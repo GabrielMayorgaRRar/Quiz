@@ -1,0 +1,65 @@
+<UserControl
+    x:Class="Quiz.Features.Categorias.CategoriaView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:Quiz.Features.Categorias"
+    x:DataType="vm:CategoriaViewModel"
+    mc:Ignorable="d">
+
+    <DockPanel Margin="16">
+
+        <!--  Formulario agregar  -->
+        <StackPanel
+            Margin="0,0,0,16"
+            DockPanel.Dock="Top"
+            Spacing="8">
+            <TextBlock
+                FontSize="20"
+                FontWeight="Bold"
+                Text="Categorías" />
+            <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto">
+                <TextBox
+                    Grid.Column="0"
+                    Margin="0,0,8,0"
+                    Text="{Binding Nombre}"
+                    Watermark="Nombre de categoría" />
+                <Button
+                    Grid.Column="1"
+                    Command="{Binding AgregarCommand}"
+                    Content="Agregar" />
+            </Grid>
+        </StackPanel>
+
+        <!--  Botón eliminar  -->
+        <Button
+            Margin="0,8,0,0"
+            HorizontalAlignment="Right"
+            Command="{Binding EliminarCommand}"
+            Content="Eliminar seleccionada"
+            DockPanel.Dock="Bottom" />
+
+        <!--  Lista  -->
+        <DataGrid
+            AutoGenerateColumns="False"
+            CanUserReorderColumns="True"
+            CanUserResizeColumns="True"
+            GridLinesVisibility="All"
+            IsReadOnly="True"
+            ItemsSource="{Binding Categorias}"
+            SelectedItem="{Binding CategoriaSeleccionada}">
+            <DataGrid.Columns>
+                <DataGridTextColumn
+                    Width="60"
+                    Binding="{Binding Id}"
+                    Header="Id" />
+                <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding Nombre}"
+                    Header="Nombre" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </DockPanel>
+</UserControl>

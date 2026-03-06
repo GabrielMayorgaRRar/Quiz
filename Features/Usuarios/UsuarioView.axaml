@@ -1,0 +1,74 @@
+<UserControl
+    x:Class="Quiz.Features.Usuarios.UsuarioView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:Quiz.Features.Usuarios"
+    x:DataType="vm:UsuarioViewModel"
+    mc:Ignorable="d">
+
+    <DockPanel Margin="16">
+
+        <!--  Formulario agregar  -->
+        <StackPanel
+            Margin="0,0,0,16"
+            DockPanel.Dock="Top"
+            Spacing="8">
+            <TextBlock
+                FontSize="20"
+                FontWeight="Bold"
+                Text="Usuarios" />
+            <Grid ColumnDefinitions="*,*,Auto" RowDefinitions="Auto">
+                <TextBox
+                    Grid.Column="0"
+                    Margin="0,0,8,0"
+                    Text="{Binding Nombre}"
+                    Watermark="Nombre" />
+                <TextBox
+                    Grid.Column="1"
+                    Margin="0,0,8,0"
+                    Text="{Binding Email}"
+                    Watermark="Email" />
+                <Button
+                    Grid.Column="2"
+                    Command="{Binding AgregarCommand}"
+                    Content="Agregar" />
+            </Grid>
+        </StackPanel>
+
+        <!--  Botón eliminar  -->
+        <Button
+            Margin="0,8,0,0"
+            HorizontalAlignment="Right"
+            Command="{Binding EliminarCommand}"
+            Content="Eliminar seleccionado"
+            DockPanel.Dock="Bottom" />
+
+        <!--  Lista  -->
+        <DataGrid
+            AutoGenerateColumns="False"
+            CanUserReorderColumns="True"
+            CanUserResizeColumns="True"
+            GridLinesVisibility="All"
+            IsReadOnly="True"
+            ItemsSource="{Binding Usuarios}"
+            SelectedItem="{Binding UsuarioSeleccionado}">
+            <DataGrid.Columns>
+                <DataGridTextColumn
+                    Width="60"
+                    Binding="{Binding Id}"
+                    Header="Id" />
+                <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding Nombre}"
+                    Header="Nombre" />
+                <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding Email}"
+                    Header="Email" />
+            </DataGrid.Columns>
+        </DataGrid>
+
+    </DockPanel>
+</UserControl>

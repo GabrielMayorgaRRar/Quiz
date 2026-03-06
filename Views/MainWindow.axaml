@@ -1,0 +1,36 @@
+<Window
+    x:Class="Quiz.Views.MainWindow"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:features_categorias="using:Quiz.Features.Categorias"
+    xmlns:features_preguntas="using:Quiz.Features.Preguntas"
+    xmlns:features_usuarios="using:Quiz.Features.Usuarios"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:Quiz.ViewModels"
+    Title="Quiz"
+    Width="900"
+    Height="600"
+    d:DesignHeight="600"
+    d:DesignWidth="900"
+    x:DataType="vm:MainWindowViewModel"
+    Icon="/Assets/avalonia-logo.ico"
+    mc:Ignorable="d">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+
+    <TabControl>
+        <TabItem Header="Usuarios">
+            <features_usuarios:UsuarioView DataContext="{Binding UsuarioVM}" />
+        </TabItem>
+        <TabItem Header="Preguntas">
+            <features_preguntas:PreguntaView DataContext="{Binding PreguntaVM}" />
+        </TabItem>
+        <TabItem Header="Categorías">
+            <features_categorias:CategoriaView DataContext="{Binding CategoriaVM}" />
+        </TabItem>
+    </TabControl>
+
+</Window>
