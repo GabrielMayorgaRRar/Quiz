@@ -1,0 +1,253 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d" d:DesignWidth="900" d:DesignHeight="600"
+             x:Class="Quiz.Views.HomeView">
+    <UserControl.Styles>
+        <Style Selector="Border.glass">
+            <Setter Property="Background" Value="#08ffffff" />
+            <Setter Property="BorderBrush" Value="#1Affffff" />
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="16"/>
+        </Style>
+        <Style Selector="Border.categoryCard">
+            <Setter Property="Background" Value="#08ffffff" />
+            <Setter Property="BorderThickness" Value="0,0,0,3"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="24"/>
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Property="Background" Duration="0:0:0.3"/>
+                    <ThicknessTransition Property="Margin" Duration="0:0:0.3"/>
+                </Transitions>
+            </Setter>
+        </Style>
+        <Style Selector="Border.categoryCard:pointerover">
+            <Setter Property="Background" Value="#15ffffff" />
+            <Setter Property="Margin" Value="0,-4,0,4"/>
+        </Style>
+        
+        <!-- Animated dot -->
+        <Style Selector="Ellipse.ping">
+            <Style.Animations>
+                <Animation Duration="0:0:1.5" IterationCount="INFINITE">
+                    <KeyFrame Cue="0%">
+                        <Setter Property="Opacity" Value="0.75" />
+                        <Setter Property="ScaleTransform.ScaleX" Value="1.0" />
+                        <Setter Property="ScaleTransform.ScaleY" Value="1.0" />
+                    </KeyFrame>
+                    <KeyFrame Cue="100%">
+                        <Setter Property="Opacity" Value="0" />
+                        <Setter Property="ScaleTransform.ScaleX" Value="2.5" />
+                        <Setter Property="ScaleTransform.ScaleY" Value="2.5" />
+                    </KeyFrame>
+                </Animation>
+            </Style.Animations>
+        </Style>
+    </UserControl.Styles>
+
+    <!-- Background mesh effect -->
+    <Grid>
+        <Grid.Background>
+            <SolidColorBrush Color="#020617"/>
+        </Grid.Background>
+        
+        <Canvas>
+            <Ellipse Width="800" Height="800" Canvas.Top="-300" Canvas.Left="-300" Fill="#150D59F2" >
+                <Ellipse.Effect>
+                    <BlurEffect Radius="150"/>
+                </Ellipse.Effect>
+            </Ellipse>
+            <Ellipse Width="800" Height="800" Canvas.Bottom="-300" Canvas.Right="-300" Fill="#158B5CF6">
+                <Ellipse.Effect>
+                    <BlurEffect Radius="150"/>
+                </Ellipse.Effect>
+            </Ellipse>
+        </Canvas>
+
+        <!-- Main Layout -->
+        <Grid RowDefinitions="Auto, *, Auto">
+            
+            <!-- Header -->
+            <Border Grid.Row="0" Classes="glass" Margin="24,16" Padding="20,12" CornerRadius="12">
+                <Grid ColumnDefinitions="Auto,*,Auto" VerticalAlignment="Center">
+                    <!-- Brand -->
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Border Background="#0d59f2" CornerRadius="8" Width="32" Height="32">
+                            <!-- Extension Icon approximate -->
+                            <Path Data="M19,13A3,3 0 0,0 22,10A3,3 0 0,0 19,7H17V5A3,3 0 0,0 14,2A3,3 0 0,0 11,5V7H5C3.89,7 3,7.9 3,9V11A3,3 0 0,0 0,14A3,3 0 0,0 3,17V19C3,20.11 3.9,21 5,21H7V19A3,3 0 0,0 10,16A3,3 0 0,0 13,19V21H19C20.11,21 21,20.11 21,19V17H19A3,3 0 0,0 16,14A3,3 0 0,0 19,13Z" 
+                                  Fill="White" Stretch="Uniform" Margin="6"/>
+                        </Border>
+                        <TextBlock Text="QUIZ MASTER" Foreground="White" FontWeight="Bold" FontSize="18" VerticalAlignment="Center" LetterSpacing="1" />
+                    </StackPanel>
+                    
+                    <!-- Actions -->
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="16" VerticalAlignment="Center">
+                        <Button Background="Transparent" Padding="8" CornerRadius="8">
+                            <!-- Notification bell -->
+                            <Path Data="M12,22A2,2 0 0,0 14,20H10A2,2 0 0,0 12,22M18,16V11C18,7.93 16.36,5.36 13.5,4.68V4A1.5,1.5 0 0,0 12,2.5A1.5,1.5 0 0,0 10.5,4V4.68C7.63,5.36 6,7.92 6,11V16L4,18V19H20V18L18,16Z" 
+                                  Fill="#cbd5e1" Stretch="Uniform" Width="20" Height="20"/>
+                        </Button>
+                        <Border BorderBrush="#0d59f2" BorderThickness="2" CornerRadius="20" Width="40" Height="40" Padding="2">
+                            <Border CornerRadius="18" Background="#1e293b" x:Name="UserAvatar">
+                                <!-- Placeholder avatar. User can replace background with Image -->
+                                <Path Data="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z" 
+                                  Fill="#cbd5e1" Stretch="Uniform" Margin="4"/>
+                            </Border>
+                        </Border>
+                    </StackPanel>
+                </Grid>
+            </Border>
+            
+            <!-- Hero and Categories -->
+            <ScrollViewer Grid.Row="1" HorizontalScrollBarVisibility="Disabled">
+                <Grid RowDefinitions="Auto,*" Margin="32,24,32,0" MaxWidth="1024" HorizontalAlignment="Center">
+                    <!-- Hero text -->
+                    <StackPanel Grid.Row="0" Margin="0,0,0,48" Spacing="16">
+                        <Border Background="#1A0d59f2" BorderBrush="#330d59f2" BorderThickness="1" CornerRadius="12" 
+                                HorizontalAlignment="Left" Padding="12,6">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <Grid Width="8" Height="8" VerticalAlignment="Center">
+                                    <Ellipse Fill="#0d59f2" Classes="ping" Width="8" Height="8"/>
+                                    <Ellipse Fill="#0d59f2" Width="6" Height="6"/>
+                                </Grid>
+                                <TextBlock Text="SELECT CHALLENGE" Foreground="#0d59f2" FontSize="11" FontWeight="Bold" LetterSpacing="1" />
+                            </StackPanel>
+                        </Border>
+                        
+                        <TextBlock Text="Choose Your Battle" Foreground="#f8fafc" FontSize="48" FontWeight="Black" />
+                        <TextBlock Text="Master the trivia arena by selecting your domain of expertise. Each category holds unique rewards and ranking points." 
+                                   Foreground="#94a3b8" FontSize="16" TextWrapping="Wrap" MaxWidth="500" HorizontalAlignment="Left" LineHeight="24"/>
+                    </StackPanel>
+                    
+                    <!-- Grid -->
+                    <UniformGrid Grid.Row="1" Columns="5" Margin="0,0,0,48" Height="220"
+                                     HorizontalAlignment="Stretch">
+                        
+                        <!-- History -->
+                        <Border Classes="categoryCard" BorderBrush="#f59e0b" Margin="0,0,16,0">
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
+                                <Border Background="#f59e0b" CornerRadius="16" Width="64" Height="64" Margin="0,0,0,16">
+                                    <!-- History Icon -->
+                                    <Path Data="M22,12 L19,10 L19,15 L22,17 L22,12 Z M18,7 L12,4 L6,7 L6,14 C6,18 12,21 12,21 C12,21 18,18 18,14 L18,7 Z" 
+                                          Fill="White" Stretch="Uniform" Margin="16"/>
+                                </Border>
+                                <TextBlock Text="History" FontWeight="Bold" FontSize="18" Foreground="White" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Ancient civilizations" FontSize="12" Foreground="#94a3b8" HorizontalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal" Spacing="4" HorizontalAlignment="Center" Margin="0,16,0,0">
+                                    <TextBlock Text="120 QUIZZES" FontWeight="Bold" FontSize="10" Foreground="#f59e0b"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                        
+                        <!-- Science -->
+                        <Border Classes="categoryCard" BorderBrush="#10b981" Margin="8,0,8,0">
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
+                                <Border Background="#10b981" CornerRadius="16" Width="64" Height="64" Margin="0,0,0,16">
+                                    <Path Data="M19,12H15.8L12.3,1.8C12.1,1.3 11.6,1 11,1S9.9,1.3 9.7,1.8L6.2,12H3A1,1 0 0,0 2,13A1,1 0 0,0 3,14H7.5C8,14 8.4,13.7 8.6,13.2L11,6.5L13.4,13.2C13.6,13.7 14.1,14 14.5,14H19A1,1 0 0,0 20,13A1,1 0 0,0 19,12 Z" 
+                                          Fill="White" Stretch="Uniform" Margin="16"/>
+                                </Border>
+                                <TextBlock Text="Science" FontWeight="Bold" FontSize="18" Foreground="White" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Physics &amp; Space" FontSize="12" Foreground="#94a3b8" HorizontalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal" Spacing="4" HorizontalAlignment="Center" Margin="0,16,0,0">
+                                    <TextBlock Text="85 QUIZZES" FontWeight="Bold" FontSize="10" Foreground="#10b981"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                        
+                        <!-- Music -->
+                        <Border Classes="categoryCard" BorderBrush="#ec4899" Margin="8,0,8,0">
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
+                                <Border Background="#ec4899" CornerRadius="16" Width="64" Height="64" Margin="0,0,0,16">
+                                    <Path Data="M21,3V15.5A3.5,3.5 0 0,1 17.5,19A3.5,3.5 0 0,1 14,15.5A3.5,3.5 0 0,1 17.5,12C18.04,12 18.55,12.12 19,12.34V6.47L9,8.6V17.5A3.5,3.5 0 0,1 5.5,21A3.5,3.5 0 0,1 2,17.5A3.5,3.5 0 0,1 5.5,14C6.04,14 6.55,14.12 7,14.34V6L21,3Z" 
+                                          Fill="White" Stretch="Uniform" Margin="16"/>
+                                </Border>
+                                <TextBlock Text="Music" FontWeight="Bold" FontSize="18" Foreground="White" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Global Icons" FontSize="12" Foreground="#94a3b8" HorizontalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal" Spacing="4" HorizontalAlignment="Center" Margin="0,16,0,0">
+                                    <TextBlock Text="150 QUIZZES" FontWeight="Bold" FontSize="10" Foreground="#ec4899"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Sports -->
+                        <Border Classes="categoryCard" BorderBrush="#3b82f6" Margin="8,0,8,0">
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
+                                <Border Background="#3b82f6" CornerRadius="16" Width="64" Height="64" Margin="0,0,0,16">
+                                    <Path Data="M12,2A10,10 0 0,0 2,12A10,10 0 0,0 12,22A10,10 0 0,0 22,12A10,10 0 0,0 12,2M12,4A8,8 0 0,1 20,12C20,13.62 19.5,15.12 18.66,16.37C17.72,13.68 15.15,11.75 12,11.75C8.85,11.75 6.28,13.68 5.34,16.37C4.5,15.12 4,13.62 4,12A8,8 0 0,1 12,4Z" 
+                                          Fill="White" Stretch="Uniform" Margin="16"/>
+                                </Border>
+                                <TextBlock Text="Sports" FontWeight="Bold" FontSize="18" Foreground="White" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Stadium Stars" FontSize="12" Foreground="#94a3b8" HorizontalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal" Spacing="4" HorizontalAlignment="Center" Margin="0,16,0,0">
+                                    <TextBlock Text="95 QUIZZES" FontWeight="Bold" FontSize="10" Foreground="#3b82f6"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                        
+                        <!-- Art -->
+                        <Border Classes="categoryCard" BorderBrush="#8b5cf6" Margin="16,0,0,0">
+                            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Spacing="8">
+                                <Border Background="#8b5cf6" CornerRadius="16" Width="64" Height="64" Margin="0,0,0,16">
+                                    <Path Data="M17.5,12A1.5,1.5 0 0,1 16,10.5A1.5,1.5 0 0,1 17.5,9A1.5,1.5 0 0,1 19,10.5A1.5,1.5 0 0,1 17.5,12M14.5,8A1.5,1.5 0 0,1 13,6.5A1.5,1.5 0 0,1 14.5,5A1.5,1.5 0 0,1 16,6.5A1.5,1.5 0 0,1 14.5,8M9.5,8A1.5,1.5 0 0,1 8,6.5A1.5,1.5 0 0,1 9.5,5A1.5,1.5 0 0,1 11,6.5A1.5,1.5 0 0,1 9.5,8M6.5,12A1.5,1.5 0 0,1 5,10.5A1.5,1.5 0 0,1 6.5,9A1.5,1.5 0 0,1 8,10.5A1.5,1.5 0 0,1 6.5,12M12,3A9,9 0 0,0 3,12A9,9 0 0,0 12,21A1.5,1.5 0 0,0 13.5,19.5C13.5,19.11 13.35,18.76 13.11,18.5C12.88,18.23 12.73,17.88 12.73,17.5A1.5,1.5 0 0,1 14.23,16H16A5,5 0 0,0 21,11C21,6.58 16.97,3 12,3Z" 
+                                          Fill="White" Stretch="Uniform" Margin="16"/>
+                                </Border>
+                                <TextBlock Text="Art" FontWeight="Bold" FontSize="18" Foreground="White" HorizontalAlignment="Center"/>
+                                <TextBlock Text="Visual Masterpieces" FontSize="12" Foreground="#94a3b8" HorizontalAlignment="Center"/>
+                                <StackPanel Orientation="Horizontal" Spacing="4" HorizontalAlignment="Center" Margin="0,16,0,0">
+                                    <TextBlock Text="60 QUIZZES" FontWeight="Bold" FontSize="10" Foreground="#8b5cf6"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </UniformGrid>
+                    
+                </Grid>
+            </ScrollViewer>
+            
+            <!-- Quick Stats & Action -->
+            <Border Grid.Row="2" Margin="32,0,32,24" BorderBrush="#330d59f2" BorderThickness="0,1,0,0" Padding="0,24,0,0">
+                <Grid ColumnDefinitions="*,Auto" MaxWidth="1024" HorizontalAlignment="Stretch">
+                    <Grid ColumnDefinitions="Auto,*,Auto,*,Auto,*,Auto" VerticalAlignment="Center">
+                        <!-- Stat 1 -->
+                        <Border Grid.Column="0" BorderBrush="#400d59f2" BorderThickness="2,0,0,0" Padding="16,4">
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="GLOBAL RANK" FontSize="10" FontWeight="Bold" Foreground="#64748b" LetterSpacing="2"/>
+                                <TextBlock Text="#2,405" FontSize="24" FontWeight="Bold" Foreground="White"/>
+                            </StackPanel>
+                        </Border>
+                        <!-- Stat 2 -->
+                        <Border Grid.Column="2" BorderBrush="#400d59f2" BorderThickness="2,0,0,0" Padding="16,4">
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="TOTAL WINS" FontSize="10" FontWeight="Bold" Foreground="#64748b" LetterSpacing="2"/>
+                                <TextBlock Text="142" FontSize="24" FontWeight="Bold" Foreground="White"/>
+                            </StackPanel>
+                        </Border>
+                        <!-- Stat 3 -->
+                        <Border Grid.Column="4" BorderBrush="#400d59f2" BorderThickness="2,0,0,0" Padding="16,4">
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="ACCURACY" FontSize="10" FontWeight="Bold" Foreground="#64748b" LetterSpacing="2"/>
+                                <TextBlock Text="88.5%" FontSize="24" FontWeight="Bold" Foreground="White"/>
+                            </StackPanel>
+                        </Border>
+                        <!-- Stat 4 -->
+                        <Border Grid.Column="6" BorderBrush="#400d59f2" BorderThickness="2,0,0,0" Padding="16,4">
+                            <StackPanel Spacing="4">
+                                <TextBlock Text="XP LEVEL" FontSize="10" FontWeight="Bold" Foreground="#64748b" LetterSpacing="2"/>
+                                <TextBlock Text="Lv. 34" FontSize="24" FontWeight="Bold" Foreground="White"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                    
+                    <Button Grid.Column="1" Background="#0d59f2" Foreground="White" CornerRadius="12" Padding="32,16" VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+                            <Path Data="M8,5.14V19.14L19,12.14L8,5.14Z" Fill="White" Stretch="Uniform" Width="16" Height="16"/>
+                            <TextBlock Text="QUICK START" FontWeight="Bold" FontSize="16" LetterSpacing="1" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </Button>
+                </Grid>
+            </Border>
+            
+        </Grid>
+    </Grid>
+</UserControl>
