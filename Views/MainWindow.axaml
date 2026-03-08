@@ -25,6 +25,38 @@
         <vm:MainWindowViewModel />
     </Design.DataContext>
 
+    <Window.Styles>
+        <Style Selector="TabControl">
+            <Setter Property="Background" Value="#FAFAF9" />
+            <Setter Property="Margin" Value="16,16,16,0" />
+        </Style>
+        <Style Selector="TabControl /template/ ItemsPresenter#PART_ItemsPresenter">
+            <Setter Property="Margin" Value="16,0,16,16" />
+        </Style>
+        <Style Selector="TabItem">
+            <Setter Property="FontFamily" Value="Inter, Roboto, sans-serif" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="Heavy" />
+            <Setter Property="Foreground" Value="#A8A29E" />
+            <Setter Property="Margin" Value="0,0,12,0" />
+            <Setter Property="Padding" Value="24,12" />
+            <Setter Property="CornerRadius" Value="24" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <Style Selector="TabItem:pointerover">
+            <Setter Property="Foreground" Value="#433829" />
+            <Setter Property="Background" Value="#F5F5F4" />
+        </Style>
+        <Style Selector="TabItem:selected">
+            <Setter Property="Foreground" Value="#FAFAF9" />
+            <Setter Property="Background" Value="#E07A5F" />
+        </Style>
+        <Style Selector="TabItem:selected /template/ Border#PART_SelectedPipe">
+            <Setter Property="IsVisible" Value="False" />
+        </Style>
+    </Window.Styles>
+
     <TabControl>
         <TabItem Header="Inicio">
             <views:HomeView />
