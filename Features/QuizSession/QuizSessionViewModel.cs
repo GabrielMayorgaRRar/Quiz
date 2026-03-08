@@ -79,10 +79,10 @@ public partial class QuizSessionViewModel : ViewModelBase
                 Enunciado = "¿Cuál de estas maravillas arquitectónicas se encuentra en Roma?",
                 Tipo = TipoPregunta.Imagen,
                 Opciones = [
-                    new() { Contenido = "https://raw.githubusercontent.com/avaloniaui/avalonia/master/src/Avalonia.Themes.Fluent/Assets/avalonia-logo.ico", EsCorrecta = false }, // Using Avalonia icon as temp mock
-                    new() { Contenido = "https://raw.githubusercontent.com/avaloniaui/avalonia/master/src/Avalonia.Themes.Fluent/Assets/avalonia-logo.ico", EsCorrecta = false },
-                    new() { Contenido = "https://raw.githubusercontent.com/avaloniaui/avalonia/master/src/Avalonia.Themes.Fluent/Assets/avalonia-logo.ico", EsCorrecta = true }, // Colosseum 
-                    new() { Contenido = "https://raw.githubusercontent.com/avaloniaui/avalonia/master/src/Avalonia.Themes.Fluent/Assets/avalonia-logo.ico", EsCorrecta = false }
+                    new() { Contenido = "avares://Quiz/Assets/img_1.webp", EsCorrecta = false },
+                    new() { Contenido = "avares://Quiz/Assets/img_2.webp", EsCorrecta = false },
+                    new() { Contenido = "avares://Quiz/Assets/img_3.webp", EsCorrecta = true },
+                    new() { Contenido = "avares://Quiz/Assets/img_4.webp", EsCorrecta = false }
                 ]
             },
             new MockPregunta 

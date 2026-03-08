@@ -2,7 +2,7 @@
     x:Class="Quiz.Features.QuizSession.QuizSessionView"
     xmlns="https://github.com/avaloniaui"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:asyncImageLoader="clr-namespace:AsyncImageLoader;assembly=AsyncImageLoader.Avalonia"
+    xmlns:cv="using:Quiz.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="using:Quiz.Features.QuizSession"
@@ -12,6 +12,10 @@
     Background="#FAFAF9"
     FontFamily="Inter, Roboto, sans-serif"
     mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <cv:BitmapAssetValueConverter x:Key="bitmapConverter" />
+    </UserControl.Resources>
 
     <UserControl.Styles>
         <Style Selector="TextBlock.serif">
@@ -240,7 +244,7 @@
                                     Background="#F5F5F4"
                                     ClipToBounds="True"
                                     CornerRadius="16">
-                                    <Image Source="{Binding Contenido}" Stretch="Uniform" />
+                                    <Image Source="{Binding Contenido, Converter={StaticResource bitmapConverter}}" Stretch="Uniform" />
                                 </Border>
                             </Button>
                         </DataTemplate>
