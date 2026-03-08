@@ -18,53 +18,81 @@
             <Setter Property="FontFamily" Value="Consolas, Cascadia Code, Courier New, monospace" />
         </Style>
 
-
         <Style Selector="Border.categoryCard">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="BorderBrush" Value="#D6D3D1" />
+            <Setter Property="Background" Value="#FAFAF9" />
+            <Setter Property="BorderThickness" Value="4" />
+            <Setter Property="BorderBrush" Value="#E7E5E4" />
+            <Setter Property="CornerRadius" Value="24" />
             <Setter Property="Padding" Value="24" />
             <Setter Property="Transitions">
                 <Transitions>
-                    <BrushTransition Property="Background" Duration="0:0:0.2" />
-                    <BrushTransition Property="BorderBrush" Duration="0:0:0.2" />
+                    <BrushTransition Property="Background" Duration="0:0:0.15" />
+                    <BrushTransition Property="BorderBrush" Duration="0:0:0.15" />
+                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.15" />
                 </Transitions>
             </Setter>
+            <Setter Property="RenderTransform" Value="scale(1)" />
         </Style>
 
-        <Style Selector="Border.categoryCard:pointerover TextBlock.cardTitle">
-            <Setter Property="TextDecorations" Value="Underline" />
+        <Style Selector="Border.categoryCard:pointerover">
+            <Setter Property="RenderTransform" Value="scale(1.02)" />
+            <Setter Property="BorderThickness" Value="4" />
         </Style>
 
         <Style Selector="Border.history:pointerover">
-            <Setter Property="Background" Value="#1AE07A5F" />
+            <Setter Property="Background" Value="#0AE07A5F" />
             <Setter Property="BorderBrush" Value="#E07A5F" />
         </Style>
         <Style Selector="Border.science:pointerover">
-            <Setter Property="Background" Value="#1ABC4749" />
+            <Setter Property="Background" Value="#0ABC4749" />
             <Setter Property="BorderBrush" Value="#BC4749" />
         </Style>
         <Style Selector="Border.music:pointerover">
-            <Setter Property="Background" Value="#1AF2CC8F" />
+            <Setter Property="Background" Value="#0AF2CC8F" />
             <Setter Property="BorderBrush" Value="#F2CC8F" />
         </Style>
         <Style Selector="Border.sports:pointerover">
-            <Setter Property="Background" Value="#1AD4A373" />
+            <Setter Property="Background" Value="#0AD4A373" />
             <Setter Property="BorderBrush" Value="#D4A373" />
         </Style>
         <Style Selector="Border.art:pointerover">
-            <Setter Property="Background" Value="#1AE65C00" />
+            <Setter Property="Background" Value="#0AE65C00" />
             <Setter Property="BorderBrush" Value="#E65C00" />
         </Style>
 
-        <Style Selector="Border.divider">
-            <Setter Property="Height" Value="1" />
-            <Setter Property="Background" Value="#E7E5E4" />
+        <Style Selector="TextBox.pinInput">
+            <Setter Property="Background" Value="#F5F5F4" />
+            <Setter Property="BorderBrush" Value="#D6D3D1" />
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="CornerRadius" Value="20" />
+            <Setter Property="Padding" Value="24,16" />
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="LetterSpacing" Value="4" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="#433829" />
+        </Style>
+        <Style Selector="TextBox.pinInput:focus /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="#FAFAF9" />
+            <Setter Property="BorderBrush" Value="#E07A5F" />
+            <Setter Property="BorderThickness" Value="3" />
+        </Style>
+
+        <Style Selector="Button.hero">
+            <Setter Property="Background" Value="#E07A5F" />
+            <Setter Property="Foreground" Value="#FAFAF9" />
+            <Setter Property="CornerRadius" Value="20" />
+            <Setter Property="Padding" Value="0,16" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
             <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="FontWeight" Value="Heavy" />
+        </Style>
+        <Style Selector="Button.hero:pointerover">
+            <Setter Property="Background" Value="#C25A3F" />
         </Style>
     </UserControl.Styles>
 
-    <Grid RowDefinitions="Auto, *, Auto">
+    <Grid RowDefinitions="Auto, *">
 
         <Border
             Grid.Row="0"
@@ -88,9 +116,8 @@
                         Stretch="Uniform" />
                     <TextBlock
                         VerticalAlignment="Center"
-                        Classes="serif"
                         FontSize="20"
-                        FontWeight="Bold"
+                        FontWeight="Heavy"
                         Foreground="#433829"
                         LetterSpacing="1"
                         Text="QUIZ MASTER" />
@@ -104,43 +131,37 @@
                     Spacing="40">
                     <TextBlock
                         Cursor="Hand"
-                        FontSize="14"
+                        FontSize="16"
                         FontWeight="SemiBold"
                         Foreground="#433829"
-                        Text="Play"
-                        TextDecorations="Underline" />
+                        Text="Jugar" />
                     <TextBlock
                         Cursor="Hand"
-                        FontSize="14"
-                        Foreground="#78716C"
-                        Text="Leaderboard" />
-                    <TextBlock
-                        Cursor="Hand"
-                        FontSize="14"
-                        Foreground="#78716C"
-                        Text="Collections" />
+                        FontSize="16"
+                        FontWeight="Medium"
+                        Foreground="#A8A29E"
+                        Text="Ranking" />
                 </StackPanel>
 
                 <Border
                     Grid.Column="2"
                     Padding="16,8"
-                    BorderBrush="#D6D3D1"
-                    BorderThickness="1"
+                    Background="#F5F5F4"
                     CornerRadius="20"
                     Cursor="Hand">
                     <StackPanel Orientation="Horizontal" Spacing="12">
                         <TextBlock
                             VerticalAlignment="Center"
                             FontSize="14"
-                            FontWeight="Medium"
+                            FontWeight="Bold"
                             Foreground="#433829"
-                            Text="Profile" />
+                            Text="Mi Perfil" />
                         <Path
                             Width="18"
                             Height="18"
                             VerticalAlignment="Center"
                             Data="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"
-                            Fill="#A8A29E"
+                            Fill="#433829"
                             Stretch="Uniform" />
                     </StackPanel>
                 </Border>
@@ -155,348 +176,262 @@
                 MaxWidth="1100"
                 Margin="40,56,40,40"
                 HorizontalAlignment="Center"
-                RowDefinitions="Auto,*">
+                ColumnDefinitions="1*,1.5*">
 
-                <Grid
-                    Grid.Row="0"
-                    Margin="0,0,0,64"
-                    ColumnDefinitions="2*, 1*">
-                    <StackPanel Grid.Column="0" Spacing="24">
+                <StackPanel
+                    Grid.Column="0"
+                    Margin="0,0,64,0"
+                    VerticalAlignment="Center"
+                    Spacing="40">
+                    <StackPanel Spacing="16">
+                        <Border
+                            Padding="16,8"
+                            HorizontalAlignment="Left"
+                            Background="#1AE07A5F"
+                            CornerRadius="12">
+                            <TextBlock
+                                FontSize="12"
+                                FontWeight="Black"
+                                Foreground="#E07A5F"
+                                LetterSpacing="2"
+                                Text="¡ES HORA DE JUGAR!" />
+                        </Border>
                         <TextBlock
-                            Classes="mono"
-                            FontSize="12"
-                            Foreground="#A8A29E"
-                            LetterSpacing="2"
-                            Text="Issue No. 42" />
-                        <TextBlock
-                            Classes="serif"
-                            FontSize="64"
-                            FontWeight="Normal"
+                            FontSize="56"
+                            FontWeight="Black"
                             Foreground="#433829"
-                            LineHeight="72"
-                            Text="Select Your Subject"
+                            LineHeight="64"
+                            Text="Demuestra lo que sabes."
                             TextWrapping="Wrap" />
                         <TextBlock
-                            MaxWidth="500"
                             FontSize="18"
                             Foreground="#78716C"
                             LineHeight="28"
-                            Text="Test your knowledge across carefully curated categories. Challenge the community records and elevate your status in the archives."
+                            Text="Ingresa el código que te dio el creador de la sala para unirte inmediatamente y competir."
                             TextWrapping="Wrap" />
-
-                        <Button
-                            Margin="0,16,0,0"
-                            Padding="32,16"
-                            HorizontalAlignment="Left"
-                            Background="#E07A5F"
-                            CornerRadius="0"
-                            Foreground="#FAFAF9">
-                            <TextBlock
-                                Classes="mono"
-                                FontSize="13"
-                                FontWeight="SemiBold"
-                                LetterSpacing="1"
-                                Text="BEGIN ASSESMENT" />
-                        </Button>
                     </StackPanel>
 
                     <Border
-                        Grid.Column="1"
                         Padding="32"
-                        VerticalAlignment="Top"
-                        BorderBrush="#D6D3D1"
-                        BorderThickness="1">
-                        <StackPanel Spacing="16">
-                            <TextBlock
-                                Classes="mono"
-                                FontSize="11"
-                                FontWeight="Bold"
-                                Foreground="#E07A5F"
-                                LetterSpacing="1"
-                                Text="TODAY'S FOCUS" />
-                            <TextBlock
-                                Classes="serif"
-                                FontSize="32"
-                                Foreground="#433829"
-                                Text="History" />
-                            <TextBlock
-                                FontSize="14"
-                                Foreground="#78716C"
-                                LineHeight="22"
-                                Text="An exploration of classical antiquity and modern revolutions."
-                                TextWrapping="Wrap" />
-                            <Border Margin="0,8" Classes="divider" />
-                            <Grid ColumnDefinitions="*,Auto">
+                        Background="#FFFFFF"
+                        BorderBrush="#E7E5E4"
+                        BorderThickness="1"
+                        CornerRadius="32">
+                        <StackPanel Spacing="24">
+                            <StackPanel Spacing="8">
                                 <TextBlock
-                                    Grid.Column="0"
-                                    FontSize="12"
-                                    Foreground="#A8A29E"
-                                    Text="Completion Rate" />
-                                <TextBlock
-                                    Grid.Column="1"
-                                    Classes="mono"
+                                    HorizontalAlignment="Center"
                                     FontSize="12"
                                     FontWeight="Bold"
-                                    Foreground="#433829"
-                                    Text="24%" />
-                            </Grid>
+                                    Foreground="#A8A29E"
+                                    LetterSpacing="1"
+                                    Text="CÓDIGO DE PARTIDA" />
+                                <TextBox Classes="pinInput" Watermark="EJ: 260308-1530" />
+                            </StackPanel>
+                            <Button Classes="hero">
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontSize="16"
+                                    Text="¡ENTRAR A LA SALA!" />
+                            </Button>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <Grid
+                    Grid.Column="1"
+                    VerticalAlignment="Center"
+                    ColumnDefinitions="*, *"
+                    RowDefinitions="Auto, Auto, Auto">
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.ColumnSpan="2"
+                        Margin="0,0,0,24"
+                        FontSize="14"
+                        FontWeight="Heavy"
+                        Foreground="#D6D3D1"
+                        LetterSpacing="2"
+                        Text="EXPLORAR MAZOS" />
+
+                    <Border
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Margin="0,0,16,16"
+                        Classes="categoryCard history"
+                        Cursor="Hand">
+                        <StackPanel Spacing="16">
+                            <Border
+                                Width="64"
+                                Height="64"
+                                Padding="16"
+                                HorizontalAlignment="Left"
+                                Background="#1AE07A5F"
+                                CornerRadius="16">
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontSize="28"
+                                    FontWeight="Black"
+                                    Foreground="#E07A5F"
+                                    Text="H" />
+                            </Border>
+                            <TextBlock
+                                Classes="cardTitle"
+                                FontSize="22"
+                                FontWeight="Bold"
+                                Foreground="#433829"
+                                Text="Historia Global"
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                FontSize="14"
+                                Foreground="#A8A29E"
+                                Text="Imperios, guerras y el paso del tiempo."
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                Margin="0,8,0,0"
+                                Classes="mono"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                Foreground="#E07A5F"
+                                Text="24 Misiones" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Margin="16,0,0,16"
+                        Classes="categoryCard science"
+                        Cursor="Hand">
+                        <StackPanel Spacing="16">
+                            <Border
+                                Width="64"
+                                Height="64"
+                                Padding="16"
+                                HorizontalAlignment="Left"
+                                Background="#1ABC4749"
+                                CornerRadius="16">
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontSize="28"
+                                    FontWeight="Black"
+                                    Foreground="#BC4749"
+                                    Text="C" />
+                            </Border>
+                            <TextBlock
+                                Classes="cardTitle"
+                                FontSize="22"
+                                FontWeight="Bold"
+                                Foreground="#433829"
+                                Text="Ciencia &amp; Tec"
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                FontSize="14"
+                                Foreground="#A8A29E"
+                                Text="Universo, física espacial y tecnología."
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                Margin="0,8,0,0"
+                                Classes="mono"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                Foreground="#BC4749"
+                                Text="18 Misiones" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Margin="0,16,16,0"
+                        Classes="categoryCard music"
+                        Cursor="Hand">
+                        <StackPanel Spacing="16">
+                            <Border
+                                Width="64"
+                                Height="64"
+                                Padding="16"
+                                HorizontalAlignment="Left"
+                                Background="#1AF2CC8F"
+                                CornerRadius="16">
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontSize="28"
+                                    FontWeight="Black"
+                                    Foreground="#E6A817"
+                                    Text="M" />
+                            </Border>
+                            <TextBlock
+                                Classes="cardTitle"
+                                FontSize="22"
+                                FontWeight="Bold"
+                                Foreground="#433829"
+                                Text="Música"
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                FontSize="14"
+                                Foreground="#A8A29E"
+                                Text="Bandas sonoras y cultura pop."
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                Margin="0,8,0,0"
+                                Classes="mono"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                Foreground="#E6A817"
+                                Text="32 Misiones" />
+                        </StackPanel>
+                    </Border>
+
+                    <Border
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Margin="16,16,0,0"
+                        Classes="categoryCard sports"
+                        Cursor="Hand">
+                        <StackPanel Spacing="16">
+                            <Border
+                                Width="64"
+                                Height="64"
+                                Padding="16"
+                                HorizontalAlignment="Left"
+                                Background="#1AD4A373"
+                                CornerRadius="16">
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontSize="28"
+                                    FontWeight="Black"
+                                    Foreground="#D4A373"
+                                    Text="D" />
+                            </Border>
+                            <TextBlock
+                                Classes="cardTitle"
+                                FontSize="22"
+                                FontWeight="Bold"
+                                Foreground="#433829"
+                                Text="Deportes"
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                FontSize="14"
+                                Foreground="#A8A29E"
+                                Text="Atletas, records mundiales y disciplinas."
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                Margin="0,8,0,0"
+                                Classes="mono"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                Foreground="#D4A373"
+                                Text="15 Misiones" />
                         </StackPanel>
                     </Border>
                 </Grid>
 
-                <Grid Grid.Row="1" RowDefinitions="Auto,*">
-                    <Grid
-                        Grid.Row="0"
-                        Margin="0,0,0,24"
-                        ColumnDefinitions="Auto,*">
-                        <TextBlock
-                            Grid.Column="0"
-                            Margin="0,0,24,0"
-                            Classes="serif"
-                            FontSize="24"
-                            Foreground="#433829"
-                            Text="Archival Categories" />
-                        <Border
-                            Grid.Column="1"
-                            VerticalAlignment="Center"
-                            Classes="divider" />
-                    </Grid>
-
-                    <UniformGrid
-                        Grid.Row="1"
-                        Margin="-8,0"
-                        Columns="5">
-
-                        <Border Margin="8,0" Classes="categoryCard history">
-                            <Grid RowDefinitions="Auto, *, Auto">
-                                <TextBlock
-                                    Grid.Row="0"
-                                    Classes="mono"
-                                    FontSize="24"
-                                    FontWeight="Light"
-                                    Foreground="#D6D3D1"
-                                    Text="01" />
-                                <StackPanel Grid.Row="1" Margin="0,32,0,32">
-                                    <TextBlock
-                                        Margin="0,0,0,8"
-                                        Classes="cardTitle serif"
-                                        FontSize="20"
-                                        Foreground="#433829"
-                                        Text="History" />
-                                    <TextBlock
-                                        FontSize="13"
-                                        Foreground="#78716C"
-                                        LineHeight="20"
-                                        Text="Chronicles of the past, empires, and eras."
-                                        TextWrapping="Wrap" />
-                                </StackPanel>
-                                <TextBlock
-                                    Grid.Row="2"
-                                    Classes="mono"
-                                    FontSize="11"
-                                    FontWeight="Bold"
-                                    Foreground="#E07A5F"
-                                    LetterSpacing="1"
-                                    Text="EXPLORE →" />
-                            </Grid>
-                        </Border>
-
-                        <Border Margin="8,0" Classes="categoryCard science">
-                            <Grid RowDefinitions="Auto, *, Auto">
-                                <TextBlock
-                                    Grid.Row="0"
-                                    Classes="mono"
-                                    FontSize="24"
-                                    FontWeight="Light"
-                                    Foreground="#D6D3D1"
-                                    Text="02" />
-                                <StackPanel Grid.Row="1" Margin="0,32,0,32">
-                                    <TextBlock
-                                        Margin="0,0,0,8"
-                                        Classes="cardTitle serif"
-                                        FontSize="20"
-                                        Foreground="#433829"
-                                        Text="Science" />
-                                    <TextBlock
-                                        FontSize="13"
-                                        Foreground="#78716C"
-                                        LineHeight="20"
-                                        Text="The mechanics of reality, from atoms to stars."
-                                        TextWrapping="Wrap" />
-                                </StackPanel>
-                                <TextBlock
-                                    Grid.Row="2"
-                                    Classes="mono"
-                                    FontSize="11"
-                                    FontWeight="Bold"
-                                    Foreground="#BC4749"
-                                    LetterSpacing="1"
-                                    Text="EXPLORE →" />
-                            </Grid>
-                        </Border>
-
-                        <Border Margin="8,0" Classes="categoryCard music">
-                            <Grid RowDefinitions="Auto, *, Auto">
-                                <TextBlock
-                                    Grid.Row="0"
-                                    Classes="mono"
-                                    FontSize="24"
-                                    FontWeight="Light"
-                                    Foreground="#D6D3D1"
-                                    Text="03" />
-                                <StackPanel Grid.Row="1" Margin="0,32,0,32">
-                                    <TextBlock
-                                        Margin="0,0,0,8"
-                                        Classes="cardTitle serif"
-                                        FontSize="20"
-                                        Foreground="#433829"
-                                        Text="Music" />
-                                    <TextBlock
-                                        FontSize="13"
-                                        Foreground="#78716C"
-                                        LineHeight="20"
-                                        Text="Harmonic theory, legendary composers and bands."
-                                        TextWrapping="Wrap" />
-                                </StackPanel>
-                                <TextBlock
-                                    Grid.Row="2"
-                                    Classes="mono"
-                                    FontSize="11"
-                                    FontWeight="Bold"
-                                    Foreground="#F2CC8F"
-                                    LetterSpacing="1"
-                                    Text="EXPLORE →" />
-                            </Grid>
-                        </Border>
-
-                        <Border Margin="8,0" Classes="categoryCard sports">
-                            <Grid RowDefinitions="Auto, *, Auto">
-                                <TextBlock
-                                    Grid.Row="0"
-                                    Classes="mono"
-                                    FontSize="24"
-                                    FontWeight="Light"
-                                    Foreground="#D6D3D1"
-                                    Text="04" />
-                                <StackPanel Grid.Row="1" Margin="0,32,0,32">
-                                    <TextBlock
-                                        Margin="0,0,0,8"
-                                        Classes="cardTitle serif"
-                                        FontSize="20"
-                                        Foreground="#433829"
-                                        Text="Sports" />
-                                    <TextBlock
-                                        FontSize="13"
-                                        Foreground="#78716C"
-                                        LineHeight="20"
-                                        Text="Athletic history, rules, and legendary events."
-                                        TextWrapping="Wrap" />
-                                </StackPanel>
-                                <TextBlock
-                                    Grid.Row="2"
-                                    Classes="mono"
-                                    FontSize="11"
-                                    FontWeight="Bold"
-                                    Foreground="#D4A373"
-                                    LetterSpacing="1"
-                                    Text="EXPLORE →" />
-                            </Grid>
-                        </Border>
-
-                        <Border Margin="8,0" Classes="categoryCard art">
-                            <Grid RowDefinitions="Auto, *, Auto">
-                                <TextBlock
-                                    Grid.Row="0"
-                                    Classes="mono"
-                                    FontSize="24"
-                                    FontWeight="Light"
-                                    Foreground="#D6D3D1"
-                                    Text="05" />
-                                <StackPanel Grid.Row="1" Margin="0,32,0,32">
-                                    <TextBlock
-                                        Margin="0,0,0,8"
-                                        Classes="cardTitle serif"
-                                        FontSize="20"
-                                        Foreground="#433829"
-                                        Text="Art" />
-                                    <TextBlock
-                                        FontSize="13"
-                                        Foreground="#78716C"
-                                        LineHeight="20"
-                                        Text="Visual aesthetics, painters, and art movements."
-                                        TextWrapping="Wrap" />
-                                </StackPanel>
-                                <TextBlock
-                                    Grid.Row="2"
-                                    Classes="mono"
-                                    FontSize="11"
-                                    FontWeight="Bold"
-                                    Foreground="#E65C00"
-                                    LetterSpacing="1"
-                                    Text="EXPLORE →" />
-                            </Grid>
-                        </Border>
-
-                    </UniformGrid>
-                </Grid>
-
             </Grid>
         </ScrollViewer>
-
-        <Border
-            Grid.Row="2"
-            Padding="40,24"
-            Background="#F5F5F4"
-            BorderBrush="#E7E5E4"
-            BorderThickness="0,1,0,0">
-            <Grid
-                MaxWidth="1100"
-                HorizontalAlignment="Center"
-                ColumnDefinitions="*,*,*">
-                <StackPanel Grid.Column="0" Spacing="4">
-                    <TextBlock
-                        FontSize="12"
-                        Foreground="#78716C"
-                        Text="Current Ranking" />
-                    <TextBlock
-                        Classes="mono"
-                        FontSize="24"
-                        FontWeight="Bold"
-                        Foreground="#433829"
-                        Text="#2405" />
-                </StackPanel>
-                <StackPanel
-                    Grid.Column="1"
-                    HorizontalAlignment="Center"
-                    Spacing="4">
-                    <TextBlock
-                        FontSize="12"
-                        Foreground="#78716C"
-                        Text="Completed Modules" />
-                    <TextBlock
-                        Classes="mono"
-                        FontSize="24"
-                        FontWeight="Bold"
-                        Foreground="#433829"
-                        Text="142" />
-                </StackPanel>
-                <StackPanel
-                    Grid.Column="2"
-                    HorizontalAlignment="Right"
-                    Spacing="4">
-                    <TextBlock
-                        FontSize="12"
-                        Foreground="#78716C"
-                        Text="Average Score" />
-                    <TextBlock
-                        Classes="mono"
-                        FontSize="24"
-                        FontWeight="Bold"
-                        Foreground="#433829"
-                        Text="88.5%" />
-                </StackPanel>
-            </Grid>
-        </Border>
-
     </Grid>
 </UserControl>
