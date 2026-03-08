@@ -4,8 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:Quiz.Features.Home"
     d:DesignHeight="768"
     d:DesignWidth="1024"
+    x:DataType="vm:HomeViewModel"
     Background="#FAFAF9"
     FontFamily="Inter, Roboto, sans-serif"
     mc:Ignorable="d">
@@ -17,8 +19,7 @@
         <Style Selector="TextBlock.mono">
             <Setter Property="FontFamily" Value="Consolas, Cascadia Code, Courier New, monospace" />
         </Style>
-
-        <Style Selector="Border.categoryCard">
+        <Style Selector="Button.categoryCard">
             <Setter Property="Background" Value="#FAFAF9" />
             <Setter Property="BorderThickness" Value="4" />
             <Setter Property="BorderBrush" Value="#E7E5E4" />
@@ -34,28 +35,28 @@
             <Setter Property="RenderTransform" Value="scale(1)" />
         </Style>
 
-        <Style Selector="Border.categoryCard:pointerover">
+        <Style Selector="Button.categoryCard:pointerover">
             <Setter Property="RenderTransform" Value="scale(1.02)" />
             <Setter Property="BorderThickness" Value="4" />
         </Style>
 
-        <Style Selector="Border.history:pointerover">
+        <Style Selector="Button.history:pointerover">
             <Setter Property="Background" Value="#0AE07A5F" />
             <Setter Property="BorderBrush" Value="#E07A5F" />
         </Style>
-        <Style Selector="Border.science:pointerover">
+        <Style Selector="Button.science:pointerover">
             <Setter Property="Background" Value="#0ABC4749" />
             <Setter Property="BorderBrush" Value="#BC4749" />
         </Style>
-        <Style Selector="Border.music:pointerover">
+        <Style Selector="Button.music:pointerover">
             <Setter Property="Background" Value="#0AF2CC8F" />
             <Setter Property="BorderBrush" Value="#F2CC8F" />
         </Style>
-        <Style Selector="Border.sports:pointerover">
+        <Style Selector="Button.sports:pointerover">
             <Setter Property="Background" Value="#0AD4A373" />
             <Setter Property="BorderBrush" Value="#D4A373" />
         </Style>
-        <Style Selector="Border.art:pointerover">
+        <Style Selector="Button.art:pointerover">
             <Setter Property="Background" Value="#0AE65C00" />
             <Setter Property="BorderBrush" Value="#E65C00" />
         </Style>
@@ -228,7 +229,7 @@
                                     Text="CÓDIGO DE PARTIDA" />
                                 <TextBox Classes="pinInput" Watermark="EJ: 260308-1530" />
                             </StackPanel>
-                            <Button Classes="hero">
+                            <Button Classes="hero" Command="{Binding IniciarPartidaCommand}">
                                 <TextBlock
                                     VerticalAlignment="Center"
                                     FontSize="16"
@@ -254,11 +255,12 @@
                         LetterSpacing="2"
                         Text="EXPLORAR MAZOS" />
 
-                    <Border
+                    <Button
                         Grid.Row="1"
                         Grid.Column="0"
                         Margin="0,0,16,16"
                         Classes="categoryCard history"
+                        Command="{Binding IniciarPartidaCommand}"
                         Cursor="Hand">
                         <StackPanel Spacing="16">
                             <Border
@@ -296,13 +298,14 @@
                                 Foreground="#E07A5F"
                                 Text="24 Misiones" />
                         </StackPanel>
-                    </Border>
+                    </Button>
 
-                    <Border
+                    <Button
                         Grid.Row="1"
                         Grid.Column="1"
                         Margin="16,0,0,16"
                         Classes="categoryCard science"
+                        Command="{Binding IniciarPartidaCommand}"
                         Cursor="Hand">
                         <StackPanel Spacing="16">
                             <Border
@@ -340,13 +343,14 @@
                                 Foreground="#BC4749"
                                 Text="18 Misiones" />
                         </StackPanel>
-                    </Border>
+                    </Button>
 
-                    <Border
+                    <Button
                         Grid.Row="2"
                         Grid.Column="0"
                         Margin="0,16,16,0"
                         Classes="categoryCard music"
+                        Command="{Binding IniciarPartidaCommand}"
                         Cursor="Hand">
                         <StackPanel Spacing="16">
                             <Border
@@ -384,13 +388,14 @@
                                 Foreground="#E6A817"
                                 Text="32 Misiones" />
                         </StackPanel>
-                    </Border>
+                    </Button>
 
-                    <Border
+                    <Button
                         Grid.Row="2"
                         Grid.Column="1"
                         Margin="16,16,0,0"
                         Classes="categoryCard sports"
+                        Command="{Binding IniciarPartidaCommand}"
                         Cursor="Hand">
                         <StackPanel Spacing="16">
                             <Border
@@ -428,7 +433,7 @@
                                 Foreground="#D4A373"
                                 Text="15 Misiones" />
                         </StackPanel>
-                    </Border>
+                    </Button>
                 </Grid>
 
             </Grid>

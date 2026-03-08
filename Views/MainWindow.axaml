@@ -6,6 +6,7 @@
     xmlns:features_categorias="using:Quiz.Features.Categorias"
     xmlns:features_juegos="using:Quiz.Features.Juegos"
     xmlns:features_preguntas="using:Quiz.Features.Preguntas"
+    xmlns:features_quizsession="using:Quiz.Features.QuizSession"
     xmlns:features_usuarios="using:Quiz.Features.Usuarios"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:views="using:Quiz.Views"
@@ -57,9 +58,9 @@
         </Style>
     </Window.Styles>
 
-    <TabControl>
+    <TabControl SelectedIndex="{Binding SelectedTab}">
         <TabItem Header="Inicio">
-            <views:HomeView />
+            <views:HomeView DataContext="{Binding HomeVM}" />
         </TabItem>
         <TabItem Header="Juegos">
             <features_juegos:JuegoView DataContext="{Binding JuegoVM}" />
@@ -72,6 +73,9 @@
         </TabItem>
         <TabItem Header="Usuarios">
             <features_usuarios:UsuarioView DataContext="{Binding UsuarioVM}" />
+        </TabItem>
+        <TabItem Header="Partida (Demo)">
+            <features_quizsession:QuizSessionView DataContext="{Binding QuizSessionVM}" />
         </TabItem>
     </TabControl>
 
