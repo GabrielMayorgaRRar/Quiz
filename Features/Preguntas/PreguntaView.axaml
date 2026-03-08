@@ -23,7 +23,7 @@
                 <TextBox
                     Grid.Column="0"
                     Margin="0,0,8,0"
-                    Text="{Binding Texto}"
+                    Text="{Binding Enunciado}"
                     Watermark="Texto de la pregunta" />
                 <ComboBox
                     Grid.Column="1"
@@ -63,11 +63,11 @@
                     Header="Id" />
                 <DataGridTextColumn
                     Width="*"
-                    Binding="{Binding Texto}"
+                    Binding="{Binding Enunciado}"
                     Header="Pregunta" />
                 <DataGridTextColumn
                     Width="200"
-                    Binding="{Binding Categoria.Nombre}"
+                    Binding="{Binding CategoriaId}"
                     Header="Categoría" />
             </DataGrid.Columns>
         </DataGrid>

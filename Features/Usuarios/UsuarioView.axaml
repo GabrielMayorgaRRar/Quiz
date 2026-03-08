@@ -28,8 +28,8 @@
                 <TextBox
                     Grid.Column="1"
                     Margin="0,0,8,0"
-                    Text="{Binding Email}"
-                    Watermark="Email" />
+                    Text="{Binding Apodo}"
+                    Watermark="Apodo" />
                 <Button
                     Grid.Column="2"
                     Command="{Binding AgregarCommand}"
@@ -65,8 +65,8 @@
                     Header="Nombre" />
                 <DataGridTextColumn
                     Width="*"
-                    Binding="{Binding Email}"
-                    Header="Email" />
+                    Binding="{Binding Apodo}"
+                    Header="Apodo" />
             </DataGrid.Columns>
         </DataGrid>
 

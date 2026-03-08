@@ -19,9 +19,7 @@ public partial class UsuarioViewModel : ViewModelBase
     private string _nombre = string.Empty;
 
     [ObservableProperty]
-    private string _email = string.Empty;
-
-    [ObservableProperty]
+    private string _apodo = string.Empty;    [ObservableProperty]
     private Usuario? _usuarioSeleccionado;
 
     public UsuarioViewModel(AppDbContext context)
@@ -39,12 +37,12 @@ public partial class UsuarioViewModel : ViewModelBase
     private async Task AgregarAsync()
     {
         if (string.IsNullOrWhiteSpace(Nombre)) return;
-        var usuario = new Usuario { Nombre = Nombre, Email = Email };
+        var usuario = new Usuario { Nombre = Nombre, Apodo = Apodo };
         _context.Usuarios.Add(usuario);
         await _context.SaveChangesAsync();
         Usuarios.Add(usuario);
         Nombre = string.Empty;
-        Email = string.Empty;
+        Apodo = string.Empty;
     }
 
     [RelayCommand]

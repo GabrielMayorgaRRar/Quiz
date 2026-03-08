@@ -19,7 +19,7 @@ public partial class PreguntaViewModel : ViewModelBase
     private ObservableCollection<Categoria> _categorias = [];
 
     [ObservableProperty]
-    private string _texto = string.Empty;
+    private string _enunciado = string.Empty;
 
     [ObservableProperty]
     private Categoria? _categoriaSeleccionada;
@@ -34,7 +34,7 @@ public partial class PreguntaViewModel : ViewModelBase
 
     private async Task CargarDatosAsync()
     {
-        var preguntas = await _context.Preguntas.Include(p => p.Categoria).ToListAsync();
+        var preguntas = await _context.Preguntas.ToListAsync();
         Preguntas = new ObservableCollection<Pregunta>(preguntas);
 
         var categorias = await _context.Categorias.ToListAsync();
@@ -44,13 +44,12 @@ public partial class PreguntaViewModel : ViewModelBase
     [RelayCommand]
     private async Task AgregarAsync()
     {
-        if (string.IsNullOrWhiteSpace(Texto) || CategoriaSeleccionada is null) return;
-        var pregunta = new Pregunta { Texto = Texto, CategoriaId = CategoriaSeleccionada.Id };
+        if (string.IsNullOrWhiteSpace(Enunciado) || CategoriaSeleccionada is null) return;
+        var pregunta = new Pregunta { Enunciado = Enunciado, CategoriaId = CategoriaSeleccionada.Id };
         _context.Preguntas.Add(pregunta);
         await _context.SaveChangesAsync();
-        pregunta.Categoria = CategoriaSeleccionada;
         Preguntas.Add(pregunta);
-        Texto = string.Empty;
+        Enunciado = string.Empty;
     }
 
     [RelayCommand]
