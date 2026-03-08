@@ -42,7 +42,6 @@
             <Setter Property="HorizontalAlignment" Value="Stretch" />
         </Style>
 
-        <!--  Clean Buttons  -->
         <Style Selector="Button.primary">
             <Setter Property="Background" Value="#E07A5F" />
             <Setter Property="Foreground" Value="#FAFAF9" />
@@ -105,9 +104,6 @@
     </UserControl.Styles>
 
     <Grid Margin="40" ColumnDefinitions="450,*">
-        <!--  ==============================================  -->
-        <!--  LEFT COLUMN: EDITORIAL FORM  -->
-        <!--  ==============================================  -->
         <Border
             Grid.Column="0"
             Padding="0,0,40,0"
@@ -145,10 +141,8 @@
                         HorizontalAlignment="Stretch"
                         Background="#E7E5E4" />
 
-                    <!--  Form Fields  -->
                     <StackPanel Spacing="24">
 
-                        <!--  Name Entry  -->
                         <StackPanel Spacing="8">
                             <TextBlock
                                 Classes="mono"
@@ -163,7 +157,6 @@
                                 Watermark="Ej. Desafío de Historia Fase 1..." />
                         </StackPanel>
 
-                        <!--  Category Selection  -->
                         <StackPanel Spacing="8">
                             <TextBlock
                                 Classes="mono"
@@ -179,7 +172,6 @@
                                 SelectedItem="{Binding CategoriaSeleccionada}" />
                         </StackPanel>
 
-                        <!--  Auto-Generated Key Representation  -->
                         <StackPanel Spacing="8">
                             <Grid ColumnDefinitions="*, Auto">
                                 <TextBlock
@@ -236,7 +228,6 @@
                         HorizontalAlignment="Stretch"
                         Background="#E7E5E4" />
 
-                    <!--  Submit Action  -->
                     <Button
                         Margin="0,8,0,0"
                         HorizontalAlignment="Stretch"
@@ -253,15 +244,10 @@
             </ScrollViewer>
         </Border>
 
-        <!--  ==============================================  -->
-        <!--  RIGHT COLUMN: COLLECTION LIST  -->
-        <!--  ==============================================  -->
         <Grid
             Grid.Column="1"
             Margin="40,0,0,0"
             RowDefinitions="Auto,*">
-
-            <!--  List Header with actions  -->
             <Grid
                 Grid.Row="0"
                 Margin="0,0,0,24"
@@ -302,7 +288,6 @@
                 </Button>
             </Grid>
 
-            <!--  Vintage DataGrid  -->
             <DataGrid
                 Grid.Row="1"
                 AutoGenerateColumns="False"
