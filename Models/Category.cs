@@ -1,1 +1,0 @@
-namespace Quiz.Models;
