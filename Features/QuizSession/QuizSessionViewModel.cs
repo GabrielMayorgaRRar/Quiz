@@ -1,5 +1,8 @@
 using System;
 using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading.Tasks;
+using Avalonia.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Quiz.ViewModels;
@@ -51,6 +54,21 @@ public partial class QuizSessionViewModel : ViewModelBase
 
     [ObservableProperty]
     private bool _juegoTerminado;
+
+    [ObservableProperty]
+    private MockOpcion? _opcionSeleccionada;
+
+    [ObservableProperty]
+    private bool _mostrarFeedback;
+
+    [ObservableProperty]
+    private bool _esCorrecta;
+
+    [ObservableProperty]
+    private string _mensajeFeedback = string.Empty;
+
+    [ObservableProperty]
+    private string _respuestaCorrectaTexto = string.Empty;
 
     public Action? OnQuizFinished;
 
@@ -110,26 +128,55 @@ public partial class QuizSessionViewModel : ViewModelBase
         EsModoImagen = PreguntaActual.Tipo == TipoPregunta.Imagen;
         EsModoAudio = PreguntaActual.Tipo == TipoPregunta.Audio;
         JuegoTerminado = false;
+        MostrarFeedback = false;
     }
 
     [RelayCommand]
     private void SeleccionarOpcion(MockOpcion opcion)
     {
-        // Advance to next question
-        if (IndiceActual < Preguntas.Count - 1)
+        OpcionSeleccionada = opcion;
+        
+        // Verificar si la respuesta es correcta
+        EsCorrecta = opcion.EsCorrecta;
+        
+        if (opcion.EsCorrecta)
         {
-            IndiceActual++;
-            ActualizarEstadoFase();
+            MensajeFeedback = "¡Correcto!";
         }
         else
         {
-            // Quiz finished
-            JuegoTerminado = true;
-            EsModoTexto = false;
-            EsModoImagen = false;
-            EsModoAudio = false;
-            ProgresoTexto = "COMPLETADO";
+            // Buscar cuál era la respuesta correcta
+            var respuestaCorrecta = PreguntaActual.Opciones.FirstOrDefault(o => o.EsCorrecta);
+            RespuestaCorrectaTexto = respuestaCorrecta?.Contenido ?? "No especificada";
+            MensajeFeedback = $"Incorrecto. La respuesta correcta era: {RespuestaCorrectaTexto}";
         }
+        
+        MostrarFeedback = true;
+        
+        // Esperar 2 segundos para mostrar el feedback antes de avanzar
+        Task.Delay(2000).ContinueWith(_ =>
+        {
+            Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+            {
+                MostrarFeedback = false;
+                
+                // Advance to next question
+                if (IndiceActual < Preguntas.Count - 1)
+                {
+                    IndiceActual++;
+                    ActualizarEstadoFase();
+                }
+                else
+                {
+                    // Quiz finished
+                    JuegoTerminado = true;
+                    EsModoTexto = false;
+                    EsModoImagen = false;
+                    EsModoAudio = false;
+                    ProgresoTexto = "COMPLETADO";
+                }
+            });
+        });
     }
 
     [RelayCommand]
