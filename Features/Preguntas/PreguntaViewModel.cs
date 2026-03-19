@@ -37,6 +37,9 @@ public partial class PreguntaViewModel : ViewModelBase
     private string _mensajeLimiteOpciones = "";
 
     [ObservableProperty]
+    private string _mensajeMinOpciones = "";
+
+    [ObservableProperty]
     private Categoria? _categoriaSeleccionada;
 
     [ObservableProperty]
@@ -184,6 +187,19 @@ public partial class PreguntaViewModel : ViewModelBase
 
         MensajeLimiteOpciones = "";
         OpcionesTemp.Add(new Opciones());
+    }
+
+    [RelayCommand]
+    private void EliminarOpcion(Opciones opcion)
+    {
+        if (OpcionesTemp.Count <= 2)
+        {
+            MensajeMinOpciones = "Debe haber al menos 2 opciones.";
+            return;
+        }
+
+        MensajeMinOpciones = "";
+        OpcionesTemp.Remove(opcion);
     }
 
 }
