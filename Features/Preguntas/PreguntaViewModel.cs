@@ -28,13 +28,18 @@ public partial class PreguntaViewModel : ViewModelBase
     private Pregunta? _preguntaSeleccionada;
 
     public PreguntaViewModel(AppDbContext context)
-    {
-        _context = context;
-    }
+{
+    _context = context;
+
+    _ = CargarDatosAsync();   
+}
 
     private async Task CargarDatosAsync()
     {
-        var preguntas = await _context.Preguntas.ToListAsync();
+        var preguntas = await _context.Preguntas
+            .Include(p => p.Categoria)
+            .ToListAsync();
+
         Preguntas = new ObservableCollection<Pregunta>(preguntas);
 
         var categorias = await _context.Categorias.ToListAsync();
