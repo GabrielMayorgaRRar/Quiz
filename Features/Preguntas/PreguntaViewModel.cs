@@ -39,6 +39,7 @@ public partial class PreguntaViewModel : ViewModelBase
     [ObservableProperty]
     private string _mensajeMinOpciones = "";
 
+    
     [ObservableProperty]
     private Categoria? _categoriaSeleccionada;
 
