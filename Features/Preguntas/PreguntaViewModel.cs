@@ -28,11 +28,11 @@ public partial class PreguntaViewModel : ViewModelBase
     private Pregunta? _preguntaSeleccionada;
 
     public PreguntaViewModel(AppDbContext context)
-{
-    _context = context;
+    {
+        _context = context;
 
-    _ = CargarDatosAsync();   
-}
+        _ = CargarDatosAsync();
+    }
 
     private async Task CargarDatosAsync()
     {
@@ -47,14 +47,31 @@ public partial class PreguntaViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    //Agregar nueva pregunta ya funciona modifique "AgregarAsync" para que se ejecute en el click del boton
     private async Task AgregarAsync()
     {
-        if (string.IsNullOrWhiteSpace(Enunciado) || CategoriaSeleccionada is null) return;
-        var pregunta = new Pregunta { Enunciado = Enunciado, CategoriaId = CategoriaSeleccionada.Id };
+        if (string.IsNullOrWhiteSpace(Enunciado) || CategoriaSeleccionada == null)
+            return;
+
+        var pregunta = new Pregunta
+        {
+            Enunciado = Enunciado,
+            CategoriaId = CategoriaSeleccionada.Id
+        };
+
         _context.Preguntas.Add(pregunta);
+
         await _context.SaveChangesAsync();
-        Preguntas.Add(pregunta);
-        Enunciado = string.Empty;
+
+        // volver a cargar con categoria incluida
+        var nueva = await _context.Preguntas
+            .Include(p => p.Categoria)
+            .FirstAsync(p => p.Id == pregunta.Id);
+
+        Preguntas.Add(nueva);
+
+        Enunciado = "";
+        CategoriaSeleccionada = null;
     }
 
     [RelayCommand]
@@ -66,3 +83,13 @@ public partial class PreguntaViewModel : ViewModelBase
         Preguntas.Remove(PreguntaSeleccionada);
     }
 }
+
+// Si por alguna razón borraron datos en la BD, solo ejecuten
+/*
+SELECT setval(
+    pg_get_serial_sequence('"Preguntas"', 'Id'),
+    (SELECT MAX("Id") FROM "Preguntas")
+);
+
+no le se mucho a PGadmin pero eso reinicia la secuencia
+*/
