@@ -13,61 +13,6 @@ namespace Quiz.Features.Preguntas;
 
 public partial class PreguntaViewModel : ViewModelBase
 {
-
-
-
-    // Propiedades para la pregunta seleccionada y su respuesta
-    [ObservableProperty] private string _opcionA = "";
-    [ObservableProperty] private string _opcionB = "";
-    [ObservableProperty] private string _opcionC = "";
-
-    private bool _aCorrecta;
-    public bool ACorrecta
-    {
-        get => _aCorrecta;
-        set
-        {
-            SetProperty(ref _aCorrecta, value);
-            if (value)
-            {
-                BCorrecta = false;
-                CCorrecta = false;
-            }
-        }
-    }
-
-
-
-    private bool _bCorrecta;
-    public bool BCorrecta
-    {
-        get => _bCorrecta;
-        set
-        {
-            SetProperty(ref _bCorrecta, value);
-            if (value)
-            {
-                ACorrecta = false;
-                CCorrecta = false;
-            }
-        }
-    }
-
-    private bool _cCorrecta;
-    public bool CCorrecta
-    {
-        get => _cCorrecta;
-        set
-        {
-            SetProperty(ref _cCorrecta, value);
-            if (value)
-            {
-                ACorrecta = false;
-                BCorrecta = false;
-            }
-        }
-    }
-
     private readonly AppDbContext _context;
 
     [ObservableProperty]

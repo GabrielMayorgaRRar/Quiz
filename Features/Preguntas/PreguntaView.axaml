@@ -214,7 +214,7 @@ mc:Ignorable="d">
 
                                             <TextBox
                                             Text="{Binding Contenido}"
-                                            Watermark="Texto de la opción..." />
+                                            Watermark="Texto, enlace o ruta multimedia..." />
 
                                             <CheckBox
                                             Grid.Column="1"
@@ -311,7 +311,7 @@ mc:Ignorable="d">
             SelectedItem="{Binding PreguntaSeleccionada}">
                 <DataGrid.Columns>
                     <DataGridTextColumn
-                    Width="80"
+                    Width="200"
                     Binding="{Binding Categoria.Nombre}"
                     Header="ID" />
                     <DataGridTextColumn
@@ -319,7 +319,7 @@ mc:Ignorable="d">
                     Binding="{Binding Enunciado}"
                     Header="ENUNCIADO" />
                     <DataGridTextColumn
-                    Width="200"
+                    Width="80"
                     Binding="{Binding CategoriaId}"
                     Header="CAT" />
                 </DataGrid.Columns>
