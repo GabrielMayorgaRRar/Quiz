@@ -39,7 +39,7 @@ public partial class PreguntaViewModel : ViewModelBase
     [ObservableProperty]
     private string _mensajeMinOpciones = "";
 
-    
+
     [ObservableProperty]
     private Categoria? _categoriaSeleccionada;
 
@@ -114,6 +114,16 @@ public partial class PreguntaViewModel : ViewModelBase
         if (OpcionesTemp.Any(o => string.IsNullOrWhiteSpace(o.Contenido)))
         {
             MensajeOpciones = "Todas las opciones deben tener contenido.";
+            return;
+        }
+
+        var repetidas = OpcionesTemp
+        .GroupBy(o => o.Contenido.Trim().ToLower())
+        .Any(g => g.Count() > 1);
+
+        if (repetidas)
+        {
+            MensajeOpciones = "No puede haber opciones de respuesta iguales.";
             return;
         }
 
