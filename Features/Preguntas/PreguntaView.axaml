@@ -250,7 +250,7 @@ mc:Ignorable="d">
                                             Grid.Column="0"
                                             HorizontalAlignment="Stretch"
                                             Text="{Binding Contenido}"
-                                            Watermark="Texto de la opción..." 
+                                            Watermark="Texto, enlace o ruta multimedia..." 
                                             KeyUp="Opcion_KeyUp"/>
 
                                             <CheckBox
