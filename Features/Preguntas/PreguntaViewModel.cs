@@ -31,6 +31,9 @@ public partial class PreguntaViewModel : ViewModelBase
     private string _mensajeOpciones = "";
 
     [ObservableProperty]
+    private string _mensajeExito = "";
+
+    [ObservableProperty]
     private Categoria? _categoriaSeleccionada;
 
     [ObservableProperty]
@@ -74,6 +77,7 @@ public partial class PreguntaViewModel : ViewModelBase
     [RelayCommand]
     private async Task AgregarAsync()
     {
+        MensajeExito = "";
         if (string.IsNullOrWhiteSpace(Enunciado))
         {
             MensajeError = "Debe escribir una pregunta.";
@@ -92,7 +96,10 @@ public partial class PreguntaViewModel : ViewModelBase
             && p.CategoriaId == CategoriaSeleccionada.Id);
 
         if (existe)
+        {
+            MensajeError = "Esta pregunta ya existe en esa categoría.";
             return;
+        }
 
         if (OpcionesTemp.Count < 2)
             return;
@@ -140,6 +147,7 @@ public partial class PreguntaViewModel : ViewModelBase
             .FirstAsync(p => p.Id == pregunta.Id);
 
         Preguntas.Add(nueva);
+        MensajeExito = "Pregunta guardada correctamente.";
 
         // limpiar formulario
         Enunciado = "";

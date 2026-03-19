@@ -265,7 +265,7 @@ mc:Ignorable="d">
                             </ItemsControl.ItemTemplate>
 
                         </ItemsControl>
-                        
+
                         <Button HorizontalAlignment="Stretch" Classes="secondary" Command="{Binding AgregarOpcionCommand}">
                             <TextBlock
                             Classes="mono"
@@ -277,29 +277,29 @@ mc:Ignorable="d">
                     </StackPanel>
 
                     <Border
-                        Background="#FEF3C7"
-                        BorderBrush="#FCD34D"
-                        BorderThickness="1"
-                        CornerRadius="8"
-                        Padding="10"
-                        Margin="0,8,0,0"
-                        IsVisible="{Binding MensajeOpciones, Converter={StaticResource StringNotEmptyConverter}}">
+                    Background="#FEF3C7"
+                    BorderBrush="#FCD34D"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="10"
+                    Margin="0,8,0,0"
+                    IsVisible="{Binding MensajeOpciones, Converter={StaticResource StringNotEmptyConverter}}">
 
-                            <StackPanel Orientation="Horizontal" Spacing="8">
+                        <StackPanel Orientation="Horizontal" Spacing="8">
 
-                                <TextBlock
-                                Text="⚠"
-                                FontSize="16"
-                                Foreground="#92400E"/>
+                            <TextBlock
+                            Text="⚠"
+                            FontSize="16"
+                            Foreground="#92400E"/>
 
-                                <TextBlock
-                                Text="{Binding MensajeOpciones}"
-                                Foreground="#92400E"
-                                FontSize="13"
-                                TextWrapping="Wrap"/>
+                            <TextBlock
+                            Text="{Binding MensajeOpciones}"
+                            Foreground="#92400E"
+                            FontSize="13"
+                            TextWrapping="Wrap"/>
 
-                            </StackPanel>
-                        </Border>
+                        </StackPanel>
+                    </Border>
 
                     <Button
                     Margin="0,8,0,0"
@@ -313,7 +313,34 @@ mc:Ignorable="d">
                         LetterSpacing="1"
                         Text="GUARDAR PREGUNTA" />
                     </Button>
+
+                    <Border
+                    Background="#DCFCE7"
+                    BorderBrush="#86EFAC"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="10"
+                    Margin="0,8,0,0"
+                    IsVisible="{Binding MensajeExito, Converter={StaticResource StringNotEmptyConverter}}">
+
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+
+                            <TextBlock
+                            Text="✔"
+                            FontSize="16"
+                            Foreground="#166534"/>
+
+                            <TextBlock
+                            Text="{Binding MensajeExito}"
+                            Foreground="#166534"
+                            FontSize="13"
+                            TextWrapping="Wrap"/>
+
+                        </StackPanel>
+                    </Border>
                 </StackPanel>
+
+
             </ScrollViewer>
         </Border>
 
