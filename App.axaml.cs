@@ -38,7 +38,7 @@ public partial class App : Application
     {
         var host   = Environment.GetEnvironmentVariable("DB_HOST") ?? "localhost";
         var port   = Environment.GetEnvironmentVariable("DB_PORT") ?? "5432";
-        var name   = Environment.GetEnvironmentVariable("DB_NAME") ?? "FLDSMDFR";
+        var name   = Environment.GetEnvironmentVariable("DB_NAME") ?? "net_psql";
         var user   = Environment.GetEnvironmentVariable("DB_USER") ?? "postgres";
         var pass   = Environment.GetEnvironmentVariable("DB_PASS") ?? "fghj";
 
