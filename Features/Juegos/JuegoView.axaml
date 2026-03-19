@@ -1,0 +1,321 @@
+<UserControl
+    x:Class="Quiz.Features.Juegos.JuegoView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:Quiz.Features.Juegos"
+    x:DataType="vm:JuegoViewModel"
+    Background="#FAFAF9"
+    FontFamily="Inter, Roboto, sans-serif"
+    mc:Ignorable="d">
+
+    <UserControl.Styles>
+        <Style Selector="TextBlock.serif">
+            <Setter Property="FontFamily" Value="Georgia, Times New Roman, serif" />
+        </Style>
+        <Style Selector="TextBlock.mono">
+            <Setter Property="FontFamily" Value="Consolas, Cascadia Code, Courier New, monospace" />
+        </Style>
+
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush" Value="#D6D3D1" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="Padding" Value="16,12" />
+            <Setter Property="Foreground" Value="#433829" />
+            <Setter Property="CaretBrush" Value="#433829" />
+        </Style>
+        <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#E07A5F" />
+            <Setter Property="Background" Value="#05E07A5F" />
+        </Style>
+
+        <Style Selector="ComboBox">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush" Value="#D6D3D1" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="Padding" Value="16,10" />
+            <Setter Property="Foreground" Value="#433829" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+        </Style>
+
+        <Style Selector="Button.primary">
+            <Setter Property="Background" Value="#E07A5F" />
+            <Setter Property="Foreground" Value="#FAFAF9" />
+            <Setter Property="Padding" Value="24,12" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Button.primary:pointerover">
+            <Setter Property="Background" Value="#C25A3F" />
+        </Style>
+
+        <Style Selector="Button.secondary">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#78716C" />
+            <Setter Property="BorderBrush" Value="#D6D3D1" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Padding" Value="16,8" />
+            <Setter Property="CornerRadius" Value="10" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Button.secondary:pointerover">
+            <Setter Property="Background" Value="#F5F5F4" />
+            <Setter Property="Foreground" Value="#433829" />
+        </Style>
+
+        <Style Selector="Button.destructive">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="#BC4749" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Foreground" Value="#BC4749" />
+            <Setter Property="Padding" Value="16,8" />
+            <Setter Property="CornerRadius" Value="0" />
+        </Style>
+        <Style Selector="Button.destructive:pointerover">
+            <Setter Property="Background" Value="#0ABC4749" />
+        </Style>
+
+        <Style Selector="DataGrid">
+            <Setter Property="Background" Value="#FAFAF9" />
+            <Setter Property="BorderBrush" Value="#D6D3D1" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="RowBackground" Value="#FAFAF9" />
+            <Setter Property="HeadersVisibility" Value="Column" />
+            <Setter Property="GridLinesVisibility" Value="Horizontal" />
+            <Setter Property="HorizontalGridLinesBrush" Value="#E7E5E4" />
+            <Setter Property="VerticalGridLinesBrush" Value="Transparent" />
+        </Style>
+        <Style Selector="DataGridColumnHeader">
+            <Setter Property="Background" Value="#F5F5F4" />
+            <Setter Property="Foreground" Value="#78716C" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Padding" Value="16,12" />
+            <Setter Property="BorderThickness" Value="0,0,0,1" />
+            <Setter Property="BorderBrush" Value="#D6D3D1" />
+        </Style>
+        <Style Selector="DataGridCell">
+            <Setter Property="Padding" Value="16,12" />
+            <Setter Property="Foreground" Value="#433829" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid Margin="40" ColumnDefinitions="450,*">
+        <Border
+            Grid.Column="0"
+            Padding="0,0,40,0"
+            BorderBrush="#D6D3D1"
+            BorderThickness="0,0,1,0">
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="0,0,0,24" Spacing="32">
+
+                    <!--  Form Header  -->
+                    <StackPanel Spacing="8">
+                        <TextBlock
+                            Classes="mono"
+                            FontSize="11"
+                            FontWeight="Bold"
+                            Foreground="#D4A373"
+                            LetterSpacing="1"
+                            Text="Partidas" />
+                        <TextBlock
+                            Classes="serif"
+                            FontSize="32"
+                            Foreground="#433829"
+                            LineHeight="40"
+                            Text="Registrar Nueva Partida"
+                            TextWrapping="Wrap" />
+                        <TextBlock
+                            FontSize="14"
+                            Foreground="#78716C"
+                            LineHeight="22"
+                            Text="Diseña un espacio de juego y distribuye la clave secreta a los participantes."
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+
+                    <Border
+                        Height="1"
+                        HorizontalAlignment="Stretch"
+                        Background="#E7E5E4" />
+
+                    <StackPanel Spacing="24">
+
+                        <StackPanel Spacing="8">
+                            <TextBlock
+                                Classes="mono"
+                                FontSize="10"
+                                FontWeight="SemiBold"
+                                Foreground="#A8A29E"
+                                LetterSpacing="1"
+                                Text="NOMBRE DEL JUEGO" />
+                            <TextBox
+                                FontSize="15"
+                                Text="{Binding Nombre}"
+                                Watermark="Ej. Desafío de Historia Fase 1..." />
+                        </StackPanel>
+
+                        <StackPanel Spacing="8">
+                            <TextBlock
+                                Classes="mono"
+                                FontSize="10"
+                                FontWeight="SemiBold"
+                                Foreground="#A8A29E"
+                                LetterSpacing="1"
+                                Text="TÓPICO A EVALUAR" />
+                            <ComboBox
+                                DisplayMemberBinding="{Binding Nombre}"
+                                ItemsSource="{Binding Categorias}"
+                                PlaceholderText="Seleccione una categoría guardada..."
+                                SelectedItem="{Binding CategoriaSeleccionada}" />
+                        </StackPanel>
+
+                        <StackPanel Spacing="8">
+                            <Grid ColumnDefinitions="*, Auto">
+                                <TextBlock
+                                    Grid.Column="0"
+                                    VerticalAlignment="Center"
+                                    Classes="mono"
+                                    FontSize="10"
+                                    FontWeight="Bold"
+                                    Foreground="#E07A5F"
+                                    LetterSpacing="1"
+                                    Text="CLAVE DE ACCESO AUTOGENERADA" />
+                                <Button
+                                    Grid.Column="1"
+                                    Padding="8,4"
+                                    Classes="secondary"
+                                    Command="{Binding RefrescarClaveCommand}"
+                                    CornerRadius="4">
+                                    <TextBlock
+                                        Classes="mono"
+                                        FontSize="9"
+                                        FontWeight="Bold"
+                                        Text="↻ REFRESCAR" />
+                                </Button>
+                            </Grid>
+
+                            <Border
+                                Padding="16,16"
+                                Background="#F5F5F4"
+                                BorderBrush="#D6D3D1"
+                                BorderThickness="1"
+                                CornerRadius="10">
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    Classes="mono"
+                                    FontSize="24"
+                                    FontWeight="Bold"
+                                    Foreground="#433829"
+                                    LetterSpacing="4"
+                                    Text="{Binding Clave}" />
+                            </Border>
+                            <TextBlock
+                                Margin="0,4,0,0"
+                                FontSize="11"
+                                Foreground="#A8A29E"
+                                Text="Esta clave ha sido generada aleatoriamente utilizando el tiempo actual para asegurar su unicidad (AAMMdd-HHmmss)."
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+
+                    </StackPanel>
+
+                    <Border
+                        Height="1"
+                        Margin="32,0"
+                        HorizontalAlignment="Stretch"
+                        Background="#E7E5E4" />
+
+                    <Button
+                        Margin="0,8,0,0"
+                        HorizontalAlignment="Stretch"
+                        Classes="primary"
+                        Command="{Binding AgregarCommand}">
+                        <TextBlock
+                            Classes="mono"
+                            FontSize="12"
+                            FontWeight="Bold"
+                            LetterSpacing="1"
+                            Text="APERTURAR SALA" />
+                    </Button>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <Grid
+            Grid.Column="1"
+            Margin="40,0,0,0"
+            RowDefinitions="Auto,*">
+            <Grid
+                Grid.Row="0"
+                Margin="0,0,0,24"
+                ColumnDefinitions="*,Auto">
+                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                    <TextBlock
+                        Classes="serif"
+                        FontSize="24"
+                        Foreground="#433829"
+                        Text="Registro de Partidas" />
+                    <TextBlock
+                        Margin="0,4,0,0"
+                        FontSize="14"
+                        Foreground="#78716C"
+                        Text="Monitoreo de todos los juegos creados en la plataforma." />
+                </StackPanel>
+
+                <Button
+                    Grid.Column="1"
+                    VerticalAlignment="Center"
+                    Classes="destructive"
+                    Command="{Binding EliminarCommand}"
+                    Cursor="Hand">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontSize="12"
+                            Foreground="#BC4749"
+                            Text="✕" />
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            Classes="mono"
+                            FontSize="11"
+                            FontWeight="Bold"
+                            LetterSpacing="1"
+                            Text="EXPIRAR SELECCIÓN" />
+                    </StackPanel>
+                </Button>
+            </Grid>
+
+            <DataGrid
+                Grid.Row="1"
+                AutoGenerateColumns="False"
+                CanUserReorderColumns="False"
+                CanUserResizeColumns="False"
+                IsReadOnly="True"
+                ItemsSource="{Binding Juegos}"
+                SelectedItem="{Binding JuegoSeleccionado}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Width="80"
+                        Binding="{Binding Id}"
+                        Header="ID" />
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding nombre}"
+                        Header="NOMBRE DEL JUEGO" />
+                    <DataGridTextColumn
+                        Width="150"
+                        Binding="{Binding Clave}"
+                        Header="CLAVE VINCULADA" />
+                    <DataGridTextColumn
+                        Width="150"
+                        Binding="{Binding FechaCreacion, StringFormat=\{0:dd/MM/yyyy\}}"
+                        Header="CREACIÓN" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+        </Grid>
+    </Grid>
+</UserControl>

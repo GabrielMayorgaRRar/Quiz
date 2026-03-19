@@ -1,0 +1,82 @@
+<Window
+    x:Class="Quiz.Views.MainWindow"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:features_categorias="using:Quiz.Features.Categorias"
+    xmlns:features_juegos="using:Quiz.Features.Juegos"
+    xmlns:features_preguntas="using:Quiz.Features.Preguntas"
+    xmlns:features_quizsession="using:Quiz.Features.QuizSession"
+    xmlns:features_usuarios="using:Quiz.Features.Usuarios"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:views="using:Quiz.Views"
+    xmlns:vm="using:Quiz.ViewModels"
+    Title="Quiz"
+    Width="1080"
+    Height="720"
+    MinWidth="1080"
+    MinHeight="720"
+    MaxWidth="1280"
+    MaxHeight="1000"
+    x:DataType="vm:MainWindowViewModel"
+    Icon="/Assets/avalonia-logo.ico"
+    mc:Ignorable="d">
+
+    <Design.DataContext>
+        <vm:MainWindowViewModel />
+    </Design.DataContext>
+
+    <Window.Styles>
+        <Style Selector="TabControl">
+            <Setter Property="Background" Value="#FAFAF9" />
+            <Setter Property="Margin" Value="16,16,16,0" />
+        </Style>
+        <Style Selector="TabControl /template/ ItemsPresenter#PART_ItemsPresenter">
+            <Setter Property="Margin" Value="16,0,16,16" />
+        </Style>
+        <Style Selector="TabItem">
+            <Setter Property="FontFamily" Value="Inter, Roboto, sans-serif" />
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="FontWeight" Value="Heavy" />
+            <Setter Property="Foreground" Value="#A8A29E" />
+            <Setter Property="Margin" Value="0,0,12,0" />
+            <Setter Property="Padding" Value="24,12" />
+            <Setter Property="CornerRadius" Value="24" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+        <Style Selector="TabItem:pointerover">
+            <Setter Property="Foreground" Value="#433829" />
+            <Setter Property="Background" Value="#F5F5F4" />
+        </Style>
+        <Style Selector="TabItem:selected">
+            <Setter Property="Foreground" Value="#FAFAF9" />
+            <Setter Property="Background" Value="#E07A5F" />
+        </Style>
+        <Style Selector="TabItem:selected /template/ Border#PART_SelectedPipe">
+            <Setter Property="IsVisible" Value="False" />
+        </Style>
+    </Window.Styles>
+
+    <TabControl SelectedIndex="{Binding SelectedTab}">
+        <TabItem Header="Inicio">
+            <views:HomeView DataContext="{Binding HomeVM}" />
+        </TabItem>
+        <TabItem Header="Juegos">
+            <features_juegos:JuegoView DataContext="{Binding JuegoVM}" />
+        </TabItem>
+        <TabItem Header="Preguntas">
+            <features_preguntas:PreguntaView DataContext="{Binding PreguntaVM}" />
+        </TabItem>
+        <TabItem Header="Categorías">
+            <features_categorias:CategoriaView DataContext="{Binding CategoriaVM}" />
+        </TabItem>
+        <TabItem Header="Usuarios">
+            <features_usuarios:UsuarioView DataContext="{Binding UsuarioVM}" />
+        </TabItem>
+        <TabItem Header="Partida (Demo)">
+            <features_quizsession:QuizSessionView DataContext="{Binding QuizSessionVM}" />
+        </TabItem>
+    </TabControl>
+
+</Window>

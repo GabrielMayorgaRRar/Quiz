@@ -1,0 +1,217 @@
+<UserControl
+    x:Class="Quiz.Features.Categorias.CategoriaView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:Quiz.Features.Categorias"
+    x:DataType="vm:CategoriaViewModel"
+    Background="#FAFAF9"
+    FontFamily="Inter, Roboto, sans-serif"
+    mc:Ignorable="d">
+
+    <UserControl.Styles>
+        <Style Selector="TextBlock.serif">
+            <Setter Property="FontFamily" Value="Georgia, Times New Roman, serif" />
+        </Style>
+        <Style Selector="TextBlock.mono">
+            <Setter Property="FontFamily" Value="Consolas, Cascadia Code, Courier New, monospace" />
+        </Style>
+
+        <Style Selector="TextBox">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0,0,0,1" />
+            <Setter Property="BorderBrush" Value="#D6D3D1" />
+            <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="Padding" Value="0,12" />
+            <Setter Property="Foreground" Value="#433829" />
+            <Setter Property="CaretBrush" Value="#433829" />
+        </Style>
+        <Style Selector="TextBox:focus /template/ Border#PART_BorderElement">
+            <Setter Property="BorderBrush" Value="#E07A5F" />
+            <Setter Property="Background" Value="#05E07A5F" />
+        </Style>
+
+        <Style Selector="Button.primary">
+            <Setter Property="Background" Value="#E07A5F" />
+            <Setter Property="Foreground" Value="#FAFAF9" />
+            <Setter Property="Padding" Value="24,12" />
+            <Setter Property="CornerRadius" Value="0" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+        </Style>
+        <Style Selector="Button.primary:pointerover">
+            <Setter Property="Background" Value="#C25A3F" />
+        </Style>
+
+        <Style Selector="Button.destructive">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderBrush" Value="#BC4749" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="Foreground" Value="#BC4749" />
+            <Setter Property="Padding" Value="16,8" />
+            <Setter Property="CornerRadius" Value="0" />
+        </Style>
+        <Style Selector="Button.destructive:pointerover">
+            <Setter Property="Background" Value="#0ABC4749" />
+        </Style>
+
+        <Style Selector="DataGrid">
+            <Setter Property="Background" Value="#FAFAF9" />
+            <Setter Property="BorderBrush" Value="#D6D3D1" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="RowBackground" Value="#FAFAF9" />
+            <Setter Property="HeadersVisibility" Value="Column" />
+            <Setter Property="GridLinesVisibility" Value="Horizontal" />
+            <Setter Property="HorizontalGridLinesBrush" Value="#E7E5E4" />
+            <Setter Property="VerticalGridLinesBrush" Value="Transparent" />
+        </Style>
+        <Style Selector="DataGridColumnHeader">
+            <Setter Property="Background" Value="#F5F5F4" />
+            <Setter Property="Foreground" Value="#78716C" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Padding" Value="16,12" />
+            <Setter Property="BorderThickness" Value="0,0,0,1" />
+            <Setter Property="BorderBrush" Value="#D6D3D1" />
+        </Style>
+        <Style Selector="DataGridCell">
+            <Setter Property="Padding" Value="16,12" />
+            <Setter Property="Foreground" Value="#433829" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid Margin="40" ColumnDefinitions="1*,2*">
+        <Border
+            Grid.Column="0"
+            Padding="0,0,40,0"
+            BorderBrush="#D6D3D1"
+            BorderThickness="0,0,1,0">
+            <StackPanel Spacing="32">
+                <StackPanel Spacing="8">
+                    <TextBlock
+                        Classes="mono"
+                        FontSize="11"
+                        FontWeight="Bold"
+                        Foreground="#D4A373"
+                        LetterSpacing="1"
+                        Text="Registros" />
+                    <TextBlock
+                        Classes="serif"
+                        FontSize="32"
+                        Foreground="#433829"
+                        LineHeight="40"
+                        Text="Añadir Nueva Categoría"
+                        TextWrapping="Wrap" />
+                    <TextBlock
+                        FontSize="14"
+                        Foreground="#78716C"
+                        LineHeight="22"
+                        Text="Introduce la denominación para la nueva clase en los archivos."
+                        TextWrapping="Wrap" />
+                </StackPanel>
+
+                <Border
+                    Height="1"
+                    HorizontalAlignment="Stretch"
+                    Background="#E7E5E4" />
+
+                <StackPanel Spacing="8">
+                    <TextBlock
+                        Classes="mono"
+                        FontSize="10"
+                        FontWeight="SemiBold"
+                        Foreground="#A8A29E"
+                        LetterSpacing="1"
+                        Text="NOMBRE DE LA CATEGORÍA" />
+                    <TextBox
+                        Padding="10"
+                        BorderBrush="#D6D3D1"
+                        BorderThickness="1"
+                        CornerRadius="10"
+                        FontSize="16"
+                        Text="{Binding Nombre}"
+                        Watermark="Ej. Filosofía Antigua..." />
+                </StackPanel>
+
+                <Button
+                    Margin="0,16,0,0"
+                    HorizontalAlignment="Stretch"
+                    Classes="primary"
+                    Command="{Binding AgregarCommand}">
+                    <TextBlock
+                        Classes="mono"
+                        FontSize="12"
+                        FontWeight="Bold"
+                        LetterSpacing="1"
+                        Text="CREAR REGISTRO" />
+                </Button>
+            </StackPanel>
+        </Border>
+
+        <Grid
+            Grid.Column="1"
+            Margin="40,0,0,0"
+            RowDefinitions="Auto,*">
+
+            <Grid
+                Grid.Row="0"
+                Margin="0,0,0,24"
+                ColumnDefinitions="*,Auto">
+                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                    <TextBlock
+                        Classes="serif"
+                        FontSize="24"
+                        Foreground="#433829"
+                        Text="Indice de Categorías" />
+                    <TextBlock
+                        Margin="0,4,0,0"
+                        FontSize="14"
+                        Foreground="#78716C"
+                        Text="Colección general de dominios de trivia resguardados." />
+                </StackPanel>
+
+                <Button
+                    Grid.Column="1"
+                    VerticalAlignment="Center"
+                    Classes="destructive"
+                    Command="{Binding EliminarCommand}"
+                    Cursor="Hand">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontSize="12"
+                            Foreground="#BC4749"
+                            Text="✕" />
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            Classes="mono"
+                            FontSize="11"
+                            FontWeight="Bold"
+                            LetterSpacing="1"
+                            Text="ELIMINAR SELECCIÓN" />
+                    </StackPanel>
+                </Button>
+            </Grid>
+
+            <DataGrid
+                Grid.Row="1"
+                AutoGenerateColumns="False"
+                CanUserReorderColumns="False"
+                CanUserResizeColumns="False"
+                IsReadOnly="True"
+                ItemsSource="{Binding Categorias}"
+                SelectedItem="{Binding CategoriaSeleccionada}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                        Width="80"
+                        Binding="{Binding Id}"
+                        Header="ID" />
+                    <DataGridTextColumn
+                        Width="*"
+                        Binding="{Binding Nombre}"
+                        Header="NOMBRE DE CLASIFICACIÓN" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+        </Grid>
+    </Grid>
+</UserControl>

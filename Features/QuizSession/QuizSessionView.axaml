@@ -1,0 +1,391 @@
+<UserControl
+    x:Class="Quiz.Features.QuizSession.QuizSessionView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:cv="using:Quiz.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:Quiz.Features.QuizSession"
+    d:DesignHeight="768"
+    d:DesignWidth="1024"
+    x:DataType="vm:QuizSessionViewModel"
+    Background="#FAFAF9"
+    FontFamily="Inter, Roboto, sans-serif"
+    mc:Ignorable="d">
+
+    <UserControl.Resources>
+        <cv:BitmapAssetValueConverter x:Key="bitmapConverter" />
+        <cv:CorrectBrushConverter x:Key="correctBrushConverter" />
+        <cv:CorrectTextConverter x:Key="correctTextConverter" />
+    </UserControl.Resources>
+
+    <UserControl.Styles>
+        <Style Selector="TextBlock.serif">
+            <Setter Property="FontFamily" Value="Georgia, Times New Roman, serif" />
+        </Style>
+        <Style Selector="TextBlock.mono">
+            <Setter Property="FontFamily" Value="Consolas, Cascadia Code, Courier New, monospace" />
+        </Style>
+
+        <Style Selector="Button.optionTextCard">
+            <Setter Property="Background" Value="#FFFFFF" />
+            <Setter Property="BorderThickness" Value="4" />
+            <Setter Property="BorderBrush" Value="#E7E5E4" />
+            <Setter Property="CornerRadius" Value="24" />
+            <Setter Property="Padding" Value="32,24" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="VerticalContentAlignment" Value="Center" />
+            <Setter Property="RenderTransform" Value="scale(1)" />
+        </Style>
+
+        <Style Selector="Button.optionTextCard:pointerover">
+            <Setter Property="RenderTransform" Value="scale(1.02)" />
+            <Setter Property="BorderBrush" Value="#E07A5F" />
+            <Setter Property="Background" Value="#05E07A5F" />
+        </Style>
+
+        <Style Selector="Button.optionTextCard:pointerover /template/ ContentPresenter">
+            <Setter Property="Background" Value="#05E07A5F" />
+            <Setter Property="BorderBrush" Value="#E07A5F" />
+        </Style>
+        <Style Selector="Button.optionImageCard">
+            <Setter Property="Background" Value="#FFFFFF" />
+            <Setter Property="BorderThickness" Value="4" />
+            <Setter Property="BorderBrush" Value="#E7E5E4" />
+            <Setter Property="CornerRadius" Value="24" />
+            <Setter Property="Padding" Value="8" />
+            <Setter Property="RenderTransform" Value="scale(1)" />
+        </Style>
+        <Style Selector="Button.optionImageCard:pointerover">
+            <Setter Property="BorderBrush" Value="#BC4749" />
+            <Setter Property="RenderTransform" Value="scale(1.02)" />
+        </Style>
+
+        <Style Selector="Button.optionAudioCard">
+            <Setter Property="Background" Value="#FAFAF9" />
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="BorderBrush" Value="#D4A373" />
+            <Setter Property="CornerRadius" Value="32" />
+            <Setter Property="Padding" Value="24,16" />
+        </Style>
+        <Style Selector="Button.optionAudioCard:pointerover">
+            <Setter Property="Background" Value="#D4A373" />
+            <Setter Property="Foreground" Value="#FAFAF9" />
+        </Style>
+
+        <Style Selector="Button.exitBtn">
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="Foreground" Value="#A8A29E" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+        </Style>
+        <Style Selector="Button.exitBtn:pointerover">
+            <Setter Property="Foreground" Value="#BC4749" />
+            <Setter Property="Background" Value="Transparent" />
+        </Style>
+
+        <Style Selector="Button.primaryAction">
+            <Setter Property="Background" Value="#E07A5F" />
+            <Setter Property="Foreground" Value="#FAFAF9" />
+            <Setter Property="FontWeight" Value="Heavy" />
+            <Setter Property="CornerRadius" Value="24" />
+            <Setter Property="Padding" Value="48,16" />
+        </Style>
+        <Style Selector="Button.primaryAction:pointerover">
+            <Setter Property="Background" Value="#BC4749" />
+        </Style>
+
+        <Style Selector="Button.secondaryAction">
+            <Setter Property="Background" Value="#E7E5E4" />
+            <Setter Property="Foreground" Value="#433829" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="CornerRadius" Value="24" />
+            <Setter Property="Padding" Value="32,16" />
+        </Style>
+        <Style Selector="Button.secondaryAction:pointerover">
+            <Setter Property="Background" Value="#D6D3D1" />
+        </Style>
+
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto, *">
+
+        <Border
+            Grid.Row="0"
+            Padding="32,24"
+            BorderBrush="#E7E5E4"
+            BorderThickness="0,0,0,1">
+            <Grid ColumnDefinitions="Auto, *, Auto">
+                <StackPanel
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal"
+                    Spacing="16">
+                    <Path
+                        Width="24"
+                        Height="24"
+                        Data="M18 4H6C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V6C20 4.89543 19.1046 4 18 4Z"
+                        Fill="#E07A5F"
+                        Stretch="Uniform" />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        Classes="serif"
+                        FontSize="18"
+                        FontWeight="Bold"
+                        Foreground="#433829"
+                        Text="QUIZ MASTER" />
+                </StackPanel>
+
+                <Border
+                    Grid.Column="1"
+                    Padding="16,8"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Background="#F5F5F4"
+                    CornerRadius="20">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontSize="11"
+                            FontWeight="Bold"
+                            Foreground="#A8A29E"
+                            LetterSpacing="1"
+                            Text="PROGRESO" />
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontSize="12"
+                            FontWeight="Heavy"
+                            Foreground="#433829"
+                            Text="{Binding ProgresoTexto}" />
+                    </StackPanel>
+                </Border>
+
+                <Button
+                    Grid.Column="2"
+                    VerticalAlignment="Center"
+                    Classes="exitBtn"
+                    Command="{Binding FinalizarPartidaCommand}">
+                    <TextBlock
+                        FontSize="12"
+                        LetterSpacing="1"
+                        Text="ABANDONAR PARTIDA" />
+                </Button>
+            </Grid>
+        </Border>
+
+        <Grid
+            Grid.Row="1"
+            MaxWidth="1000"
+            Margin="40"
+            HorizontalAlignment="Stretch"
+            RowDefinitions="Auto, *">
+
+            <TextBlock
+                Grid.Row="0"
+                Margin="0,48,0,64"
+                FontSize="48"
+                FontWeight="Black"
+                Foreground="#433829"
+                IsVisible="{Binding !JuegoTerminado}"
+                LineHeight="56"
+                Text="{Binding PreguntaActual.Enunciado}"
+                TextAlignment="Center"
+                TextWrapping="Wrap" />
+
+            <Panel Grid.Row="1" HorizontalAlignment="Center">
+                <ItemsControl IsVisible="{Binding EsModoTexto}" ItemsSource="{Binding PreguntaActual.Opciones}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Columns="2"
+                                Rows="2" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button
+                                Margin="12"
+                                Classes="optionTextCard"
+                                Command="{Binding $parent[UserControl].((vm:QuizSessionViewModel)DataContext).SeleccionarOpcionCommand}"
+                                CommandParameter="{Binding}">
+                                <TextBlock
+                                    FontSize="24"
+                                    FontWeight="Bold"
+                                    Foreground="#433829"
+                                    Text="{Binding Contenido}"
+                                    TextAlignment="Center"
+                                    TextWrapping="Wrap" />
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <ItemsControl IsVisible="{Binding EsModoImagen}" ItemsSource="{Binding PreguntaActual.Opciones}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <UniformGrid
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center"
+                                Columns="2"
+                                Rows="2" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button
+                                Width="300"
+                                Height="200"
+                                Margin="16"
+                                Classes="optionImageCard"
+                                Command="{Binding $parent[UserControl].((vm:QuizSessionViewModel)DataContext).SeleccionarOpcionCommand}"
+                                CommandParameter="{Binding}">
+                                <Border
+                                    HorizontalAlignment="Stretch"
+                                    VerticalAlignment="Stretch"
+                                    Background="#F5F5F4"
+                                    ClipToBounds="True"
+                                    CornerRadius="16">
+                                    <Image Source="{Binding Contenido, Converter={StaticResource bitmapConverter}}" Stretch="Uniform" />
+                                </Border>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <ItemsControl
+                    Width="500"
+                    IsVisible="{Binding EsModoAudio}"
+                    ItemsSource="{Binding PreguntaActual.Opciones}">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel
+                                HorizontalAlignment="Stretch"
+                                VerticalAlignment="Center"
+                                Spacing="16" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Button
+                                HorizontalAlignment="Stretch"
+                                Classes="optionAudioCard"
+                                Command="{Binding $parent[UserControl].((vm:QuizSessionViewModel)DataContext).SeleccionarOpcionCommand}"
+                                CommandParameter="{Binding}">
+                                <Grid ColumnDefinitions="Auto,*">
+                                    <Border
+                                        Grid.Column="0"
+                                        Width="32"
+                                        Height="32"
+                                        Margin="0,0,16,0"
+                                        Background="#FAF9F9"
+                                        CornerRadius="16">
+                                        <Path
+                                            Width="12"
+                                            Height="12"
+                                            Data="M8 5V19L19 12L8 5Z"
+                                            Fill="#D4A373"
+                                            Stretch="Uniform" />
+                                    </Border>
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        VerticalAlignment="Center"
+                                        FontSize="18"
+                                        FontWeight="SemiBold"
+                                        Foreground="#433829"
+                                        Text="{Binding Contenido}" />
+                                </Grid>
+                            </Button>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- Feedback Overlay -->
+                <Border
+                    IsVisible="{Binding MostrarFeedback}"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Background="#CCFFFFFF">
+                    <Border
+                        MaxWidth="400"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Background="{Binding EsCorrecta, Converter={StaticResource correctBrushConverter}}"
+                        CornerRadius="32"
+                        Padding="32,24">
+                        <StackPanel Spacing="16">
+                            <TextBlock
+                                FontSize="32"
+                                FontWeight="Bold"
+                                Foreground="{Binding EsCorrecta, Converter={StaticResource correctTextConverter}}"
+                                Text="{Binding MensajeFeedback}"
+                                TextAlignment="Center"
+                                TextWrapping="Wrap" />
+                            
+                            <!-- Mostrar respuesta correcta si falló -->
+                            <TextBlock
+                                IsVisible="{Binding !EsCorrecta}"
+                                FontSize="18"
+                                Foreground="#433829"
+                                Text="{Binding RespuestaCorrectaTexto}"
+                                TextAlignment="Center"
+                                TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+                </Border>
+
+                <StackPanel
+                    Margin="0,48,0,0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    IsVisible="{Binding JuegoTerminado}"
+                    Spacing="32">
+
+                    <Border
+                        Width="120"
+                        Height="120"
+                        HorizontalAlignment="Center"
+                        Background="#1AE07A5F"
+                        CornerRadius="60">
+                        <Path
+                            Width="64"
+                            Height="64"
+                            Data="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
+                            Fill="#E07A5F"
+                            Stretch="Uniform" />
+                    </Border>
+
+                    <StackPanel HorizontalAlignment="Center" Spacing="16">
+                        <TextBlock
+                            FontSize="48"
+                            FontWeight="Black"
+                            Foreground="#433829"
+                            Text="¡QUIZ COMPLETADO!"
+                            TextAlignment="Center" />
+                        <TextBlock
+                            FontSize="20"
+                            Foreground="#78716C"
+                            Text="Has superado todas las misiones de esta partida."
+                            TextAlignment="Center" />
+                    </StackPanel>
+
+                    <StackPanel
+                        Margin="0,24,0,0"
+                        HorizontalAlignment="Center"
+                        Orientation="Horizontal"
+                        Spacing="24">
+                        <Button Classes="secondaryAction" Command="{Binding ReiniciarPartidaCommand}">
+                            <TextBlock FontSize="16" Text="JUGAR DE NUEVO" />
+                        </Button>
+                        <Button Classes="primaryAction" Command="{Binding FinalizarPartidaCommand}">
+                            <TextBlock FontSize="16" Text="VOLVER AL INICIO" />
+                        </Button>
+                    </StackPanel>
+
+                </StackPanel>
+
+            </Panel>
+        </Grid>
+
+    </Grid>
+</UserControl>

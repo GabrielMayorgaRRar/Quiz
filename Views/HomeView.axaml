@@ -1,0 +1,442 @@
+<UserControl
+    x:Class="Quiz.Views.HomeView"
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:vm="using:Quiz.Features.Home"
+    d:DesignHeight="768"
+    d:DesignWidth="1024"
+    x:DataType="vm:HomeViewModel"
+    Background="#FAFAF9"
+    FontFamily="Inter, Roboto, sans-serif"
+    mc:Ignorable="d">
+
+    <UserControl.Styles>
+        <Style Selector="TextBlock.serif">
+            <Setter Property="FontFamily" Value="Georgia, Times New Roman, serif" />
+        </Style>
+        <Style Selector="TextBlock.mono">
+            <Setter Property="FontFamily" Value="Consolas, Cascadia Code, Courier New, monospace" />
+        </Style>
+        <Style Selector="Button.categoryCard">
+            <Setter Property="Background" Value="#FAFAF9" />
+            <Setter Property="BorderThickness" Value="4" />
+            <Setter Property="BorderBrush" Value="#E7E5E4" />
+            <Setter Property="CornerRadius" Value="24" />
+            <Setter Property="Padding" Value="24" />
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Property="Background" Duration="0:0:0.15" />
+                    <BrushTransition Property="BorderBrush" Duration="0:0:0.15" />
+                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.15" />
+                </Transitions>
+            </Setter>
+            <Setter Property="RenderTransform" Value="scale(1)" />
+        </Style>
+
+        <Style Selector="Button.categoryCard:pointerover">
+            <Setter Property="RenderTransform" Value="scale(1.02)" />
+            <Setter Property="BorderThickness" Value="4" />
+        </Style>
+
+        <Style Selector="Button.history:pointerover">
+            <Setter Property="Background" Value="#0AE07A5F" />
+            <Setter Property="BorderBrush" Value="#E07A5F" />
+        </Style>
+        <Style Selector="Button.science:pointerover">
+            <Setter Property="Background" Value="#0ABC4749" />
+            <Setter Property="BorderBrush" Value="#BC4749" />
+        </Style>
+        <Style Selector="Button.music:pointerover">
+            <Setter Property="Background" Value="#0AF2CC8F" />
+            <Setter Property="BorderBrush" Value="#F2CC8F" />
+        </Style>
+        <Style Selector="Button.sports:pointerover">
+            <Setter Property="Background" Value="#0AD4A373" />
+            <Setter Property="BorderBrush" Value="#D4A373" />
+        </Style>
+        <Style Selector="Button.art:pointerover">
+            <Setter Property="Background" Value="#0AE65C00" />
+            <Setter Property="BorderBrush" Value="#E65C00" />
+        </Style>
+
+        <Style Selector="TextBox.pinInput">
+            <Setter Property="Background" Value="#F5F5F4" />
+            <Setter Property="BorderBrush" Value="#D6D3D1" />
+            <Setter Property="BorderThickness" Value="2" />
+            <Setter Property="CornerRadius" Value="20" />
+            <Setter Property="Padding" Value="24,16" />
+            <Setter Property="FontSize" Value="24" />
+            <Setter Property="FontWeight" Value="Bold" />
+            <Setter Property="LetterSpacing" Value="4" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="Foreground" Value="#433829" />
+        </Style>
+        <Style Selector="TextBox.pinInput:focus /template/ Border#PART_BorderElement">
+            <Setter Property="Background" Value="#FAFAF9" />
+            <Setter Property="BorderBrush" Value="#E07A5F" />
+            <Setter Property="BorderThickness" Value="3" />
+        </Style>
+
+        <Style Selector="Button.hero">
+            <Setter Property="Background" Value="#E07A5F" />
+            <Setter Property="Foreground" Value="#FAFAF9" />
+            <Setter Property="CornerRadius" Value="20" />
+            <Setter Property="Padding" Value="0,16" />
+            <Setter Property="HorizontalContentAlignment" Value="Center" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="FontWeight" Value="Heavy" />
+        </Style>
+        <Style Selector="Button.hero:pointerover">
+            <Setter Property="Background" Value="#C25A3F" />
+        </Style>
+    </UserControl.Styles>
+
+    <Grid RowDefinitions="Auto, *">
+
+        <Border
+            Grid.Row="0"
+            BorderBrush="#E7E5E4"
+            BorderThickness="0,0,0,1">
+            <Grid
+                Margin="32,24"
+                VerticalAlignment="Center"
+                ColumnDefinitions="Auto,*,Auto">
+
+                <StackPanel
+                    Grid.Column="0"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal"
+                    Spacing="16">
+                    <Path
+                        Width="28"
+                        Height="28"
+                        Data="M18 4H6C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V6C20 4.89543 19.1046 4 18 4Z M10.5 15.5L6.5 11.5L7.91 10.09L10.5 12.67L16.09 7.09L17.5 8.5L10.5 15.5Z"
+                        Fill="#E07A5F"
+                        Stretch="Uniform" />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontSize="20"
+                        FontWeight="Heavy"
+                        Foreground="#433829"
+                        LetterSpacing="1"
+                        Text="QUIZ MASTER" />
+                </StackPanel>
+
+                <StackPanel
+                    Grid.Column="1"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Orientation="Horizontal"
+                    Spacing="40">
+                    <TextBlock
+                        Cursor="Hand"
+                        FontSize="16"
+                        FontWeight="SemiBold"
+                        Foreground="#433829"
+                        Text="Jugar" />
+                    <TextBlock
+                        Cursor="Hand"
+                        FontSize="16"
+                        FontWeight="Medium"
+                        Foreground="#A8A29E"
+                        Text="Ranking" />
+                </StackPanel>
+
+                <Border
+                    Grid.Column="2"
+                    Padding="16,8"
+                    Background="#F5F5F4"
+                    CornerRadius="20"
+                    Cursor="Hand">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <TextBlock
+                            VerticalAlignment="Center"
+                            FontSize="14"
+                            FontWeight="Bold"
+                            Foreground="#433829"
+                            Text="Mi Perfil" />
+                        <Path
+                            Width="18"
+                            Height="18"
+                            VerticalAlignment="Center"
+                            Data="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"
+                            Fill="#433829"
+                            Stretch="Uniform" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Border>
+
+        <ScrollViewer
+            Grid.Row="1"
+            HorizontalScrollBarVisibility="Disabled"
+            VerticalScrollBarVisibility="Auto">
+            <Grid
+                MaxWidth="1100"
+                Margin="40,56,40,40"
+                HorizontalAlignment="Center"
+                ColumnDefinitions="1*,1.5*">
+
+                <StackPanel
+                    Grid.Column="0"
+                    Margin="0,0,64,0"
+                    VerticalAlignment="Center"
+                    Spacing="40">
+                    <StackPanel Spacing="16">
+                        <Border
+                            Padding="16,8"
+                            HorizontalAlignment="Left"
+                            Background="#1AE07A5F"
+                            CornerRadius="12">
+                            <TextBlock
+                                FontSize="12"
+                                FontWeight="Black"
+                                Foreground="#E07A5F"
+                                LetterSpacing="2"
+                                Text="¡ES HORA DE JUGAR!" />
+                        </Border>
+                        <TextBlock
+                            FontSize="56"
+                            FontWeight="Black"
+                            Foreground="#433829"
+                            LineHeight="64"
+                            Text="Demuestra lo que sabes."
+                            TextWrapping="Wrap" />
+                        <TextBlock
+                            FontSize="18"
+                            Foreground="#78716C"
+                            LineHeight="28"
+                            Text="Ingresa el código que te dio el creador de la sala para unirte inmediatamente y competir."
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+
+                    <Border
+                        Padding="32"
+                        Background="#FFFFFF"
+                        BorderBrush="#E7E5E4"
+                        BorderThickness="1"
+                        CornerRadius="32">
+                        <StackPanel Spacing="24">
+                            <StackPanel Spacing="8">
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    FontSize="12"
+                                    FontWeight="Bold"
+                                    Foreground="#A8A29E"
+                                    LetterSpacing="1"
+                                    Text="CÓDIGO DE PARTIDA" />
+                                <TextBox Classes="pinInput" Watermark="EJ: 260308-1530" />
+                            </StackPanel>
+                            <Button Classes="hero" Command="{Binding IniciarPartidaCommand}">
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontSize="16"
+                                    Text="¡ENTRAR A LA SALA!" />
+                            </Button>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <Grid
+                    Grid.Column="1"
+                    VerticalAlignment="Center"
+                    ColumnDefinitions="*, *"
+                    RowDefinitions="Auto, Auto, Auto">
+
+                    <TextBlock
+                        Grid.Row="0"
+                        Grid.ColumnSpan="2"
+                        Margin="0,0,0,24"
+                        FontSize="14"
+                        FontWeight="Heavy"
+                        Foreground="#D6D3D1"
+                        LetterSpacing="2"
+                        Text="EXPLORAR MAZOS" />
+
+                    <Button
+                        Grid.Row="1"
+                        Grid.Column="0"
+                        Margin="0,0,16,16"
+                        Classes="categoryCard history"
+                        Command="{Binding IniciarPartidaCommand}"
+                        Cursor="Hand">
+                        <StackPanel Spacing="16">
+                            <Border
+                                Width="64"
+                                Height="64"
+                                Padding="16"
+                                HorizontalAlignment="Left"
+                                Background="#1AE07A5F"
+                                CornerRadius="16">
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontSize="28"
+                                    FontWeight="Black"
+                                    Foreground="#E07A5F"
+                                    Text="H" />
+                            </Border>
+                            <TextBlock
+                                Classes="cardTitle"
+                                FontSize="22"
+                                FontWeight="Bold"
+                                Foreground="#433829"
+                                Text="Historia Global"
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                FontSize="14"
+                                Foreground="#A8A29E"
+                                Text="Imperios, guerras y el paso del tiempo."
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                Margin="0,8,0,0"
+                                Classes="mono"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                Foreground="#E07A5F"
+                                Text="24 Misiones" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Margin="16,0,0,16"
+                        Classes="categoryCard science"
+                        Command="{Binding IniciarPartidaCommand}"
+                        Cursor="Hand">
+                        <StackPanel Spacing="16">
+                            <Border
+                                Width="64"
+                                Height="64"
+                                Padding="16"
+                                HorizontalAlignment="Left"
+                                Background="#1ABC4749"
+                                CornerRadius="16">
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontSize="28"
+                                    FontWeight="Black"
+                                    Foreground="#BC4749"
+                                    Text="C" />
+                            </Border>
+                            <TextBlock
+                                Classes="cardTitle"
+                                FontSize="22"
+                                FontWeight="Bold"
+                                Foreground="#433829"
+                                Text="Ciencia &amp; Tec"
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                FontSize="14"
+                                Foreground="#A8A29E"
+                                Text="Universo, física espacial y tecnología."
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                Margin="0,8,0,0"
+                                Classes="mono"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                Foreground="#BC4749"
+                                Text="18 Misiones" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button
+                        Grid.Row="2"
+                        Grid.Column="0"
+                        Margin="0,16,16,0"
+                        Classes="categoryCard music"
+                        Command="{Binding IniciarPartidaCommand}"
+                        Cursor="Hand">
+                        <StackPanel Spacing="16">
+                            <Border
+                                Width="64"
+                                Height="64"
+                                Padding="16"
+                                HorizontalAlignment="Left"
+                                Background="#1AF2CC8F"
+                                CornerRadius="16">
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontSize="28"
+                                    FontWeight="Black"
+                                    Foreground="#E6A817"
+                                    Text="M" />
+                            </Border>
+                            <TextBlock
+                                Classes="cardTitle"
+                                FontSize="22"
+                                FontWeight="Bold"
+                                Foreground="#433829"
+                                Text="Música"
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                FontSize="14"
+                                Foreground="#A8A29E"
+                                Text="Bandas sonoras y cultura pop."
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                Margin="0,8,0,0"
+                                Classes="mono"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                Foreground="#E6A817"
+                                Text="32 Misiones" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button
+                        Grid.Row="2"
+                        Grid.Column="1"
+                        Margin="16,16,0,0"
+                        Classes="categoryCard sports"
+                        Command="{Binding IniciarPartidaCommand}"
+                        Cursor="Hand">
+                        <StackPanel Spacing="16">
+                            <Border
+                                Width="64"
+                                Height="64"
+                                Padding="16"
+                                HorizontalAlignment="Left"
+                                Background="#1AD4A373"
+                                CornerRadius="16">
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontSize="28"
+                                    FontWeight="Black"
+                                    Foreground="#D4A373"
+                                    Text="D" />
+                            </Border>
+                            <TextBlock
+                                Classes="cardTitle"
+                                FontSize="22"
+                                FontWeight="Bold"
+                                Foreground="#433829"
+                                Text="Deportes"
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                FontSize="14"
+                                Foreground="#A8A29E"
+                                Text="Atletas, records mundiales y disciplinas."
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                Margin="0,8,0,0"
+                                Classes="mono"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                Foreground="#D4A373"
+                                Text="15 Misiones" />
+                        </StackPanel>
+                    </Button>
+                </Grid>
+
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
