@@ -25,6 +25,9 @@ public partial class PreguntaViewModel : ViewModelBase
     private string _enunciado = string.Empty;
 
     [ObservableProperty]
+    private string _mensajeError = "";
+
+    [ObservableProperty]
     private Categoria? _categoriaSeleccionada;
 
     [ObservableProperty]
@@ -34,7 +37,7 @@ public partial class PreguntaViewModel : ViewModelBase
     {
         _context = context;
 
-        // ⭐ inicializar opciones visibles
+        // inicializar opciones visibles
         OpcionesTemp.Add(new Opciones());
         OpcionesTemp.Add(new Opciones());
 
@@ -51,7 +54,7 @@ public partial class PreguntaViewModel : ViewModelBase
             .ToListAsync();
 
         Preguntas = new ObservableCollection<Pregunta>(preguntas);
-
+        
         var categorias = await _context.Categorias.ToListAsync();
         Categorias = new ObservableCollection<Categoria>(categorias);
     }
@@ -68,8 +71,17 @@ public partial class PreguntaViewModel : ViewModelBase
     [RelayCommand]
     private async Task AgregarAsync()
     {
-        if (string.IsNullOrWhiteSpace(Enunciado) || CategoriaSeleccionada == null)
+        if (string.IsNullOrWhiteSpace(Enunciado))
+        {
+            MensajeError = "Debe escribir una pregunta.";
             return;
+        }
+
+        if (CategoriaSeleccionada == null)
+        {
+            MensajeError = "Debe seleccionar una categoría.";
+            return;
+        }
 
         // validar duplicado
         bool existe = await _context.Preguntas.AnyAsync(p =>
@@ -90,6 +102,7 @@ public partial class PreguntaViewModel : ViewModelBase
         if (correctas != 1)
             return;
 
+        MensajeError = "";
 
         // crear pregunta
         var pregunta = new Pregunta
@@ -122,7 +135,7 @@ public partial class PreguntaViewModel : ViewModelBase
         Enunciado = "";
         CategoriaSeleccionada = null;
 
-        // ⭐ limpiar lista de opciones
+        // limpiar lista de opciones
         OpcionesTemp.Clear();
 
         // volver a dejar 3 opciones iniciales
