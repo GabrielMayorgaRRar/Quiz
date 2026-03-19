@@ -13,9 +13,9 @@ x:DataType="vm:PreguntaViewModel"
 Background="#FAFAF9"
 FontFamily="Inter, Roboto, sans-serif"
 mc:Ignorable="d">
-<UserControl.Resources>
-    <local:StringNotEmptyConverter x:Key="StringNotEmptyConverter"/>
-</UserControl.Resources>
+    <UserControl.Resources>
+        <local:StringNotEmptyConverter x:Key="StringNotEmptyConverter"/>
+    </UserControl.Resources>
 
     <UserControl.Styles>
         <Style Selector="TextBlock.serif">
@@ -233,6 +233,7 @@ mc:Ignorable="d">
 
                         <ItemsControl ItemsSource="{Binding OpcionesTemp}">
                             <ItemsControl.ItemTemplate>
+
                                 <DataTemplate x:DataType="models:Opciones">
 
                                     <Border Padding="12"
@@ -258,10 +259,13 @@ mc:Ignorable="d">
                                         </Grid>
                                     </Border>
 
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
 
+                                </DataTemplate>
+
+                            </ItemsControl.ItemTemplate>
+
+                        </ItemsControl>
+                        
                         <Button HorizontalAlignment="Stretch" Classes="secondary" Command="{Binding AgregarOpcionCommand}">
                             <TextBlock
                             Classes="mono"
@@ -271,6 +275,31 @@ mc:Ignorable="d">
                             Text="+ AÑADIR OTRA OPCIÓN" />
                         </Button>
                     </StackPanel>
+
+                    <Border
+                        Background="#FEF3C7"
+                        BorderBrush="#FCD34D"
+                        BorderThickness="1"
+                        CornerRadius="8"
+                        Padding="10"
+                        Margin="0,8,0,0"
+                        IsVisible="{Binding MensajeOpciones, Converter={StaticResource StringNotEmptyConverter}}">
+
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+
+                                <TextBlock
+                                Text="⚠"
+                                FontSize="16"
+                                Foreground="#92400E"/>
+
+                                <TextBlock
+                                Text="{Binding MensajeOpciones}"
+                                Foreground="#92400E"
+                                FontSize="13"
+                                TextWrapping="Wrap"/>
+
+                            </StackPanel>
+                        </Border>
 
                     <Button
                     Margin="0,8,0,0"

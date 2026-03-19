@@ -28,6 +28,9 @@ public partial class PreguntaViewModel : ViewModelBase
     private string _mensajeError = "";
 
     [ObservableProperty]
+    private string _mensajeOpciones = "";
+
+    [ObservableProperty]
     private Categoria? _categoriaSeleccionada;
 
     [ObservableProperty]
@@ -54,7 +57,7 @@ public partial class PreguntaViewModel : ViewModelBase
             .ToListAsync();
 
         Preguntas = new ObservableCollection<Pregunta>(preguntas);
-        
+
         var categorias = await _context.Categorias.ToListAsync();
         Categorias = new ObservableCollection<Categoria>(categorias);
     }
@@ -95,13 +98,20 @@ public partial class PreguntaViewModel : ViewModelBase
             return;
 
         if (OpcionesTemp.Any(o => string.IsNullOrWhiteSpace(o.Contenido)))
+        {
+            MensajeOpciones = "Todas las opciones deben tener contenido.";
             return;
+        }
 
         int correctas = OpcionesTemp.Count(o => o.EsCorrecta);
 
         if (correctas != 1)
+        {
+            MensajeOpciones = "Debe marcar una opción correcta.";
             return;
+        }
 
+        MensajeOpciones = "";
         MensajeError = "";
 
         // crear pregunta
