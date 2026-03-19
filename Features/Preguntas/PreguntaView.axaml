@@ -282,6 +282,31 @@ mc:Ignorable="d">
                     BorderThickness="1"
                     CornerRadius="8"
                     Padding="10"
+                    Margin="0,6,0,0"
+                    IsVisible="{Binding MensajeLimiteOpciones, Converter={StaticResource StringNotEmptyConverter}}">
+
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+
+                            <TextBlock
+                            Text="⚠"
+                            FontSize="16"
+                            Foreground="#92400E"/>
+
+                            <TextBlock
+                            Text="{Binding MensajeLimiteOpciones}"
+                            Foreground="#92400E"
+                            FontSize="13"
+                            TextWrapping="Wrap"/>
+
+                        </StackPanel>
+                    </Border>
+
+                    <Border
+                    Background="#FEF3C7"
+                    BorderBrush="#FCD34D"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="10"
                     Margin="0,8,0,0"
                     IsVisible="{Binding MensajeOpciones, Converter={StaticResource StringNotEmptyConverter}}">
 

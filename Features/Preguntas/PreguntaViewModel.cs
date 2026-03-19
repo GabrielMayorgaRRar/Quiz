@@ -34,6 +34,9 @@ public partial class PreguntaViewModel : ViewModelBase
     private string _mensajeExito = "";
 
     [ObservableProperty]
+    private string _mensajeLimiteOpciones = "";
+
+    [ObservableProperty]
     private Categoria? _categoriaSeleccionada;
 
     [ObservableProperty]
@@ -174,11 +177,14 @@ public partial class PreguntaViewModel : ViewModelBase
     private void AgregarOpcion()
     {
         if (OpcionesTemp.Count >= 4)
+        {
+            MensajeLimiteOpciones = "Ya no puedes agregar más de 4 opciones.";
             return;
+        }
 
+        MensajeLimiteOpciones = "";
         OpcionesTemp.Add(new Opciones());
     }
-
 
 }
 
