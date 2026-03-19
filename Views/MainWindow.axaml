@@ -12,7 +12,6 @@
     xmlns:views="using:Quiz.Views"
     xmlns:vm="using:Quiz.ViewModels"
     Title="Quiz"
-  
     x:DataType="vm:MainWindowViewModel"
     Icon="/Assets/avalonia-logo.ico"
     mc:Ignorable="d">

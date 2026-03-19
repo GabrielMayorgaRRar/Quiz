@@ -198,109 +198,26 @@ mc:Ignorable="d">
                         Foreground="#A8A29E"
                         Text="Proporciona las respuestas e indica la correcta." />
 
-                        <Border
-                        Padding="12"
-                        BorderBrush="#D6D3D1"
-                        BorderThickness="1"
-                        CornerRadius="10">
+                        <ItemsControl ItemsSource="{Binding OpcionesTemp}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Padding="12" BorderBrush="#D6D3D1" BorderThickness="1" CornerRadius="10">
+                                        <Grid ColumnDefinitions="*,Auto">
 
-                            <Grid ColumnDefinitions="Auto,*,Auto">
+                                            <TextBox Text="{Binding Contenido}" />
 
-                                <TextBlock
-                                Grid.Column="0"
-                                Margin="0,0,12,0"
-                                VerticalAlignment="Center"
-                                FontSize="18"
-                                FontWeight="Bold"
-                                Text="A." />
+                                            <CheckBox
+                                            Grid.Column="1"
+                                            Content="Correcta"
+                                            IsChecked="{Binding EsCorrecta}" />
 
-                                <TextBox
-                                Grid.Column="1"
-                                Text="{Binding OpcionA}"
-                                Padding="0"
-                                VerticalAlignment="Center"
-                                Background="Transparent"
-                                BorderThickness="0"
-                                Watermark="Texto de la opción..." />
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
 
-                                <CheckBox
-                                Grid.Column="2"
-                                Margin="16,0,0,0"
-                                Content="Correcta"
-                                IsChecked="{Binding ACorrecta}" />
-
-                            </Grid>
-                        </Border>
-
-                        <Border
-                        Padding="12"
-                        BorderBrush="#D6D3D1"
-                        BorderThickness="1"
-                        CornerRadius="10">
-
-                            <Grid ColumnDefinitions="Auto,*,Auto">
-
-                                <TextBlock
-                                Grid.Column="0"
-                                Margin="0,0,12,0"
-                                VerticalAlignment="Center"
-                                FontSize="18"
-                                FontWeight="Bold"
-                                Text="B." />
-
-                                <TextBox
-                                Grid.Column="1"
-                                Text="{Binding OpcionB}"
-                                Padding="0"
-                                VerticalAlignment="Center"
-                                Background="Transparent"
-                                BorderThickness="0"
-                                Watermark="Texto de la opción..." />
-
-                                <CheckBox
-                                Grid.Column="2"
-                                Margin="16,0,0,0"
-                                Content="Correcta"
-                                IsChecked="{Binding BCorrecta}" />
-
-                            </Grid>
-                        </Border>
-
-                        <Border
-                        Padding="12"
-                        BorderBrush="#D6D3D1"
-                        BorderThickness="1"
-                        CornerRadius="10">
-
-                            <Grid ColumnDefinitions="Auto,*,Auto">
-
-                                <TextBlock
-                                Grid.Column="0"
-                                Margin="0,0,12,0"
-                                VerticalAlignment="Center"
-                                FontSize="18"
-                                FontWeight="Bold"
-                                Text="C." />
-
-                                <TextBox
-                                Grid.Column="1"
-                                Text="{Binding OpcionC}"
-                                Padding="0"
-                                VerticalAlignment="Center"
-                                Background="Transparent"
-                                BorderThickness="0"
-                                Watermark="Texto de la opción..." />
-
-                                <CheckBox
-                                Grid.Column="2"
-                                Margin="16,0,0,0"
-                                Content="Correcta"
-                                IsChecked="{Binding CCorrecta}" />
-
-                            </Grid>
-                        </Border>
-
-                        <Button HorizontalAlignment="Stretch" Classes="secondary">
+                        <Button HorizontalAlignment="Stretch" Classes="secondary" Command="{Binding AgregarOpcionCommand}">
                             <TextBlock
                             Classes="mono"
                             FontSize="11"

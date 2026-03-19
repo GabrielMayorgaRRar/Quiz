@@ -5,60 +5,68 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
 using Quiz.Models;
 using Quiz.ViewModels;
+using System.Linq;
 
 namespace Quiz.Features.Preguntas;
 
+
+
 public partial class PreguntaViewModel : ViewModelBase
 {
+
+
+
     // Propiedades para la pregunta seleccionada y su respuesta
     [ObservableProperty] private string _opcionA = "";
     [ObservableProperty] private string _opcionB = "";
     [ObservableProperty] private string _opcionC = "";
 
     private bool _aCorrecta;
-public bool ACorrecta
-{
-    get => _aCorrecta;
-    set
+    public bool ACorrecta
     {
-        SetProperty(ref _aCorrecta, value);
-        if (value)
+        get => _aCorrecta;
+        set
         {
-            BCorrecta = false;
-            CCorrecta = false;
+            SetProperty(ref _aCorrecta, value);
+            if (value)
+            {
+                BCorrecta = false;
+                CCorrecta = false;
+            }
         }
     }
-}
 
-private bool _bCorrecta;
-public bool BCorrecta
-{
-    get => _bCorrecta;
-    set
-    {
-        SetProperty(ref _bCorrecta, value);
-        if (value)
-        {
-            ACorrecta = false;
-            CCorrecta = false;
-        }
-    }
-}
 
-private bool _cCorrecta;
-public bool CCorrecta
-{
-    get => _cCorrecta;
-    set
+
+    private bool _bCorrecta;
+    public bool BCorrecta
     {
-        SetProperty(ref _cCorrecta, value);
-        if (value)
+        get => _bCorrecta;
+        set
         {
-            ACorrecta = false;
-            BCorrecta = false;
+            SetProperty(ref _bCorrecta, value);
+            if (value)
+            {
+                ACorrecta = false;
+                CCorrecta = false;
+            }
         }
     }
-}
+
+    private bool _cCorrecta;
+    public bool CCorrecta
+    {
+        get => _cCorrecta;
+        set
+        {
+            SetProperty(ref _cCorrecta, value);
+            if (value)
+            {
+                ACorrecta = false;
+                BCorrecta = false;
+            }
+        }
+    }
 
     private readonly AppDbContext _context;
 
@@ -81,8 +89,16 @@ public bool CCorrecta
     {
         _context = context;
 
+        // ⭐ inicializar opciones visibles
+        OpcionesTemp.Add(new Opciones());
+        OpcionesTemp.Add(new Opciones());
+        OpcionesTemp.Add(new Opciones());
+
         _ = CargarDatosAsync();
     }
+
+    [ObservableProperty]
+    private ObservableCollection<Opciones> _opcionesTemp = new();
 
     private async Task CargarDatosAsync()
     {
@@ -97,72 +113,70 @@ public bool CCorrecta
     }
 
     [RelayCommand]
-private async Task AgregarAsync()
-{
-    if (string.IsNullOrWhiteSpace(Enunciado) || CategoriaSeleccionada == null)
-        return;
-
-    // validar duplicado
-    bool existe = await _context.Preguntas.AnyAsync(p =>
-        p.Enunciado.ToLower().Trim() == Enunciado.ToLower().Trim()
-        && p.CategoriaId == CategoriaSeleccionada.Id);
-
-    if (existe)
-        return;
-
-    // validar opciones
-    if (string.IsNullOrWhiteSpace(OpcionA) ||
-        string.IsNullOrWhiteSpace(OpcionB) ||
-        string.IsNullOrWhiteSpace(OpcionC))
-        return;
-
-    // validar solo una correcta
-    int correctas = 0;
-    if (ACorrecta) correctas++;
-    if (BCorrecta) correctas++;
-    if (CCorrecta) correctas++;
-
-    if (correctas != 1)
-        return;
-
-    // crear pregunta
-    var pregunta = new Pregunta
+    private async Task AgregarAsync()
     {
-        Enunciado = Enunciado.Trim(),
-        CategoriaId = CategoriaSeleccionada.Id
-    };
+        if (string.IsNullOrWhiteSpace(Enunciado) || CategoriaSeleccionada == null)
+            return;
 
-    _context.Preguntas.Add(pregunta);
-    await _context.SaveChangesAsync();
+        // validar duplicado
+        bool existe = await _context.Preguntas.AnyAsync(p =>
+            p.Enunciado.ToLower().Trim() == Enunciado.ToLower().Trim()
+            && p.CategoriaId == CategoriaSeleccionada.Id);
 
-    // guardar opciones
-    _context.Opciones.AddRange(
-        new Opciones { Contenido = OpcionA, EsCorrecta = ACorrecta, PreguntaId = pregunta.Id },
-        new Opciones { Contenido = OpcionB, EsCorrecta = BCorrecta, PreguntaId = pregunta.Id },
-        new Opciones { Contenido = OpcionC, EsCorrecta = CCorrecta, PreguntaId = pregunta.Id }
-    );
+        if (existe)
+            return;
 
-    await _context.SaveChangesAsync();
+        if (OpcionesTemp.Count < 2)
+            return;
 
-    // refrescar tabla
-    var nueva = await _context.Preguntas
-        .Include(p => p.Categoria)
-        .FirstAsync(p => p.Id == pregunta.Id);
+        if (OpcionesTemp.Any(o => string.IsNullOrWhiteSpace(o.Contenido)))
+            return;
 
-    Preguntas.Add(nueva);
+        int correctas = OpcionesTemp.Count(o => o.EsCorrecta);
 
-    // limpiar formulario
-    Enunciado = "";
-    CategoriaSeleccionada = null;
+        if (correctas != 1)
+            return;
 
-    OpcionA = "";
-    OpcionB = "";
-    OpcionC = "";
 
-    ACorrecta = false;
-    BCorrecta = false;
-    CCorrecta = false;
-}
+        // crear pregunta
+        var pregunta = new Pregunta
+        {
+            Enunciado = Enunciado.Trim(),
+            CategoriaId = CategoriaSeleccionada.Id
+        };
+
+        _context.Preguntas.Add(pregunta);
+        await _context.SaveChangesAsync();
+
+        // guardar opciones
+        foreach (var op in OpcionesTemp)
+        {
+            op.PreguntaId = pregunta.Id;
+        }
+
+        _context.Opciones.AddRange(OpcionesTemp);
+
+        await _context.SaveChangesAsync();
+
+        // refrescar tabla
+        var nueva = await _context.Preguntas
+            .Include(p => p.Categoria)
+            .FirstAsync(p => p.Id == pregunta.Id);
+
+        Preguntas.Add(nueva);
+
+        // limpiar formulario
+        Enunciado = "";
+        CategoriaSeleccionada = null;
+
+        // ⭐ limpiar lista de opciones
+        OpcionesTemp.Clear();
+
+        // volver a dejar 3 opciones iniciales
+        OpcionesTemp.Add(new Opciones());
+        OpcionesTemp.Add(new Opciones());
+        OpcionesTemp.Add(new Opciones());
+    }
 
     [RelayCommand]
     private async Task EliminarAsync()
@@ -172,6 +186,14 @@ private async Task AgregarAsync()
         await _context.SaveChangesAsync();
         Preguntas.Remove(PreguntaSeleccionada);
     }
+
+    [RelayCommand]
+    private void AgregarOpcion()
+    {
+        OpcionesTemp.Add(new Opciones());
+    }
+
+
 }
 
 // Si por alguna razón borraron datos en la BD, solo ejecuten
