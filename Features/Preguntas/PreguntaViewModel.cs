@@ -53,7 +53,7 @@ public partial class PreguntaViewModel : ViewModelBase
         if (string.IsNullOrWhiteSpace(Enunciado) || CategoriaSeleccionada == null)
             return;
 
-        //verificar si ya existe una pregunta con el mismo enunciado y categoria
+        //verificar si ya existe una pregunta con el mismo enunciado y categoria seleccionada
         bool existe = await _context.Preguntas.AnyAsync(p =>
             p.Enunciado.ToLower().Trim() == Enunciado.ToLower().Trim()
             && p.CategoriaId == CategoriaSeleccionada.Id);
