@@ -1,15 +1,18 @@
+using CommunityToolkit.Mvvm.ComponentModel;
+
 namespace Quiz.Models;
 
-public class Opciones
+public partial class Opciones : ObservableObject
 {
     public int Id { get; set; }
 
-    public string Contenido { get; set; } = string.Empty;
+    [ObservableProperty]
+    private string contenido = string.Empty;
 
-    public bool EsCorrecta { get; set; }
+    [ObservableProperty]
+    private bool esCorrecta;
 
     public int PreguntaId { get; set; }
 
-    // Es una relacion para navegacion
     public Pregunta? Pregunta { get; set; }
 }

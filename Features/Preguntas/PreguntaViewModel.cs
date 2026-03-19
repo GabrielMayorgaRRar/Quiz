@@ -113,6 +113,15 @@ public partial class PreguntaViewModel : ViewModelBase
     }
 
     [RelayCommand]
+    private void MarcarCorrecta(Opciones opcionSeleccionada)
+    {
+        foreach (var op in OpcionesTemp)
+            op.EsCorrecta = false;
+
+        opcionSeleccionada.EsCorrecta = true;
+    }
+
+    [RelayCommand]
     private async Task AgregarAsync()
     {
         if (string.IsNullOrWhiteSpace(Enunciado) || CategoriaSeleccionada == null)

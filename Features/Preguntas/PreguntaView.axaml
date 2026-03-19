@@ -5,7 +5,9 @@ xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 xmlns:vm="using:Quiz.Features.Preguntas"
+xmlns:models="using:Quiz.Models"
 x:DataType="vm:PreguntaViewModel"
+
 Background="#FAFAF9"
 FontFamily="Inter, Roboto, sans-serif"
 mc:Ignorable="d">
@@ -200,19 +202,31 @@ mc:Ignorable="d">
 
                         <ItemsControl ItemsSource="{Binding OpcionesTemp}">
                             <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Border Padding="12" BorderBrush="#D6D3D1" BorderThickness="1" CornerRadius="10">
+                                <DataTemplate x:DataType="models:Opciones">
+
+                                    <Border Padding="12"
+                                            BorderBrush="#D6D3D1"
+                                            BorderThickness="1"
+                                            CornerRadius="10"
+                                            Margin="0,6">
+
                                         <Grid ColumnDefinitions="*,Auto">
 
-                                            <TextBox Text="{Binding Contenido}" />
+                                            <TextBox
+                                            Text="{Binding Contenido}"
+                                            Watermark="Texto de la opción..." />
 
                                             <CheckBox
                                             Grid.Column="1"
+                                            Margin="16,0,0,0"
                                             Content="Correcta"
-                                            IsChecked="{Binding EsCorrecta}" />
+                                            IsChecked="{Binding EsCorrecta}"
+                                            Command="{Binding $parent[UserControl].((vm:PreguntaViewModel)DataContext).MarcarCorrectaCommand}"
+                                            CommandParameter="{Binding}" />
 
                                         </Grid>
                                     </Border>
+
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
