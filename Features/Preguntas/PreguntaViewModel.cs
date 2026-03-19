@@ -93,12 +93,22 @@ public partial class PreguntaViewModel : ViewModelBase
         if (string.IsNullOrWhiteSpace(Enunciado))
         {
             MensajeError = "Debe escribir una pregunta.";
+            _ = Task.Run(async () =>
+        {
+            await Task.Delay(1000);
+            MensajeError = "";
+        });
             return;
         }
 
         if (CategoriaSeleccionada == null)
         {
             MensajeError = "Debe seleccionar una categoría.";
+            _ = Task.Run(async () =>
+        {
+            await Task.Delay(1000);
+            MensajeError = "";
+        });
             return;
         }
 
@@ -110,6 +120,11 @@ public partial class PreguntaViewModel : ViewModelBase
         if (existe)
         {
             MensajeError = "Esta pregunta ya existe en esa categoría.";
+            _ = Task.Run(async () =>
+        {
+            await Task.Delay(1000);
+            MensajeError = "";
+        });
             return;
         }
 
@@ -119,6 +134,11 @@ public partial class PreguntaViewModel : ViewModelBase
         if (OpcionesTemp.Any(o => string.IsNullOrWhiteSpace(o.Contenido)))
         {
             MensajeOpciones = "Todas las opciones deben tener contenido.";
+            _ = Task.Run(async () =>
+        {
+            await Task.Delay(1000);
+            MensajeOpciones = "";
+        });
             return;
         }
 
@@ -129,6 +149,11 @@ public partial class PreguntaViewModel : ViewModelBase
         if (repetidas)
         {
             MensajeOpciones = "No puede haber opciones de respuesta iguales.";
+            _ = Task.Run(async () =>
+        {
+            await Task.Delay(1000);
+            MensajeOpciones = "";
+        });
             return;
         }
 
@@ -137,6 +162,11 @@ public partial class PreguntaViewModel : ViewModelBase
         if (correctas != 1)
         {
             MensajeOpciones = "Debe marcar una opción correcta.";
+            _ = Task.Run(async () =>
+        {
+            await Task.Delay(1000);
+            MensajeOpciones = "";
+        });
             return;
         }
 
@@ -227,6 +257,11 @@ public partial class PreguntaViewModel : ViewModelBase
         if (OpcionesTemp.Count >= 4)
         {
             MensajeLimiteOpciones = "Ya no puedes agregar más de 4 opciones.";
+            _ = Task.Run(async () =>
+        {
+            await Task.Delay(1000);
+            MensajeLimiteOpciones = "";
+        });
             return;
         }
 
@@ -240,6 +275,11 @@ public partial class PreguntaViewModel : ViewModelBase
         if (OpcionesTemp.Count <= 2)
         {
             MensajeMinOpciones = "Debe haber al menos 2 opciones.";
+            _ = Task.Run(async () =>
+        {
+            await Task.Delay(1000);
+            MensajeMinOpciones = "";
+        });
             return;
         }
 
