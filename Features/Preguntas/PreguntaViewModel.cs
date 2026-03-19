@@ -39,6 +39,11 @@ public partial class PreguntaViewModel : ViewModelBase
     [ObservableProperty]
     private string _mensajeMinOpciones = "";
 
+    [ObservableProperty]
+    private string _mensajeEliminar = "";
+
+    [ObservableProperty]
+    private string _mensajeEliminarError = "";
 
     [ObservableProperty]
     private Categoria? _categoriaSeleccionada;
@@ -165,6 +170,11 @@ public partial class PreguntaViewModel : ViewModelBase
 
         Preguntas.Add(nueva);
         MensajeExito = "Pregunta guardada correctamente.";
+        _ = Task.Run(async () =>
+        {
+            await Task.Delay(1000);
+            MensajeExito = "";
+        });
 
         // limpiar formulario
         Enunciado = "";
@@ -181,10 +191,34 @@ public partial class PreguntaViewModel : ViewModelBase
     [RelayCommand]
     private async Task EliminarAsync()
     {
-        if (PreguntaSeleccionada is null) return;
+        MensajeEliminar = "";
+        MensajeEliminarError = "";
+
+        if (PreguntaSeleccionada is null)
+        {
+            MensajeEliminarError = "No hay ninguna pregunta seleccionada.";
+
+            _ = Task.Run(async () =>
+            {
+                await Task.Delay(1000);
+                MensajeEliminarError = "";
+            });
+
+            return;
+        }
+
         _context.Preguntas.Remove(PreguntaSeleccionada);
         await _context.SaveChangesAsync();
+
         Preguntas.Remove(PreguntaSeleccionada);
+
+        MensajeEliminar = "Pregunta eliminada.";
+
+        _ = Task.Run(async () =>
+        {
+            await Task.Delay(1000);
+            MensajeEliminar = "";
+        });
     }
 
     [RelayCommand]
