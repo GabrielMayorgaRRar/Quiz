@@ -10,6 +10,56 @@ namespace Quiz.Features.Preguntas;
 
 public partial class PreguntaViewModel : ViewModelBase
 {
+    // Propiedades para la pregunta seleccionada y su respuesta
+    [ObservableProperty] private string _opcionA = "";
+    [ObservableProperty] private string _opcionB = "";
+    [ObservableProperty] private string _opcionC = "";
+
+    private bool _aCorrecta;
+public bool ACorrecta
+{
+    get => _aCorrecta;
+    set
+    {
+        SetProperty(ref _aCorrecta, value);
+        if (value)
+        {
+            BCorrecta = false;
+            CCorrecta = false;
+        }
+    }
+}
+
+private bool _bCorrecta;
+public bool BCorrecta
+{
+    get => _bCorrecta;
+    set
+    {
+        SetProperty(ref _bCorrecta, value);
+        if (value)
+        {
+            ACorrecta = false;
+            CCorrecta = false;
+        }
+    }
+}
+
+private bool _cCorrecta;
+public bool CCorrecta
+{
+    get => _cCorrecta;
+    set
+    {
+        SetProperty(ref _cCorrecta, value);
+        if (value)
+        {
+            ACorrecta = false;
+            BCorrecta = false;
+        }
+    }
+}
+
     private readonly AppDbContext _context;
 
     [ObservableProperty]
@@ -47,39 +97,72 @@ public partial class PreguntaViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    //Agregar nueva pregunta ya funciona modifique "AgregarAsync" para que se ejecute en el click del boton
-    private async Task AgregarAsync()
+private async Task AgregarAsync()
+{
+    if (string.IsNullOrWhiteSpace(Enunciado) || CategoriaSeleccionada == null)
+        return;
+
+    // validar duplicado
+    bool existe = await _context.Preguntas.AnyAsync(p =>
+        p.Enunciado.ToLower().Trim() == Enunciado.ToLower().Trim()
+        && p.CategoriaId == CategoriaSeleccionada.Id);
+
+    if (existe)
+        return;
+
+    // validar opciones
+    if (string.IsNullOrWhiteSpace(OpcionA) ||
+        string.IsNullOrWhiteSpace(OpcionB) ||
+        string.IsNullOrWhiteSpace(OpcionC))
+        return;
+
+    // validar solo una correcta
+    int correctas = 0;
+    if (ACorrecta) correctas++;
+    if (BCorrecta) correctas++;
+    if (CCorrecta) correctas++;
+
+    if (correctas != 1)
+        return;
+
+    // crear pregunta
+    var pregunta = new Pregunta
     {
-        if (string.IsNullOrWhiteSpace(Enunciado) || CategoriaSeleccionada == null)
-            return;
+        Enunciado = Enunciado.Trim(),
+        CategoriaId = CategoriaSeleccionada.Id
+    };
 
-        //verificar si ya existe una pregunta con el mismo enunciado y categoria seleccionada
-        bool existe = await _context.Preguntas.AnyAsync(p =>
-            p.Enunciado.ToLower().Trim() == Enunciado.ToLower().Trim()
-            && p.CategoriaId == CategoriaSeleccionada.Id);
+    _context.Preguntas.Add(pregunta);
+    await _context.SaveChangesAsync();
 
-        if (existe)
-            return;
+    // guardar opciones
+    _context.Opciones.AddRange(
+        new Opciones { Contenido = OpcionA, EsCorrecta = ACorrecta, PreguntaId = pregunta.Id },
+        new Opciones { Contenido = OpcionB, EsCorrecta = BCorrecta, PreguntaId = pregunta.Id },
+        new Opciones { Contenido = OpcionC, EsCorrecta = CCorrecta, PreguntaId = pregunta.Id }
+    );
 
-        var pregunta = new Pregunta
-        {
-            Enunciado = Enunciado.Trim(),
-            CategoriaId = CategoriaSeleccionada.Id
-        };
+    await _context.SaveChangesAsync();
 
-        _context.Preguntas.Add(pregunta);
+    // refrescar tabla
+    var nueva = await _context.Preguntas
+        .Include(p => p.Categoria)
+        .FirstAsync(p => p.Id == pregunta.Id);
 
-        await _context.SaveChangesAsync();
-        // volver a cargar con categoria incluida a
-        var nueva = await _context.Preguntas
-            .Include(p => p.Categoria)
-            .FirstAsync(p => p.Id == pregunta.Id);
+    Preguntas.Add(nueva);
 
-        Preguntas.Add(nueva);
+    // limpiar formulario
+    Enunciado = "";
+    CategoriaSeleccionada = null;
 
-        Enunciado = "";
-        CategoriaSeleccionada = null;
-    }
+    OpcionA = "";
+    OpcionB = "";
+    OpcionC = "";
+
+    ACorrecta = false;
+    BCorrecta = false;
+    CCorrecta = false;
+}
 
     [RelayCommand]
     private async Task EliminarAsync()
