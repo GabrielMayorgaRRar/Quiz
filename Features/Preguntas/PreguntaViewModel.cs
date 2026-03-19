@@ -92,7 +92,6 @@ public partial class PreguntaViewModel : ViewModelBase
         // ⭐ inicializar opciones visibles
         OpcionesTemp.Add(new Opciones());
         OpcionesTemp.Add(new Opciones());
-        OpcionesTemp.Add(new Opciones());
 
         _ = CargarDatosAsync();
     }
@@ -184,7 +183,6 @@ public partial class PreguntaViewModel : ViewModelBase
         // volver a dejar 3 opciones iniciales
         OpcionesTemp.Add(new Opciones());
         OpcionesTemp.Add(new Opciones());
-        OpcionesTemp.Add(new Opciones());
     }
 
     [RelayCommand]
@@ -199,6 +197,9 @@ public partial class PreguntaViewModel : ViewModelBase
     [RelayCommand]
     private void AgregarOpcion()
     {
+        if (OpcionesTemp.Count >= 4)
+            return;
+
         OpcionesTemp.Add(new Opciones());
     }
 
