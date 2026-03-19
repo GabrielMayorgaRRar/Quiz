@@ -56,6 +56,14 @@
             <Setter Property="Background" Value="#0AD4A373" />
             <Setter Property="BorderBrush" Value="#D4A373" />
         </Style>
+        <Style Selector="Button.tech:pointerover">
+            <Setter Property="Background" Value="#0A5C6BC0" />
+            <Setter Property="BorderBrush" Value="#5C6BC0" />
+        </Style>
+        <Style Selector="Button.geo:pointerover">
+            <Setter Property="Background" Value="#0A66BB6A" />
+            <Setter Property="BorderBrush" Value="#66BB6A" />
+        </Style>
         <Style Selector="Button.art:pointerover">
             <Setter Property="Background" Value="#0AE65C00" />
             <Setter Property="BorderBrush" Value="#E65C00" />
@@ -243,7 +251,7 @@
                     Grid.Column="1"
                     VerticalAlignment="Center"
                     ColumnDefinitions="*, *"
-                    RowDefinitions="Auto, Auto, Auto">
+                    RowDefinitions="Auto, Auto, Auto, Auto">
 
                     <TextBlock
                         Grid.Row="0"
@@ -255,12 +263,14 @@
                         LetterSpacing="2"
                         Text="EXPLORAR MAZOS" />
 
+                    <!-- FILA 1: Historia y Ciencia -->
                     <Button
                         Grid.Row="1"
                         Grid.Column="0"
                         Margin="0,0,16,16"
                         Classes="categoryCard history"
-                        Command="{Binding IniciarPartidaCommand}"
+                        Command="{Binding IniciarPartidaConCategoriaCommand}"
+                        CommandParameter="Historia"
                         Cursor="Hand">
                         <StackPanel Spacing="16">
                             <Border
@@ -279,7 +289,6 @@
                                     Text="H" />
                             </Border>
                             <TextBlock
-                                Classes="cardTitle"
                                 FontSize="22"
                                 FontWeight="Bold"
                                 Foreground="#433829"
@@ -296,7 +305,7 @@
                                 FontSize="12"
                                 FontWeight="Bold"
                                 Foreground="#E07A5F"
-                                Text="24 Misiones" />
+                                Text="12 Misiones" />
                         </StackPanel>
                     </Button>
 
@@ -305,7 +314,8 @@
                         Grid.Column="1"
                         Margin="16,0,0,16"
                         Classes="categoryCard science"
-                        Command="{Binding IniciarPartidaCommand}"
+                        Command="{Binding IniciarPartidaConCategoriaCommand}"
+                        CommandParameter="Ciencia"
                         Cursor="Hand">
                         <StackPanel Spacing="16">
                             <Border
@@ -324,16 +334,15 @@
                                     Text="C" />
                             </Border>
                             <TextBlock
-                                Classes="cardTitle"
                                 FontSize="22"
                                 FontWeight="Bold"
                                 Foreground="#433829"
-                                Text="Ciencia &amp; Tec"
+                                Text="Ciencia"
                                 TextWrapping="Wrap" />
                             <TextBlock
                                 FontSize="14"
                                 Foreground="#A8A29E"
-                                Text="Universo, física espacial y tecnología."
+                                Text="Biología, química, física y el universo."
                                 TextWrapping="Wrap" />
                             <TextBlock
                                 Margin="0,8,0,0"
@@ -341,16 +350,18 @@
                                 FontSize="12"
                                 FontWeight="Bold"
                                 Foreground="#BC4749"
-                                Text="18 Misiones" />
+                                Text="12 Misiones" />
                         </StackPanel>
                     </Button>
 
+                    <!-- FILA 2: Música y Deportes -->
                     <Button
                         Grid.Row="2"
                         Grid.Column="0"
-                        Margin="0,16,16,0"
+                        Margin="0,16,16,16"
                         Classes="categoryCard music"
-                        Command="{Binding IniciarPartidaCommand}"
+                        Command="{Binding IniciarPartidaConCategoriaCommand}"
+                        CommandParameter="Musica"
                         Cursor="Hand">
                         <StackPanel Spacing="16">
                             <Border
@@ -369,7 +380,6 @@
                                     Text="M" />
                             </Border>
                             <TextBlock
-                                Classes="cardTitle"
                                 FontSize="22"
                                 FontWeight="Bold"
                                 Foreground="#433829"
@@ -378,7 +388,7 @@
                             <TextBlock
                                 FontSize="14"
                                 Foreground="#A8A29E"
-                                Text="Bandas sonoras y cultura pop."
+                                Text="Bandas sonoras, géneros y cultura pop."
                                 TextWrapping="Wrap" />
                             <TextBlock
                                 Margin="0,8,0,0"
@@ -386,16 +396,17 @@
                                 FontSize="12"
                                 FontWeight="Bold"
                                 Foreground="#E6A817"
-                                Text="32 Misiones" />
+                                Text="12 Misiones" />
                         </StackPanel>
                     </Button>
 
                     <Button
                         Grid.Row="2"
                         Grid.Column="1"
-                        Margin="16,16,0,0"
+                        Margin="16,16,0,16"
                         Classes="categoryCard sports"
-                        Command="{Binding IniciarPartidaCommand}"
+                        Command="{Binding IniciarPartidaConCategoriaCommand}"
+                        CommandParameter="Deportes"
                         Cursor="Hand">
                         <StackPanel Spacing="16">
                             <Border
@@ -414,7 +425,6 @@
                                     Text="D" />
                             </Border>
                             <TextBlock
-                                Classes="cardTitle"
                                 FontSize="22"
                                 FontWeight="Bold"
                                 Foreground="#433829"
@@ -423,7 +433,7 @@
                             <TextBlock
                                 FontSize="14"
                                 Foreground="#A8A29E"
-                                Text="Atletas, records mundiales y disciplinas."
+                                Text="Atletas, récords y disciplinas."
                                 TextWrapping="Wrap" />
                             <TextBlock
                                 Margin="0,8,0,0"
@@ -431,11 +441,101 @@
                                 FontSize="12"
                                 FontWeight="Bold"
                                 Foreground="#D4A373"
-                                Text="15 Misiones" />
+                                Text="12 Misiones" />
+                        </StackPanel>
+                    </Button>
+
+                    <!-- FILA 3: Tecnología y Geografía -->
+                    <Button
+                        Grid.Row="3"
+                        Grid.Column="0"
+                        Margin="0,16,16,0"
+                        Classes="categoryCard tech"
+                        Command="{Binding IniciarPartidaConCategoriaCommand}"
+                        CommandParameter="Tecnologia"
+                        Cursor="Hand">
+                        <StackPanel Spacing="16">
+                            <Border
+                                Width="64"
+                                Height="64"
+                                Padding="16"
+                                HorizontalAlignment="Left"
+                                Background="#1A5C6BC0"
+                                CornerRadius="16">
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontSize="28"
+                                    FontWeight="Black"
+                                    Foreground="#5C6BC0"
+                                    Text="T" />
+                            </Border>
+                            <TextBlock
+                                FontSize="22"
+                                FontWeight="Bold"
+                                Foreground="#433829"
+                                Text="Tecnología"
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                FontSize="14"
+                                Foreground="#A8A29E"
+                                Text="Innovación, gadgets y programación."
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                Margin="0,8,0,0"
+                                Classes="mono"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                Foreground="#5C6BC0"
+                                Text="12 Misiones" />
+                        </StackPanel>
+                    </Button>
+
+                    <Button
+                        Grid.Row="3"
+                        Grid.Column="1"
+                        Margin="16,16,0,0"
+                        Classes="categoryCard geo"
+                        Command="{Binding IniciarPartidaConCategoriaCommand}"
+                        CommandParameter="Geografia"
+                        Cursor="Hand">
+                        <StackPanel Spacing="16">
+                            <Border
+                                Width="64"
+                                Height="64"
+                                Padding="16"
+                                HorizontalAlignment="Left"
+                                Background="#1A66BB6A"
+                                CornerRadius="16">
+                                <TextBlock
+                                    HorizontalAlignment="Center"
+                                    VerticalAlignment="Center"
+                                    FontSize="28"
+                                    FontWeight="Black"
+                                    Foreground="#66BB6A"
+                                    Text="G" />
+                            </Border>
+                            <TextBlock
+                                FontSize="22"
+                                FontWeight="Bold"
+                                Foreground="#433829"
+                                Text="Geografía"
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                FontSize="14"
+                                Foreground="#A8A29E"
+                                Text="Países, capitales y accidentes geográficos."
+                                TextWrapping="Wrap" />
+                            <TextBlock
+                                Margin="0,8,0,0"
+                                Classes="mono"
+                                FontSize="12"
+                                FontWeight="Bold"
+                                Foreground="#66BB6A"
+                                Text="12 Misiones" />
                         </StackPanel>
                     </Button>
                 </Grid>
-
             </Grid>
         </ScrollViewer>
     </Grid>
