@@ -1,4 +1,4 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Quiz.Features.Categorias;
 using Quiz.Features.Home;
 using Quiz.Features.Juegos;
@@ -33,8 +33,15 @@ public partial class MainWindowViewModel : ViewModelBase
         QuizSessionVM = new QuizSessionViewModel();
 
         // Wiring navigation
-        // Assuming Tabs: 0=Inicio, 1=Juegos, 2=Preguntas, 3=Categorias, 4=Usuarios, 5=Partida Activa
-        HomeVM.OnStartQuizRequested = () => SelectedTab = 5;
+        // Tabs: 0=Inicio, 1=Juegos, 2=Preguntas, 3=Categorias, 4=Usuarios, 5=Partida Activa
+        
+        HomeVM.OnStartQuizWithCategory = (categoria) => 
+        {
+            // Pasa la categoría seleccionada al QuizSession
+            QuizSessionVM.CategoriaSeleccionada = categoria;
+            SelectedTab = 5;
+        };
+        
         QuizSessionVM.OnQuizFinished = () => SelectedTab = 0;
     }
 }
