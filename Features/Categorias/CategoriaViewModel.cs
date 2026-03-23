@@ -4,11 +4,10 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
 using Quiz.Models;
-using Quiz.ViewModels;
 
 namespace Quiz.Features.Categorias;
 
-public partial class CategoriaViewModel : ViewModelBase
+public partial class CategoriaViewModel : ObservableObject
 {
     private readonly AppDbContext _context;
 
@@ -24,6 +23,7 @@ public partial class CategoriaViewModel : ViewModelBase
     public CategoriaViewModel(AppDbContext context)
     {
         _context = context;
+        _ = CargarCategoriasAsync(); // Esto carga las categorías al iniciar
     }
 
     private async Task CargarCategoriasAsync()
