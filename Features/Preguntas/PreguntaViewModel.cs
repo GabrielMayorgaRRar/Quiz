@@ -6,11 +6,14 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
 using Quiz.Models;
+using Quiz.ViewModels;
+using System.Linq;
 
 namespace Quiz.Features.Preguntas;
 
-// Enum para tipos de respuesta
-public enum TipoRespuesta
+
+
+public partial class PreguntaViewModel : ViewModelBase
 {
     Texto,
     Imagen,
@@ -46,7 +49,25 @@ public partial class PreguntaViewModel : ObservableObject
     private string _enunciado = string.Empty;
 
     [ObservableProperty]
-    private ObservableCollection<Categoria> _categorias = [];
+    private string _mensajeError = "";
+
+    [ObservableProperty]
+    private string _mensajeOpciones = "";
+
+    [ObservableProperty]
+    private string _mensajeExito = "";
+
+    [ObservableProperty]
+    private string _mensajeLimiteOpciones = "";
+
+    [ObservableProperty]
+    private string _mensajeMinOpciones = "";
+
+    [ObservableProperty]
+    private string _mensajeEliminar = "";
+
+    [ObservableProperty]
+    private string _mensajeEliminarError = "";
 
     [ObservableProperty]
     private Categoria? _categoriaSeleccionada;
@@ -57,27 +78,168 @@ public partial class PreguntaViewModel : ObservableObject
     public PreguntaViewModel(AppDbContext context)
     {
         _context = context;
-        _ = CargarCategoriasAsync();
-        
-        // Inicializar con 4 opciones vacías
-        for (int i = 0; i < 4; i++)
-        {
-            Opciones.Add(new OpcionRespuesta());
-        }
+
+        // inicializar opciones visibles
+        OpcionesTemp.Add(new Opciones());
+        OpcionesTemp.Add(new Opciones());
+
+        _ = CargarDatosAsync();
     }
 
-    private async Task CargarCategoriasAsync()
+    [ObservableProperty]
+    private ObservableCollection<Opciones> _opcionesTemp = new();
+
+    private async Task CargarDatosAsync()
     {
-        var categorias = await _context.Categorias
-            .OrderBy(c => c.Nombre)
+        var preguntas = await _context.Preguntas
+            .Include(p => p.Categoria)
             .ToListAsync();
+
+        Preguntas = new ObservableCollection<Pregunta>(preguntas);
+
+        var categorias = await _context.Categorias.ToListAsync();
         Categorias = new ObservableCollection<Categoria>(categorias);
     }
 
     [RelayCommand]
-    private void AgregarOpcion()
+    private void MarcarCorrecta(Opciones opcionSeleccionada)
     {
-        Opciones.Add(new OpcionRespuesta());
+        foreach (var op in OpcionesTemp)
+            op.EsCorrecta = false;
+
+        opcionSeleccionada.EsCorrecta = true;
+    }
+
+    [RelayCommand]
+    private async Task AgregarAsync()
+    {
+        MensajeExito = "";
+        if (string.IsNullOrWhiteSpace(Enunciado))
+        {
+            MensajeError = "Debe escribir una pregunta.";
+            _ = Task.Run(async () =>
+        {
+            await Task.Delay(1000);
+            MensajeError = "";
+        });
+            return;
+        }
+
+        if (CategoriaSeleccionada == null)
+        {
+            MensajeError = "Debe seleccionar una categoría.";
+            _ = Task.Run(async () =>
+        {
+            await Task.Delay(1000);
+            MensajeError = "";
+        });
+            return;
+        }
+
+        // validar duplicado
+        bool existe = await _context.Preguntas.AnyAsync(p =>
+            p.Enunciado.ToLower().Trim() == Enunciado.ToLower().Trim()
+            && p.CategoriaId == CategoriaSeleccionada.Id);
+
+        if (existe)
+        {
+            MensajeError = "Esta pregunta ya existe en esa categoría.";
+            _ = Task.Run(async () =>
+        {
+            await Task.Delay(1000);
+            MensajeError = "";
+        });
+            return;
+        }
+
+        if (OpcionesTemp.Count < 2)
+            return;
+
+        if (OpcionesTemp.Any(o => string.IsNullOrWhiteSpace(o.Contenido)))
+        {
+            MensajeOpciones = "Todas las opciones deben tener contenido.";
+            _ = Task.Run(async () =>
+        {
+            await Task.Delay(1000);
+            MensajeOpciones = "";
+        });
+            return;
+        }
+
+        var repetidas = OpcionesTemp
+        .GroupBy(o => o.Contenido.Trim().ToLower())
+        .Any(g => g.Count() > 1);
+
+        if (repetidas)
+        {
+            MensajeOpciones = "No puede haber opciones de respuesta iguales.";
+            _ = Task.Run(async () =>
+        {
+            await Task.Delay(1000);
+            MensajeOpciones = "";
+        });
+            return;
+        }
+
+        int correctas = OpcionesTemp.Count(o => o.EsCorrecta);
+
+        if (correctas != 1)
+        {
+            MensajeOpciones = "Debe marcar una opción correcta.";
+            _ = Task.Run(async () =>
+        {
+            await Task.Delay(1000);
+            MensajeOpciones = "";
+        });
+            return;
+        }
+
+        MensajeOpciones = "";
+        MensajeError = "";
+
+        // crear pregunta
+        var pregunta = new Pregunta
+        {
+            Enunciado = Enunciado.Trim(),
+            CategoriaId = CategoriaSeleccionada.Id
+        };
+
+        _context.Preguntas.Add(pregunta);
+        await _context.SaveChangesAsync();
+
+        // guardar opciones
+        foreach (var op in OpcionesTemp)
+        {
+            op.PreguntaId = pregunta.Id;
+        }
+
+        _context.Opciones.AddRange(OpcionesTemp);
+
+        await _context.SaveChangesAsync();
+
+        // refrescar tabla
+        var nueva = await _context.Preguntas
+            .Include(p => p.Categoria)
+            .FirstAsync(p => p.Id == pregunta.Id);
+
+        Preguntas.Add(nueva);
+        MensajeExito = "Pregunta guardada correctamente.";
+        _ = Task.Run(async () =>
+        {
+            await Task.Delay(1000);
+            MensajeExito = "";
+        });
+
+        // limpiar formulario
+        Enunciado = "";
+        CategoriaSeleccionada = null;
+
+        // limpiar lista de opciones
+        OpcionesTemp.Clear();
+
+        // volver a dejar 3 opciones iniciales
+        OpcionesTemp.Add(new Opciones());
+        OpcionesTemp.Add(new Opciones());
     }
 
     [RelayCommand]
@@ -193,13 +355,80 @@ public partial class PreguntaViewModel : ObservableObject
     [RelayCommand]
     private void LimpiarFormulario()
     {
-        Enunciado = string.Empty;
-        CategoriaSeleccionada = null;
-        Opciones.Clear();
-        
-        for (int i = 0; i < 4; i++)
+        MensajeEliminar = "";
+        MensajeEliminarError = "";
+
+        if (PreguntaSeleccionada is null)
         {
-            Opciones.Add(new OpcionRespuesta());
+            MensajeEliminarError = "No hay ninguna pregunta seleccionada.";
+
+            _ = Task.Run(async () =>
+            {
+                await Task.Delay(1000);
+                MensajeEliminarError = "";
+            });
+
+            return;
         }
+
+        _context.Preguntas.Remove(PreguntaSeleccionada);
+        await _context.SaveChangesAsync();
+
+        Preguntas.Remove(PreguntaSeleccionada);
+
+        MensajeEliminar = "Pregunta eliminada.";
+
+        _ = Task.Run(async () =>
+        {
+            await Task.Delay(1000);
+            MensajeEliminar = "";
+        });
     }
+
+    [RelayCommand]
+    private void AgregarOpcion()
+    {
+        if (OpcionesTemp.Count >= 4)
+        {
+            MensajeLimiteOpciones = "Ya no puedes agregar más de 4 opciones.";
+            _ = Task.Run(async () =>
+        {
+            await Task.Delay(1000);
+            MensajeLimiteOpciones = "";
+        });
+            return;
+        }
+
+        MensajeLimiteOpciones = "";
+        OpcionesTemp.Add(new Opciones());
+    }
+
+    [RelayCommand]
+    private void EliminarOpcion(Opciones opcion)
+    {
+        if (OpcionesTemp.Count <= 2)
+        {
+            MensajeMinOpciones = "Debe haber al menos 2 opciones.";
+            _ = Task.Run(async () =>
+        {
+            await Task.Delay(1000);
+            MensajeMinOpciones = "";
+        });
+            return;
+        }
+
+        MensajeMinOpciones = "";
+        OpcionesTemp.Remove(opcion);
+    }
+
 }
+
+// Si por alguna razón borraron datos en la BD, solo ejecuten
+/*
+SELECT setval(
+    pg_get_serial_sequence('"Preguntas"', 'Id'),
+    (SELECT MAX("Id") FROM "Preguntas")
+);
+
+no le se mucho a PGadmin pero eso reinicia la secuencia
+*/

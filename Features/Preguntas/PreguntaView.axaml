@@ -1,14 +1,22 @@
 <UserControl
-    x:Class="Quiz.Features.Preguntas.PreguntaView"
-    xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:vm="using:Quiz.Features.Preguntas"
-    x:DataType="vm:PreguntaViewModel"
-    Background="#FAFAF9"
-    FontFamily="Inter, Roboto, sans-serif"
-    mc:Ignorable="d">
+x:Class="Quiz.Features.Preguntas.PreguntaView"
+xmlns="https://github.com/avaloniaui"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+xmlns:vm="using:Quiz.Features.Preguntas"
+xmlns:local="using:Quiz"
+xmlns:models="using:Quiz.Models"
+
+x:DataType="vm:PreguntaViewModel"
+
+Background="#FAFAF9"
+FontFamily="Inter, Roboto, sans-serif"
+mc:Ignorable="d">
+    <UserControl.Resources>
+        <local:StringNotEmptyConverter x:Key="StringNotEmptyConverter"/>
+        <local:MayorQueDosConverter x:Key="MayorQueDosConverter"/>
+    </UserControl.Resources>
 
     <UserControl.Styles>
         <Style Selector="TextBlock.serif">
@@ -71,229 +79,381 @@
         </Style>
     </UserControl.Styles>
 
-    <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-        <StackPanel MaxWidth="800" Margin="40" HorizontalAlignment="Center" Spacing="32">
+    <Grid Margin="40" ColumnDefinitions="450,*">
+        <Border
+        Grid.Column="0"
+        Padding="0,0,40,0"
+        BorderBrush="#D6D3D1"
+        BorderThickness="0,0,1,0">
+            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+                <StackPanel Margin="0,0,0,24" Spacing="32">
 
-            <!-- Título -->
-            <StackPanel Spacing="8">
-                <TextBlock
-                    Classes="mono"
-                    FontSize="11"
-                    FontWeight="Bold"
-                    Foreground="#D4A373"
-                    LetterSpacing="1"
-                    Text="Cuestionarios" />
-                <TextBlock
-                    Classes="serif"
-                    FontSize="32"
-                    Foreground="#433829"
-                    LineHeight="40"
-                    Text="Añadir Nueva Pregunta"
-                    TextWrapping="Wrap" />
-                <TextBlock
-                    FontSize="14"
-                    Foreground="#78716C"
-                    LineHeight="22"
-                    Text="Redacta el cuestionamiento y selecciona la categoría."
-                    TextWrapping="Wrap" />
-            </StackPanel>
-
-            <Border
-                Height="1"
-                HorizontalAlignment="Stretch"
-                Background="#E7E5E4" />
-
-            <!-- Formulario -->
-            <StackPanel Spacing="24">
-
-                <!-- Texto de la pregunta -->
-                <StackPanel Spacing="8">
-                    <TextBlock
+                    <StackPanel Spacing="8">
+                        <TextBlock
                         Classes="mono"
-                        FontSize="10"
-                        FontWeight="SemiBold"
-                        Foreground="#A8A29E"
+                        FontSize="11"
+                        FontWeight="Bold"
+                        Foreground="#D4A373"
                         LetterSpacing="1"
-                        Text="TEXTO DE LA PREGUNTA" />
-                    <TextBox
-                        Height="80"
-                        AcceptsReturn="True"
-                        FontSize="15"
-                        Text="{Binding Enunciado}"
-                        TextWrapping="Wrap"
-                        Watermark="Ej. ¿En qué año cayó el muro de Berlín?" />
-                </StackPanel>
+                        Text="Cuestionarios" />
+                        <TextBlock
+                        Classes="serif"
+                        FontSize="32"
+                        Foreground="#433829"
+                        LineHeight="40"
+                        Text="Añadir Nueva Pregunta"
+                        TextWrapping="Wrap" />
+                        <TextBlock
+                        FontSize="14"
+                        Foreground="#78716C"
+                        LineHeight="22"
+                        Text="Redacta el cuestionamiento y proporciona sus posibles respuestas."
+                        TextWrapping="Wrap" />
+                    </StackPanel>
 
-                <!-- Selector de categoría (MUY IMPORTANTE) -->
-                <StackPanel Spacing="8">
-                    <TextBlock
-                        Classes="mono"
-                        FontSize="10"
-                        FontWeight="SemiBold"
-                        Foreground="#A8A29E"
-                        LetterSpacing="1"
-                        Text="CLASIFICACIÓN" />
-                    <ComboBox
-                        DisplayMemberBinding="{Binding Nombre}"
-                        ItemsSource="{Binding Categorias}"
-                        PlaceholderText="Seleccione una categoría archivada..."
-                        SelectedItem="{Binding CategoriaSeleccionada}" />
-                </StackPanel>
-
-                <Border
+                    <Border
                     Height="1"
                     HorizontalAlignment="Stretch"
                     Background="#E7E5E4" />
 
-                <!-- Opciones de respuesta -->
-                <StackPanel Spacing="16">
-                    <TextBlock
+            <!-- Formulario -->
+            <StackPanel Spacing="24">
+
+                        <StackPanel Spacing="8">
+                            <TextBlock
+                            Classes="mono"
+                            FontSize="10"
+                            FontWeight="SemiBold"
+                            Foreground="#A8A29E"
+                            LetterSpacing="1"
+                            Text="TEXTO DE LA PREGUNTA" />
+                            <TextBox
+                            Height="80"
+                            AcceptsReturn="True"
+                            FontSize="15"
+                            Text="{Binding Enunciado}"
+                            TextWrapping="Wrap"
+                            Watermark="Ej. ¿En qué año cayó el muro de Berlín?" />
+                            <Border
+                            Background="#FEE2E2"
+                            BorderBrush="#FCA5A5"
+                            BorderThickness="1"
+                            CornerRadius="8"
+                            Padding="10"
+                            Margin="0,6,0,0"
+                            IsVisible="{Binding MensajeError, Converter={StaticResource StringNotEmptyConverter}}">
+
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+
+                                    <TextBlock
+                                    Text="⚠"
+                                    FontSize="16"
+                                    VerticalAlignment="Center"
+                                    Foreground="#B91C1C"/>
+
+                                    <TextBlock
+                                    Text="{Binding MensajeError}"
+                                    Foreground="#B91C1C"
+                                    FontSize="13"
+                                    VerticalAlignment="Center"
+                                    TextWrapping="Wrap"/>
+
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+
+                        <StackPanel Spacing="8">
+                            <TextBlock
+                            Classes="mono"
+                            FontSize="10"
+                            FontWeight="SemiBold"
+                            Foreground="#A8A29E"
+                            LetterSpacing="1"
+                            Text="CLASIFICACIÓN" />
+                            <ComboBox
+                            DisplayMemberBinding="{Binding Nombre}"
+                            ItemsSource="{Binding Categorias}"
+                            PlaceholderText="Seleccione una categoría archivada..."
+                            SelectedItem="{Binding CategoriaSeleccionada}" />
+                        </StackPanel>
+                    </StackPanel>
+
+                    <Border
+                    Height="1"
+                    Margin="32,0"
+                    HorizontalAlignment="Stretch"
+                    Background="#E7E5E4" />
+
+                    <StackPanel Spacing="16">
+                        <TextBlock
                         Classes="mono"
                         FontSize="12"
                         FontWeight="Bold"
                         Foreground="#433829"
                         LetterSpacing="1"
                         Text="OPCIONES DE RESPUESTA" />
-                    <TextBlock
+                        <TextBlock
                         Margin="0,-8,0,8"
                         FontSize="12"
                         Foreground="#A8A29E"
                         Text="Proporciona las respuestas e indica la correcta." />
 
-                    <Border
-                        Padding="12,12"
-                        BorderBrush="#D6D3D1"
-                        BorderThickness="1"
-                        CornerRadius="10">
-                        <Grid ColumnDefinitions="Auto, *, Auto">
-                            <TextBlock
-                                Grid.Column="0"
-                                Margin="0,0,12,0"
-                                VerticalAlignment="Center"
-                                Classes="serif"
-                                FontSize="18"
-                                FontWeight="Bold"
-                                Foreground="#D4A373"
-                                Text="A." />
-                            <TextBox
-                                Grid.Column="1"
-                                Padding="0"
-                                Background="Transparent"
-                                BorderThickness="0"
-                                Watermark="Texto, enlace o ruta multimedia..." />
-                            <CheckBox
-                                Grid.Column="2"
-                                Margin="16,0,0,0"
-                                Content="Correcta" />
-                        </Grid>
-                    </Border>
+                        <ItemsControl ItemsSource="{Binding OpcionesTemp}">
+                            <ItemsControl.ItemTemplate>
 
-                    <Border
-                        Padding="12,12"
-                        BorderBrush="#D6D3D1"
-                        BorderThickness="1"
-                        CornerRadius="10">
-                        <Grid ColumnDefinitions="Auto, *, Auto">
-                            <TextBlock
-                                Grid.Column="0"
-                                Margin="0,0,12,0"
-                                VerticalAlignment="Center"
-                                Classes="serif"
-                                FontSize="18"
-                                FontWeight="Bold"
-                                Foreground="#D4A373"
-                                Text="B." />
-                            <TextBox
-                                Grid.Column="1"
-                                Padding="0"
-                                Background="Transparent"
-                                BorderThickness="0"
-                                Watermark="Texto, enlace o ruta multimedia..." />
-                            <CheckBox
-                                Grid.Column="2"
-                                Margin="16,0,0,0"
-                                Content="Correcta" />
-                        </Grid>
-                    </Border>
+                                <DataTemplate x:DataType="models:Opciones">
 
-                    <Border
-                        Padding="12,12"
-                        BorderBrush="#D6D3D1"
-                        BorderThickness="1"
-                        CornerRadius="10">
-                        <Grid ColumnDefinitions="Auto, *, Auto">
-                            <TextBlock
-                                Grid.Column="0"
-                                Margin="0,0,12,0"
-                                VerticalAlignment="Center"
-                                Classes="serif"
-                                FontSize="18"
-                                FontWeight="Bold"
-                                Foreground="#D4A373"
-                                Text="C." />
-                            <TextBox
-                                Grid.Column="1"
-                                Padding="0"
-                                Background="Transparent"
-                                BorderThickness="0"
-                                Watermark="Texto, enlace o ruta multimedia..." />
-                            <CheckBox
-                                Grid.Column="2"
-                                Margin="16,0,0,0"
-                                Content="Correcta" />
-                        </Grid>
-                    </Border>
+                                    <Border Padding="12"
+                                            BorderBrush="#D6D3D1"
+                                            BorderThickness="1"
+                                            CornerRadius="10"
+                                            Margin="0,6">
 
-                    <Border
-                        Padding="12,12"
-                        BorderBrush="#D6D3D1"
-                        BorderThickness="1"
-                        CornerRadius="10">
-                        <Grid ColumnDefinitions="Auto, *, Auto">
-                            <TextBlock
-                                Grid.Column="0"
-                                Margin="0,0,12,0"
-                                VerticalAlignment="Center"
-                                Classes="serif"
-                                FontSize="18"
-                                FontWeight="Bold"
-                                Foreground="#D4A373"
-                                Text="D." />
-                            <TextBox
-                                Grid.Column="1"
-                                Padding="0"
-                                Background="Transparent"
-                                BorderThickness="0"
-                                Watermark="Texto, enlace o ruta multimedia..." />
-                            <CheckBox
-                                Grid.Column="2"
-                                Margin="16,0,0,0"
-                                Content="Correcta" />
-                        </Grid>
-                    </Border>
+                                        <Grid ColumnDefinitions="*,Auto,Auto"
+                                              VerticalAlignment="Center">
 
-                    <Button HorizontalAlignment="Stretch" Classes="secondary">
-                        <TextBlock
+                                            <TextBox
+                                            Grid.Column="0"
+                                            HorizontalAlignment="Stretch"
+                                            Text="{Binding Contenido}"
+                                            Watermark="Texto, enlace o ruta multimedia..."
+                                            KeyUp="Opcion_KeyUp"/>
+
+                                            <CheckBox
+                                            Grid.Column="1"
+                                            Margin="12,0,0,0"
+                                            VerticalAlignment="Center"
+                                            Content="Correcta"
+                                            IsChecked="{Binding EsCorrecta}"
+                                            Command="{Binding $parent[UserControl].((vm:PreguntaViewModel)DataContext).MarcarCorrectaCommand}"
+                                            CommandParameter="{Binding}" />
+
+                                            <Button
+                                            Grid.Column="2"
+                                            Margin="8,0,0,0"
+                                            Width="32"
+                                            Height="32"
+                                            Content="✕"
+                                            IsVisible="{Binding $parent[UserControl].((vm:PreguntaViewModel)DataContext).OpcionesTemp.Count, Converter={StaticResource MayorQueDosConverter}}"
+                                            Command="{Binding $parent[UserControl].((vm:PreguntaViewModel)DataContext).EliminarOpcionCommand}"
+                                            CommandParameter="{Binding}"/>
+
+                                        </Grid>
+                                    </Border>
+
+
+                                </DataTemplate>
+
+                            </ItemsControl.ItemTemplate>
+
+                        </ItemsControl>
+
+                        <Button HorizontalAlignment="Stretch" Classes="secondary" Command="{Binding AgregarOpcionCommand}">
+                            <TextBlock
                             Classes="mono"
                             FontSize="11"
                             FontWeight="Bold"
                             LetterSpacing="1"
                             Text="+ AÑADIR OTRA OPCIÓN" />
-                    </Button>
-                </StackPanel>
+                        </Button>
+                    </StackPanel>
 
-                <Button
+                    <Border
+                    Background="#FEF3C7"
+                    BorderBrush="#FCD34D"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="10"
+                    Margin="0,6,0,0"
+                    IsVisible="{Binding MensajeLimiteOpciones, Converter={StaticResource StringNotEmptyConverter}}">
+
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+
+                            <TextBlock
+                            Text="⚠"
+                            FontSize="16"
+                            Foreground="#92400E"/>
+
+                            <TextBlock
+                            Text="{Binding MensajeLimiteOpciones}"
+                            Foreground="#92400E"
+                            FontSize="13"
+                            TextWrapping="Wrap"/>
+
+                        </StackPanel>
+                    </Border>
+
+                    <Border
+                    Background="#FEF3C7"
+                    BorderBrush="#FCD34D"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="10"
+                    Margin="0,8,0,0"
+                    IsVisible="{Binding MensajeOpciones, Converter={StaticResource StringNotEmptyConverter}}">
+
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+
+                            <TextBlock
+                            Text="⚠"
+                            FontSize="16"
+                            Foreground="#92400E"/>
+
+                            <TextBlock
+                            Text="{Binding MensajeOpciones}"
+                            Foreground="#92400E"
+                            FontSize="13"
+                            TextWrapping="Wrap"/>
+
+                        </StackPanel>
+                    </Border>
+
+                    <Button
+                    Margin="0,8,0,0"
                     HorizontalAlignment="Stretch"
                     Classes="primary"
                     Command="{Binding AgregarCommand}">
-                    <TextBlock
+                        <TextBlock
                         Classes="mono"
                         FontSize="12"
                         FontWeight="Bold"
                         LetterSpacing="1"
                         Text="GUARDAR PREGUNTA" />
+                    </Button>
+
+                    <Border
+                    Background="#DCFCE7"
+                    BorderBrush="#86EFAC"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="10"
+                    Margin="0,8,0,0"
+                    IsVisible="{Binding MensajeExito, Converter={StaticResource StringNotEmptyConverter}}">
+
+                        <StackPanel Orientation="Horizontal" Spacing="8">
+
+                            <TextBlock
+                            Text="✔"
+                            FontSize="16"
+                            Foreground="#166534"/>
+
+                            <TextBlock
+                            Text="{Binding MensajeExito}"
+                            Foreground="#166534"
+                            FontSize="13"
+                            TextWrapping="Wrap"/>
+
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+
+            </ScrollViewer>
+        </Border>
+
+        <Grid
+        Grid.Column="1"
+        Margin="40,0,0,0"
+        RowDefinitions="Auto,*">
+            <Grid
+            Grid.Row="0"
+            Margin="0,0,0,24"
+            ColumnDefinitions="*,Auto">
+                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                    <TextBlock
+                    Classes="serif"
+                    FontSize="24"
+                    Foreground="#433829"
+                    Text="Indice de Preguntas" />
+                    <TextBlock
+                    Margin="0,4,0,0"
+                    FontSize="14"
+                    Foreground="#78716C"
+                    Text="Colección general de conocimientos." />
+                </StackPanel>
+
+                <Button
+                Grid.Column="1"
+                VerticalAlignment="Center"
+                Classes="destructive"
+                Command="{Binding EliminarCommand}"
+                Cursor="Hand">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock
+                        VerticalAlignment="Center"
+                        FontSize="12"
+                        Foreground="#BC4749"
+                        Text="✕" />
+                        <TextBlock
+                        VerticalAlignment="Center"
+                        Classes="mono"
+                        FontSize="11"
+                        FontWeight="Bold"
+                        LetterSpacing="1"
+                        Text="ELIMINAR SELECCIÓN" />
+                    </StackPanel>
                 </Button>
-            </StackPanel>
-        </StackPanel>
-    </ScrollViewer>
+                <Border
+                Background="#FEE2E2"
+                BorderBrush="#FCA5A5"
+                BorderThickness="1"
+                CornerRadius="6"
+                Padding="6"
+                Margin="0,4,0,0"
+                HorizontalAlignment="Right"
+                MaxWidth="320"
+                IsVisible="{Binding MensajeEliminarError, Converter={StaticResource StringNotEmptyConverter}}">
+
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <TextBlock Text="⚠" FontSize="13" Foreground="#B91C1C"/>
+                        <TextBlock Text="{Binding MensajeEliminarError}" FontSize="12" Foreground="#B91C1C"/>
+                    </StackPanel>
+                </Border>
+                <Border
+                Background="#DCFCE7"
+                BorderBrush="#86EFAC"
+                BorderThickness="1"
+                CornerRadius="6"
+                Padding="6"
+                Margin="0,4,0,0"
+                HorizontalAlignment="Right"
+                MaxWidth="320"
+                IsVisible="{Binding MensajeEliminar, Converter={StaticResource StringNotEmptyConverter}}">
+
+                    <StackPanel Orientation="Horizontal" Spacing="6">
+                        <TextBlock Text="✔" FontSize="13" Foreground="#166534"/>
+                        <TextBlock Text="{Binding MensajeEliminar}"
+                                   FontSize="12"
+                                   Foreground="#166534"/>
+                    </StackPanel>
+
+                </Border>
+            </Grid>
+
+            <DataGrid
+            Grid.Row="1"
+            AutoGenerateColumns="False"
+            CanUserReorderColumns="False"
+            CanUserResizeColumns="False"
+            IsReadOnly="True"
+            ItemsSource="{Binding Preguntas}"
+            SelectedItem="{Binding PreguntaSeleccionada}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn
+                    Width="200"
+                    Binding="{Binding Categoria.Nombre}"
+                    Header="ID" />
+                    <DataGridTextColumn
+                    Width="*"
+                    Binding="{Binding Enunciado}"
+                    Header="ENUNCIADO" />
+                    <DataGridTextColumn
+                    Width="80"
+                    Binding="{Binding CategoriaId}"
+                    Header="CAT" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+        </Grid>
+    </Grid>
 </UserControl>
