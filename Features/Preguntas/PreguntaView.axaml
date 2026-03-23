@@ -74,42 +74,7 @@ mc:Ignorable="d">
             <Setter Property="Foreground" Value="#433829" />
         </Style>
 
-        <Style Selector="Button.destructive">
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderBrush" Value="#BC4749" />
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="Foreground" Value="#BC4749" />
-            <Setter Property="Padding" Value="16,8" />
-            <Setter Property="CornerRadius" Value="0" />
-        </Style>
-        <Style Selector="Button.destructive:pointerover">
-            <Setter Property="Background" Value="#0ABC4749" />
-        </Style>
-
         <Style Selector="CheckBox">
-            <Setter Property="Foreground" Value="#433829" />
-        </Style>
-
-        <Style Selector="DataGrid">
-            <Setter Property="Background" Value="#FAFAF9" />
-            <Setter Property="BorderBrush" Value="#D6D3D1" />
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="RowBackground" Value="#FAFAF9" />
-            <Setter Property="HeadersVisibility" Value="Column" />
-            <Setter Property="GridLinesVisibility" Value="Horizontal" />
-            <Setter Property="HorizontalGridLinesBrush" Value="#E7E5E4" />
-            <Setter Property="VerticalGridLinesBrush" Value="Transparent" />
-        </Style>
-        <Style Selector="DataGridColumnHeader">
-            <Setter Property="Background" Value="#F5F5F4" />
-            <Setter Property="Foreground" Value="#78716C" />
-            <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="Padding" Value="16,12" />
-            <Setter Property="BorderThickness" Value="0,0,0,1" />
-            <Setter Property="BorderBrush" Value="#D6D3D1" />
-        </Style>
-        <Style Selector="DataGridCell">
-            <Setter Property="Padding" Value="16,12" />
             <Setter Property="Foreground" Value="#433829" />
         </Style>
     </UserControl.Styles>
@@ -151,7 +116,8 @@ mc:Ignorable="d">
                     HorizontalAlignment="Stretch"
                     Background="#E7E5E4" />
 
-                    <StackPanel Spacing="24">
+            <!-- Formulario -->
+            <StackPanel Spacing="24">
 
                         <StackPanel Spacing="8">
                             <TextBlock
