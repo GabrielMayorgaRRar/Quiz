@@ -33,10 +33,10 @@ public partial class UsuarioViewModel : ObservableObject
 
     public UsuarioViewModel(AppDbContext context)
     {
-        System.Diagnostics.Debug.WriteLine("=== CONSTRUCTOR UsuarioViewModel ===");
+       
         _context = context;
         _ = CargarUsuariosAsync();
-        System.Diagnostics.Debug.WriteLine("=== CONSTRUCTOR UsuarioViewModel FINALIZADO ===");
+        
     }
 
     /* private async Task CargarUsuariosAsync()
@@ -55,7 +55,7 @@ public partial class UsuarioViewModel : ObservableObject
 
   
 
-    private async Task CargarUsuariosAsync()
+    /*private async Task CargarUsuariosAsync()
     {
         try
         {
@@ -80,6 +80,30 @@ public partial class UsuarioViewModel : ObservableObject
             System.Diagnostics.Debug.WriteLine($"ERROR EN CARGA: {ex.Message}");
             MensajeError = $"Error al cargar usuarios: {ex.Message}";
             _ = LimpiarMensajeAsync(() => MensajeError = "");
+        }
+    }*/
+    private async Task CargarUsuariosAsync()
+    {
+        try
+        {
+            // Ejecutar en el hilo UI
+            await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(async () =>
+            {
+                var lista = await _context.Usuarios.OrderBy(u => u.Id).ToListAsync();
+
+                Usuarios.Clear();
+                foreach (var usuario in lista)
+                {
+                    Usuarios.Add(usuario);
+                }
+            });
+        }
+        catch (Exception ex)
+        {
+            await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                MensajeError = $"Error al cargar: {ex.Message}";
+            });
         }
     }
 
