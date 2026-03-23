@@ -1,16 +1,23 @@
 using System;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.ComponentModel;
 using Quiz.ViewModels;
 
 namespace Quiz.Features.Home;
 
 public partial class HomeViewModel : ViewModelBase
 {
-    public Action? OnStartQuizRequested;
+    public Action<string>? OnStartQuizWithCategory;
 
     [RelayCommand]
     private void IniciarPartida()
     {
-        OnStartQuizRequested?.Invoke();
+        OnStartQuizWithCategory?.Invoke(null);
+    }
+
+    [RelayCommand]
+    private void IniciarPartidaConCategoria(string categoria)
+    {
+        OnStartQuizWithCategory?.Invoke(categoria);
     }
 }
