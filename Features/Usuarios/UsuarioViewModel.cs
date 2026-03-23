@@ -33,21 +33,77 @@ public partial class UsuarioViewModel : ObservableObject
 
     public UsuarioViewModel(AppDbContext context)
     {
+       
         _context = context;
         _ = CargarUsuariosAsync();
+        
     }
 
+    /* private async Task CargarUsuariosAsync()
+     {
+         try
+         {
+             var lista = await _context.Usuarios.ToListAsync();
+             Usuarios = new ObservableCollection<Usuario>(lista);
+         }
+         catch (Exception ex)
+         {
+             MensajeError = $"Error al cargar usuarios: {ex.Message}";
+             _ = LimpiarMensajeAsync(() => MensajeError = "");
+         }
+     }*/
+
+  
+
+    /*private async Task CargarUsuariosAsync()
+    {
+        try
+        {
+            System.Diagnostics.Debug.WriteLine("=== CargarUsuariosAsync INICIADO ===");
+
+            var lista = await _context.Usuarios.ToListAsync();
+
+            System.Diagnostics.Debug.WriteLine($"Se encontraron {lista.Count} usuarios en BD");
+
+            foreach (var u in lista)
+            {
+                System.Diagnostics.Debug.WriteLine($"Usuario: {u.Id} - {u.Nombre} ({u.Apodo})");
+            }
+
+            Usuarios = new ObservableCollection<Usuario>(lista);
+
+            System.Diagnostics.Debug.WriteLine($"Usuarios en ObservableCollection: {Usuarios.Count}");
+            System.Diagnostics.Debug.WriteLine("=== CargarUsuariosAsync FINALIZADO ===");
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"ERROR EN CARGA: {ex.Message}");
+            MensajeError = $"Error al cargar usuarios: {ex.Message}";
+            _ = LimpiarMensajeAsync(() => MensajeError = "");
+        }
+    }*/
     private async Task CargarUsuariosAsync()
     {
         try
         {
-            var lista = await _context.Usuarios.ToListAsync();
-            Usuarios = new ObservableCollection<Usuario>(lista);
+            // Ejecutar en el hilo UI
+            await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(async () =>
+            {
+                var lista = await _context.Usuarios.OrderBy(u => u.Id).ToListAsync();
+
+                Usuarios.Clear();
+                foreach (var usuario in lista)
+                {
+                    Usuarios.Add(usuario);
+                }
+            });
         }
         catch (Exception ex)
         {
-            MensajeError = $"Error al cargar usuarios: {ex.Message}";
-            _ = LimpiarMensajeAsync(() => MensajeError = "");
+            await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(() =>
+            {
+                MensajeError = $"Error al cargar: {ex.Message}";
+            });
         }
     }
 
@@ -88,6 +144,7 @@ public partial class UsuarioViewModel : ObservableObject
             {
                 Nombre = Nombre.Trim(),
                 Apodo = Apodo.Trim()
+                // FechaRegistro = DateTime.Now
             };
 
             _context.Usuarios.Add(usuario);
@@ -146,6 +203,31 @@ public partial class UsuarioViewModel : ObservableObject
         Apodo = string.Empty;
         MensajeError = "";
         MensajeExito = "";
+    }
+    [RelayCommand]
+    private async Task ProbarCargaAsync()
+    {
+        try
+        {
+            var count = await _context.Usuarios.CountAsync();
+            MensajeError = $"Hay {count} usuarios en la BD";
+
+            // También mostrar en un MessageBox
+            await Avalonia.Threading.Dispatcher.UIThread.InvokeAsync(async () =>
+            {
+                var message = $"Total usuarios en BD: {count}\n\n";
+                var usuarios = await _context.Usuarios.ToListAsync();
+                foreach (var u in usuarios)
+                {
+                    message += $"- {u.Nombre} ({u.Apodo})\n";
+                }
+                MensajeExito = message;
+            });
+        }
+        catch (Exception ex)
+        {
+            MensajeError = $"Error: {ex.Message}";
+        }
     }
 
     private async Task LimpiarMensajeAsync(Action limpiarAccion)
