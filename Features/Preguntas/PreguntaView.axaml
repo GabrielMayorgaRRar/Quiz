@@ -312,7 +312,7 @@ mc:Ignorable="d">
                     Margin="0,8,0,0"
                     HorizontalAlignment="Stretch"
                     Classes="primary"
-                    Command="{Binding AgregarCommand}">
+                    Command="{Binding GuardarPreguntaCommand}">
                         <TextBlock
                         Classes="mono"
                         FontSize="12"
@@ -376,7 +376,7 @@ mc:Ignorable="d">
                 Grid.Column="1"
                 VerticalAlignment="Center"
                 Classes="destructive"
-                Command="{Binding EliminarCommand}"
+                Command="{Binding EliminarPreguntaCommand}"
                 Cursor="Hand">
                     <StackPanel Orientation="Horizontal" Spacing="8">
                         <TextBlock
