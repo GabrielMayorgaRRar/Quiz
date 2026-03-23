@@ -42,6 +42,7 @@ public partial class App : Application
         var user   = Environment.GetEnvironmentVariable("DB_USER") ?? "postgres";
         var pass   = Environment.GetEnvironmentVariable("DB_PASS") ?? "fghj";
 
+
         var connStr = $"Host={host};Port={port};Database={name};Username={user};Password={pass}";
         var options = new DbContextOptionsBuilder<AppDbContext>()
             .UseNpgsql(connStr)
