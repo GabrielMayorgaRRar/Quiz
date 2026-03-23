@@ -2,6 +2,13 @@ using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace Quiz.Models;
 
+public enum TipoRespuesta
+{
+    Texto,
+    Imagen,
+    Audio
+}
+
 public partial class Opciones : ObservableObject
 {
     public int Id { get; set; }
@@ -11,6 +18,9 @@ public partial class Opciones : ObservableObject
 
     [ObservableProperty]
     private bool esCorrecta;
+
+    [ObservableProperty]
+    private TipoRespuesta _tipoRespuesta = TipoRespuesta.Texto;
 
     public int PreguntaId { get; set; }
 

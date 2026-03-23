@@ -1,4 +1,4 @@
-﻿using Avalonia;
+using Avalonia;
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
@@ -13,6 +13,7 @@ sealed class Program
     [STAThread]
     public static void Main(string[] args)
     {
+        EnvLoader.Load();
         var serviceCollection = new ServiceCollection();
         WireUpServices(serviceCollection);
         Services = serviceCollection.BuildServiceProvider();

@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using Microsoft.EntityFrameworkCore;
 using Quiz.Models;
+using Quiz.ViewModels;
 
 namespace Quiz.Features.Preguntas;
 
@@ -86,27 +87,40 @@ public partial class PreguntaViewModel : ObservableObject
     [ObservableProperty]
     private Pregunta? _preguntaSeleccionada;
 
+    public Array TiposRespuesta => Enum.GetValues(typeof(TipoRespuesta));
+
     public PreguntaViewModel(AppDbContext context)
     {
         _context = context;
 
-        // inicializar opciones visibles
         OpcionesTemp.Add(new Opciones());
         OpcionesTemp.Add(new Opciones());
 
         _ = CargarDatosAsync();
     }
 
+    public void RecargarDatos()
+    {
+        _ = CargarDatosAsync();
+    }
     private async Task CargarDatosAsync()
     {
-        var preguntas = await _context.Preguntas
-            .Include(p => p.Categoria)
-            .ToListAsync();
+        try 
+        {
+            var preguntas = await _context.Preguntas
+                .Include(p => p.Categoria)
+                .ToListAsync();
 
-        Preguntas = new ObservableCollection<Pregunta>(preguntas);
+            Preguntas = new ObservableCollection<Pregunta>(preguntas);
 
-        var categorias = await _context.Categorias.ToListAsync();
-        Categorias = new ObservableCollection<Categoria>(categorias);
+            var categorias = await _context.Categorias.ToListAsync();
+            System.Diagnostics.Debug.WriteLine($"Cargadas {categorias.Count} categorias de la BD.");
+            Categorias = new ObservableCollection<Categoria>(categorias);
+        }
+        catch (Exception ex)
+        {
+            System.Diagnostics.Debug.WriteLine($"ERROR en CargarDatosAsync: {ex.Message}");
+        }
     }
 
     [RelayCommand]
@@ -137,7 +151,6 @@ public partial class PreguntaViewModel : ObservableObject
             return;
         }
 
-        // validar duplicado
         bool existe = await _context.Preguntas.AnyAsync(p =>
             p.Enunciado.ToLower().Trim() == Enunciado.ToLower().Trim()
             && p.CategoriaId == CategoriaSeleccionada.Id);
@@ -186,7 +199,6 @@ public partial class PreguntaViewModel : ObservableObject
         MensajeOpciones = "";
         MensajeError = "";
 
-        // crear pregunta
         var pregunta = new Pregunta
         {
             Enunciado = Enunciado.Trim(),
@@ -196,7 +208,6 @@ public partial class PreguntaViewModel : ObservableObject
         _context.Preguntas.Add(pregunta);
         await _context.SaveChangesAsync();
 
-        // guardar opciones
         foreach (var op in OpcionesTemp)
         {
             op.PreguntaId = pregunta.Id;
@@ -205,7 +216,6 @@ public partial class PreguntaViewModel : ObservableObject
         _context.Opciones.AddRange(OpcionesTemp);
         await _context.SaveChangesAsync();
 
-        // refrescar tabla
         var nueva = await _context.Preguntas
             .Include(p => p.Categoria)
             .FirstAsync(p => p.Id == pregunta.Id);
@@ -214,11 +224,9 @@ public partial class PreguntaViewModel : ObservableObject
         MensajeExito = "Pregunta guardada correctamente.";
         _ = LimpiarMensajeAsync(() => MensajeExito = "");
 
-        // limpiar formulario
         Enunciado = "";
         CategoriaSeleccionada = null;
 
-        // limpiar lista de opciones
         OpcionesTemp.Clear();
 
         // volver a dejar 2 opciones iniciales

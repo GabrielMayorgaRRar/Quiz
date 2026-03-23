@@ -6,6 +6,7 @@ public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbConte
 {
     public AppDbContext CreateDbContext(string[] args)
     {
+        Quiz.EnvLoader.Load();
         var dbHost = Environment.GetEnvironmentVariable("DB_HOST") ?? "localhost";
         var dbPort = Environment.GetEnvironmentVariable("DB_PORT") ?? "5432";
         var dbName = Environment.GetEnvironmentVariable("DB_NAME") ?? "net_psql";

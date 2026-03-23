@@ -31,11 +31,10 @@ public partial class App : Application
         base.OnFrameworkInitializationCompleted();
     }
 
-    /// <summary>
-    /// Crea y configura el AppDbContext leyendo variables de entorno.
-    /// </summary>
+
     public static AppDbContext CreateDbContext()
     {
+        EnvLoader.Load();
         var host   = Environment.GetEnvironmentVariable("DB_HOST") ?? "localhost";
         var port   = Environment.GetEnvironmentVariable("DB_PORT") ?? "5432";
         var name   = Environment.GetEnvironmentVariable("DB_NAME") ?? "net_psql";

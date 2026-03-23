@@ -27,28 +27,22 @@
             <Setter Property="FontFamily" Value="Consolas, Cascadia Code, Courier New, monospace" />
         </Style>
 
-        <Style Selector="Button.optionTextCard">
+        <Style Selector="Border.optionTextCard">
             <Setter Property="Background" Value="#FFFFFF" />
             <Setter Property="BorderThickness" Value="4" />
             <Setter Property="BorderBrush" Value="#E7E5E4" />
             <Setter Property="CornerRadius" Value="24" />
             <Setter Property="Padding" Value="32,24" />
-            <Setter Property="HorizontalContentAlignment" Value="Center" />
-            <Setter Property="VerticalContentAlignment" Value="Center" />
             <Setter Property="RenderTransform" Value="scale(1)" />
         </Style>
 
-        <Style Selector="Button.optionTextCard:pointerover">
+        <Style Selector="Border.optionTextCard:pointerover">
             <Setter Property="RenderTransform" Value="scale(1.02)" />
             <Setter Property="BorderBrush" Value="#E07A5F" />
             <Setter Property="Background" Value="#05E07A5F" />
         </Style>
 
-        <Style Selector="Button.optionTextCard:pointerover /template/ ContentPresenter">
-            <Setter Property="Background" Value="#05E07A5F" />
-            <Setter Property="BorderBrush" Value="#E07A5F" />
-        </Style>
-        <Style Selector="Button.optionImageCard">
+        <Style Selector="Border.optionImageCard">
             <Setter Property="Background" Value="#FFFFFF" />
             <Setter Property="BorderThickness" Value="4" />
             <Setter Property="BorderBrush" Value="#E7E5E4" />
@@ -56,21 +50,21 @@
             <Setter Property="Padding" Value="8" />
             <Setter Property="RenderTransform" Value="scale(1)" />
         </Style>
-        <Style Selector="Button.optionImageCard:pointerover">
+        <Style Selector="Border.optionImageCard:pointerover">
             <Setter Property="BorderBrush" Value="#BC4749" />
             <Setter Property="RenderTransform" Value="scale(1.02)" />
         </Style>
 
-        <Style Selector="Button.optionAudioCard">
+        <Style Selector="Border.optionAudioCard">
             <Setter Property="Background" Value="#FAFAF9" />
             <Setter Property="BorderThickness" Value="2" />
             <Setter Property="BorderBrush" Value="#D4A373" />
             <Setter Property="CornerRadius" Value="32" />
             <Setter Property="Padding" Value="24,16" />
         </Style>
-        <Style Selector="Button.optionAudioCard:pointerover">
+        <Style Selector="Border.optionAudioCard:pointerover">
             <Setter Property="Background" Value="#D4A373" />
-            <Setter Property="Foreground" Value="#FAFAF9" />
+            <Setter Property="TextElement.Foreground" Value="#FAFAF9" />
         </Style>
 
         <Style Selector="Button.exitBtn">
@@ -204,11 +198,12 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Button
+                            <Border
                                 Margin="12"
                                 Classes="optionTextCard"
-                                Command="{Binding $parent[UserControl].((vm:QuizSessionViewModel)DataContext).SeleccionarOpcionCommand}"
-                                CommandParameter="{Binding}">
+                                Cursor="Hand"
+                                Tag="{Binding}"
+                                Tapped="OnOptionTapped">
                                 <TextBlock
                                     FontSize="24"
                                     FontWeight="Bold"
@@ -216,7 +211,7 @@
                                     Text="{Binding Contenido}"
                                     TextAlignment="Center"
                                     TextWrapping="Wrap" />
-                            </Button>
+                            </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -233,13 +228,14 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Button
+                            <Border
                                 Width="300"
                                 Height="200"
                                 Margin="16"
                                 Classes="optionImageCard"
-                                Command="{Binding $parent[UserControl].((vm:QuizSessionViewModel)DataContext).SeleccionarOpcionCommand}"
-                                CommandParameter="{Binding}">
+                                Cursor="Hand"
+                                Tag="{Binding}"
+                                Tapped="OnOptionTapped">
                                 <Border
                                     HorizontalAlignment="Stretch"
                                     VerticalAlignment="Stretch"
@@ -248,7 +244,7 @@
                                     CornerRadius="16">
                                     <Image Source="{Binding Contenido, Converter={StaticResource bitmapConverter}}" Stretch="Uniform" />
                                 </Border>
-                            </Button>
+                            </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
@@ -267,11 +263,12 @@
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
-                            <Button
+                            <Border
                                 HorizontalAlignment="Stretch"
                                 Classes="optionAudioCard"
-                                Command="{Binding $parent[UserControl].((vm:QuizSessionViewModel)DataContext).SeleccionarOpcionCommand}"
-                                CommandParameter="{Binding}">
+                                Cursor="Hand"
+                                Tag="{Binding}"
+                                Tapped="OnOptionTapped">
                                 <Grid ColumnDefinitions="Auto,*">
                                     <Border
                                         Grid.Column="0"
@@ -295,12 +292,11 @@
                                         Foreground="#433829"
                                         Text="{Binding Contenido}" />
                                 </Grid>
-                            </Button>
+                            </Border>
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <!-- Feedback Overlay -->
                 <Border
                     IsVisible="{Binding MostrarFeedback}"
                     HorizontalAlignment="Stretch"
@@ -322,7 +318,6 @@
                                 TextAlignment="Center"
                                 TextWrapping="Wrap" />
                             
-                            <!-- Mostrar respuesta correcta si falló -->
                             <TextBlock
                                 IsVisible="{Binding !EsCorrecta}"
                                 FontSize="18"

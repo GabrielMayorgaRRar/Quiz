@@ -13,6 +13,14 @@ public partial class MainWindowViewModel : ViewModelBase
     [ObservableProperty]
     private int _selectedTab = 0;
 
+    partial void OnSelectedTabChanged(int value)
+    {
+        if (value == 2)
+        {
+            PreguntaVM.RecargarDatos();
+        }
+    }
+
     public HomeViewModel      HomeVM      { get; }
     public UsuarioViewModel   UsuarioVM   { get; }
     public PreguntaViewModel  PreguntaVM  { get; }
@@ -30,7 +38,7 @@ public partial class MainWindowViewModel : ViewModelBase
         JuegoVM     = new JuegoViewModel(context);
         
         HomeVM = new HomeViewModel();
-        QuizSessionVM = new QuizSessionViewModel();
+        QuizSessionVM = new QuizSessionViewModel(context);
 
         // Wiring navigation
         // Tabs: 0=Inicio, 1=Juegos, 2=Preguntas, 3=Categorias, 4=Usuarios, 5=Partida Activa
