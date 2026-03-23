@@ -19,7 +19,8 @@
                 FontSize="20"
                 FontWeight="Bold"
                 Text="Usuarios" />
-            <Grid ColumnDefinitions="*,*,Auto" RowDefinitions="Auto">
+            
+            <Grid ColumnDefinitions="*,*,Auto,Auto" RowDefinitions="Auto,Auto">
                 <TextBox
                     Grid.Column="0"
                     Margin="0,0,8,0"
@@ -32,8 +33,29 @@
                     Watermark="Apodo" />
                 <Button
                     Grid.Column="2"
+                    Margin="0,0,8,0"
                     Command="{Binding AgregarCommand}"
                     Content="Agregar" />
+                <Button
+                    Grid.Column="3"
+                    Command="{Binding LimpiarFormularioCommand}"
+                    Content="Limpiar" />
+                
+                <!-- Mensajes -->
+                <TextBlock
+                    Grid.Row="1"
+                    Grid.ColumnSpan="4"
+                    Margin="0,8,0,0"
+                    Foreground="Red"
+                    Text="{Binding MensajeError}"
+                    VerticalAlignment="Center" />
+                <TextBlock
+                    Grid.Row="1"
+                    Grid.ColumnSpan="4"
+                    Margin="0,8,0,0"
+                    Foreground="Green"
+                    Text="{Binding MensajeExito}"
+                    VerticalAlignment="Center" />
             </Grid>
         </StackPanel>
 
