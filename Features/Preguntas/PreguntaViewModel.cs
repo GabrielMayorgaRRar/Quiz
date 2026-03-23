@@ -30,6 +30,7 @@ public partial class PreguntaViewModel : ViewModelBase
     public PreguntaViewModel(AppDbContext context)
     {
         _context = context;
+        _ = CargarDatosAsync();
     }
 
     private async Task CargarDatosAsync()
