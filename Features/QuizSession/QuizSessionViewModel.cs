@@ -140,6 +140,13 @@ public partial class QuizSessionViewModel : ViewModelBase
         JuegoTerminado = false;
         MostrarFeedback = false;
         
+        StopAudio();
+    }
+
+    private System.Diagnostics.Process? _currentAudioProcess;
+
+    private void StopAudio()
+    {
         try
         {
             if (_currentAudioProcess != null && !_currentAudioProcess.HasExited)
@@ -147,8 +154,6 @@ public partial class QuizSessionViewModel : ViewModelBase
         }
         catch { }
     }
-
-    private System.Diagnostics.Process? _currentAudioProcess;
 
     [RelayCommand]
     private void PlayAudio(string? audioPath)
@@ -167,14 +172,7 @@ public partial class QuizSessionViewModel : ViewModelBase
             return;
         }
 
-        try
-        {
-            if (_currentAudioProcess != null && !_currentAudioProcess.HasExited)
-            {
-                _currentAudioProcess.Kill();
-            }
-        }
-        catch { }
+        StopAudio();
 
         Task.Run(() => 
         {
@@ -220,6 +218,7 @@ public partial class QuizSessionViewModel : ViewModelBase
     [RelayCommand]
     private void SeleccionarOpcion(Opciones opcion)
     {
+        StopAudio();
         OpcionSeleccionada = opcion;
         
         EsCorrecta = opcion.EsCorrecta;
@@ -279,6 +278,7 @@ public partial class QuizSessionViewModel : ViewModelBase
     [RelayCommand]
     private void FinalizarPartida()
     {
+        StopAudio();
         OnQuizFinished?.Invoke();
     }
 }
