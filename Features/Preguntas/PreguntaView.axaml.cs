@@ -40,20 +40,7 @@ public partial class PreguntaView : UserControl
                     var file = files[0];
                     if (file.Path.LocalPath is string localPath && !string.IsNullOrEmpty(localPath))
                     {
-                        var fileName = file.Name;
-                        var destFolder = System.IO.Path.Combine(System.AppDomain.CurrentDomain.BaseDirectory, "Assets", "Respuestas");
-                        System.IO.Directory.CreateDirectory(destFolder);
-                        var destPath = System.IO.Path.Combine(destFolder, fileName);
-                        
-                        try 
-                        {
-                            System.IO.File.Copy(localPath, destPath, true);
-                            opcion.Contenido = "/Assets/Respuestas/" + fileName;
-                        }
-                        catch (System.Exception ex)
-                        {
-                            System.Diagnostics.Debug.WriteLine($"Error copiando archivo: {ex.Message}");
-                        }
+                        opcion.Contenido = localPath;
                     }
                 }
             }

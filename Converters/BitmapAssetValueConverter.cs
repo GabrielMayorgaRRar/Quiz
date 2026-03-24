@@ -3,6 +3,7 @@ using Avalonia.Media.Imaging;
 using Avalonia.Platform;
 using System;
 using System.Globalization;
+using System.IO;
 
 namespace Quiz.Converters;
 
@@ -12,15 +13,29 @@ public class BitmapAssetValueConverter : IValueConverter
 
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is string rawUri && Uri.TryCreate(rawUri, UriKind.Absolute, out var uri))
+        if (value is string rawUri && !string.IsNullOrWhiteSpace(rawUri))
         {
             try
             {
-                return new Bitmap(AssetLoader.Open(uri));
+                if (rawUri.StartsWith("avares://"))
+                {
+                    return new Bitmap(AssetLoader.Open(new Uri(rawUri)));
+                }
+
+                string absolutePath = rawUri;
+                if (!Path.IsPathRooted(absolutePath))
+                {
+                    absolutePath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, rawUri.TrimStart('/'));
+                }
+
+                if (File.Exists(absolutePath))
+                {
+                    return new Bitmap(absolutePath);
+                }
             }
-            catch
+            catch (Exception ex)
             {
-                return null;
+                System.Diagnostics.Debug.WriteLine($"Error cargando imagen: {ex.Message}");
             }
         }
         return null;

@@ -270,20 +270,26 @@
                                 Tag="{Binding}"
                                 Tapped="OnOptionTapped">
                                 <Grid ColumnDefinitions="Auto,*">
-                                    <Border
+                                    <Button
                                         Grid.Column="0"
                                         Width="32"
                                         Height="32"
                                         Margin="0,0,16,0"
+                                        Padding="0"
                                         Background="#FAF9F9"
-                                        CornerRadius="16">
+                                        CornerRadius="16"
+                                        Command="{Binding $parent[UserControl].((vm:QuizSessionViewModel)DataContext).PlayAudioCommand}"
+                                        CommandParameter="{Binding Contenido}"
+                                        Cursor="Hand">
                                         <Path
                                             Width="12"
                                             Height="12"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
                                             Data="M8 5V19L19 12L8 5Z"
                                             Fill="#D4A373"
                                             Stretch="Uniform" />
-                                    </Border>
+                                    </Button>
                                     <TextBlock
                                         Grid.Column="1"
                                         VerticalAlignment="Center"

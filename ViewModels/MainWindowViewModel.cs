@@ -15,7 +15,11 @@ public partial class MainWindowViewModel : ViewModelBase
 
     partial void OnSelectedTabChanged(int value)
     {
-        if (value == 2)
+        if (value == 0)
+        {
+            _ = HomeVM.CargarCategoriasAsync();
+        }
+        else if (value == 2)
         {
             PreguntaVM.RecargarDatos();
         }

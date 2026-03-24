@@ -129,6 +129,84 @@ public partial class QuizSessionViewModel : ViewModelBase
         EsModoAudio = tipoRespuesta == TipoRespuesta.Audio;
         JuegoTerminado = false;
         MostrarFeedback = false;
+        
+        // Detener audio actual si cambia la fase
+        try
+        {
+            if (_currentAudioProcess != null && !_currentAudioProcess.HasExited)
+                _currentAudioProcess.Kill();
+        }
+        catch { }
+    }
+
+    private System.Diagnostics.Process? _currentAudioProcess;
+
+    [RelayCommand]
+    private void PlayAudio(string? audioPath)
+    {
+        if (string.IsNullOrWhiteSpace(audioPath)) return;
+        
+        string absolutePath = audioPath;
+        if (!System.IO.Path.IsPathRooted(absolutePath))
+        {
+            absolutePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, audioPath.TrimStart('/'));
+        }
+
+        if (!System.IO.File.Exists(absolutePath))
+        {
+            System.Diagnostics.Debug.WriteLine($"Audio no encontrado en: {absolutePath}");
+            return;
+        }
+
+        try
+        {
+            if (_currentAudioProcess != null && !_currentAudioProcess.HasExited)
+            {
+                _currentAudioProcess.Kill();
+            }
+        }
+        catch { }
+
+        Task.Run(() => 
+        {
+            try
+            {
+                if (OperatingSystem.IsLinux())
+                {
+                    _currentAudioProcess = System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = "ffplay",
+                        Arguments = $"-nodisp -autoexit \"{absolutePath}\"",
+                        CreateNoWindow = true,
+                        UseShellExecute = false
+                    });
+                }
+                else if (OperatingSystem.IsWindows())
+                {
+                    _currentAudioProcess = System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = "powershell",
+                        Arguments = $"-c (New-Object System.Media.SoundPlayer '{absolutePath}').PlaySync()",
+                        CreateNoWindow = true,
+                        UseShellExecute = false
+                    });
+                }
+                else if (OperatingSystem.IsMacOS())
+                {
+                    _currentAudioProcess = System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = "afplay",
+                        Arguments = $"\"{absolutePath}\"",
+                        CreateNoWindow = true,
+                        UseShellExecute = false
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error playing audio: {ex.Message}");
+            }
+        });
     }
     [RelayCommand]
     private void SeleccionarOpcion(Opciones opcion)
