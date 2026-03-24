@@ -232,7 +232,14 @@ public partial class QuizSessionViewModel : ViewModelBase
         else
         {
             var respuestaCorrecta = PreguntaActual.Opciones?.FirstOrDefault(o => o.EsCorrecta);
-            RespuestaCorrectaTexto = respuestaCorrecta?.Contenido ?? "No especificada";
+            var contenido = respuestaCorrecta?.Contenido ?? "No especificada";
+            
+            if (EsModoImagen || EsModoAudio)
+            {
+                try { contenido = System.IO.Path.GetFileNameWithoutExtension(contenido); } catch { }
+            }
+
+            RespuestaCorrectaTexto = contenido;
             MensajeFeedback = $"Incorrecto. La respuesta correcta era: {RespuestaCorrectaTexto}";
         }
         
