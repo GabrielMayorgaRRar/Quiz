@@ -338,64 +338,64 @@
                 </Border>
 
                 <StackPanel
-                    Margin="0,48,0,0"
+                    Margin="0,24,0,0"
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     IsVisible="{Binding JuegoTerminado}"
-                    Spacing="32">
+                    Spacing="16">
 
                     <Border
-                        Width="120"
-                        Height="120"
+                        Width="80"
+                        Height="80"
                         HorizontalAlignment="Center"
                         Background="#1AE07A5F"
-                        CornerRadius="60">
+                        CornerRadius="40">
                         <Path
-                            Width="64"
-                            Height="64"
+                            Width="36"
+                            Height="36"
                             Data="M12 2L15.09 8.26L22 9.27L17 14.14L18.18 21.02L12 17.77L5.82 21.02L7 14.14L2 9.27L8.91 8.26L12 2Z"
                             Fill="#E07A5F"
                             Stretch="Uniform" />
                     </Border>
 
-                    <StackPanel HorizontalAlignment="Center" Spacing="16">
+                    <StackPanel HorizontalAlignment="Center" Spacing="8">
                         <TextBlock
-                            FontSize="48"
+                            FontSize="32"
                             FontWeight="Black"
                             Foreground="#433829"
                             Text="¡QUIZ COMPLETADO!"
                             TextAlignment="Center" />
                         <TextBlock
-                            FontSize="20"
+                            FontSize="16"
                             Foreground="#78716C"
-                            Text="Has superado todas las misiones de esta partida."
+                            Text="Has superado todas las misiones."
                             TextAlignment="Center" />
 
                         <Border
                             Margin="0,16,0,0"
-                            Padding="48,24"
+                            Padding="32,16"
                             Background="#FFFFFF"
                             BorderBrush="#E7E5E4"
-                            BorderThickness="4"
-                            CornerRadius="24">
-                            <StackPanel Spacing="16">
+                            BorderThickness="3"
+                            CornerRadius="20">
+                            <StackPanel Spacing="8">
                                 <TextBlock
-                                    FontSize="14"
+                                    FontSize="12"
                                     FontWeight="Bold"
                                     Foreground="#A8A29E"
-                                    LetterSpacing="2"
+                                    LetterSpacing="1.5"
                                     Text="ESTADÍSTICAS"
                                     TextAlignment="Center" />
                                 <Grid HorizontalAlignment="Center" ColumnDefinitions="Auto, Auto, Auto">
-                                    <StackPanel Grid.Column="0" Spacing="4">
+                                    <StackPanel Grid.Column="0" Spacing="2">
                                         <TextBlock
-                                            FontSize="48"
+                                            FontSize="36"
                                             FontWeight="Black"
                                             Foreground="#E07A5F"
                                             Text="{Binding PreguntasCorrectas}"
                                             TextAlignment="Center" />
                                         <TextBlock
-                                            FontSize="14"
+                                            FontSize="12"
                                             FontWeight="Bold"
                                             Foreground="#433829"
                                             Text="ACIERTOS"
@@ -403,21 +403,21 @@
                                     </StackPanel>
                                     <TextBlock
                                         Grid.Column="1"
-                                        Margin="32,0"
+                                        Margin="24,0"
                                         VerticalAlignment="Center"
-                                        FontSize="48"
+                                        FontSize="36"
                                         FontWeight="Black"
                                         Foreground="#E7E5E4"
                                         Text="/" />
-                                    <StackPanel Grid.Column="2" Spacing="4">
+                                    <StackPanel Grid.Column="2" Spacing="2">
                                         <TextBlock
-                                            FontSize="48"
+                                            FontSize="36"
                                             FontWeight="Black"
                                             Foreground="#433829"
                                             Text="{Binding Preguntas.Count}"
                                             TextAlignment="Center" />
                                         <TextBlock
-                                            FontSize="14"
+                                            FontSize="12"
                                             FontWeight="Bold"
                                             Foreground="#433829"
                                             Text="TOTAL"
@@ -429,18 +429,17 @@
                     </StackPanel>
 
                     <StackPanel
-                        Margin="0,24,0,0"
+                        Margin="0,16,0,0"
                         HorizontalAlignment="Center"
                         Orientation="Horizontal"
-                        Spacing="24">
+                        Spacing="16">
                         <Button Classes="secondaryAction" Command="{Binding ReiniciarPartidaCommand}">
-                            <TextBlock FontSize="16" Text="JUGAR DE NUEVO" />
+                            <TextBlock FontSize="14" Text="JUGAR DE NUEVO" />
                         </Button>
                         <Button Classes="primaryAction" Command="{Binding FinalizarPartidaCommand}">
-                            <TextBlock FontSize="16" Text="VOLVER AL INICIO" />
+                            <TextBlock FontSize="14" Text="VOLVER AL INICIO" />
                         </Button>
                     </StackPanel>
-
                 </StackPanel>
 
             </Panel>
