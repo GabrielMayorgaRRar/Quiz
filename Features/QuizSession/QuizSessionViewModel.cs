@@ -121,7 +121,17 @@ public partial class QuizSessionViewModel : ViewModelBase
         var tipoRespuesta = TipoRespuesta.Texto;
         if (PreguntaActual.Opciones != null && PreguntaActual.Opciones.Any())
         {
-            tipoRespuesta = PreguntaActual.Opciones.First().TipoRespuesta;
+            var primeraOpcion = PreguntaActual.Opciones.First();
+            tipoRespuesta = primeraOpcion.TipoRespuesta;
+            
+            if (tipoRespuesta == TipoRespuesta.Texto && !string.IsNullOrWhiteSpace(primeraOpcion.Contenido))
+            {
+                var content = primeraOpcion.Contenido.Trim().ToLowerInvariant();
+                if (content.EndsWith(".jpg") || content.EndsWith(".jpeg") || content.EndsWith(".png") || content.EndsWith(".webp") || content.EndsWith(".gif"))
+                {
+                    tipoRespuesta = TipoRespuesta.Imagen;
+                }
+            }
         }
 
         EsModoTexto = tipoRespuesta == TipoRespuesta.Texto;

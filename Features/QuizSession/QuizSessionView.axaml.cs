@@ -23,4 +23,9 @@ public partial class QuizSessionView : UserControl
             }
         }
     }
+
+    private void OnPlayButtonTapped(object? sender, Avalonia.Input.TappedEventArgs e)
+    {
+        e.Handled = true;
+    }
 }

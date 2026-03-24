@@ -280,7 +280,8 @@
                                         CornerRadius="16"
                                         Command="{Binding $parent[UserControl].((vm:QuizSessionViewModel)DataContext).PlayAudioCommand}"
                                         CommandParameter="{Binding Contenido}"
-                                        Cursor="Hand">
+                                        Cursor="Hand"
+                                        Tapped="OnPlayButtonTapped">
                                         <Path
                                             Width="12"
                                             Height="12"
