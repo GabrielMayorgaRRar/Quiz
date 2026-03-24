@@ -55,7 +55,9 @@ public partial class QuizSessionViewModel : ViewModelBase
     [ObservableProperty]
     private string _respuestaCorrectaTexto = string.Empty;
 
-    // NUEVA PROPIEDAD: Categoría seleccionada desde el menú
+    [ObservableProperty]
+    private int _preguntasCorrectas;
+
     [ObservableProperty]
     private string? _categoriaSeleccionada;
 
@@ -64,14 +66,13 @@ public partial class QuizSessionViewModel : ViewModelBase
     public QuizSessionViewModel(AppDbContext context)
     {
         _context = context;
-        // No cargar nada aquí, se carga cuando se establece la categoría
     }
 
-    // Cuando cambia la categoría, cargamos las preguntas
     async partial void OnCategoriaSeleccionadaChanged(string? value)
     {
         await CargarPreguntasPorCategoriaAsync(value);
         IndiceActual = 0;
+        PreguntasCorrectas = 0;
         ActualizarEstadoFase();
     }
 
@@ -88,7 +89,6 @@ public partial class QuizSessionViewModel : ViewModelBase
 
         var pregList = await query.ToListAsync();
         
-        // Shuffle the questions for better gameplay
         var rng = new Random();
         int n = pregList.Count;
         while (n > 1) 
@@ -130,7 +130,6 @@ public partial class QuizSessionViewModel : ViewModelBase
         JuegoTerminado = false;
         MostrarFeedback = false;
         
-        // Detener audio actual si cambia la fase
         try
         {
             if (_currentAudioProcess != null && !_currentAudioProcess.HasExited)
@@ -213,16 +212,15 @@ public partial class QuizSessionViewModel : ViewModelBase
     {
         OpcionSeleccionada = opcion;
         
-        // Verificar si la respuesta es correcta
         EsCorrecta = opcion.EsCorrecta;
         
         if (opcion.EsCorrecta)
         {
             MensajeFeedback = "¡Correcto!";
+            PreguntasCorrectas++;
         }
         else
         {
-            // Buscar cuál era la respuesta correcta
             var respuestaCorrecta = PreguntaActual.Opciones?.FirstOrDefault(o => o.EsCorrecta);
             RespuestaCorrectaTexto = respuestaCorrecta?.Contenido ?? "No especificada";
             MensajeFeedback = $"Incorrecto. La respuesta correcta era: {RespuestaCorrectaTexto}";
@@ -230,14 +228,12 @@ public partial class QuizSessionViewModel : ViewModelBase
         
         MostrarFeedback = true;
         
-        // Esperar 2 segundos para mostrar el feedback antes de avanzar
         Task.Delay(2000).ContinueWith(_ =>
         {
             Avalonia.Threading.Dispatcher.UIThread.Post(() =>
             {
                 MostrarFeedback = false;
                 
-                // Advance to next question
                 if (IndiceActual < Preguntas.Count - 1)
                 {
                     IndiceActual++;
@@ -245,7 +241,6 @@ public partial class QuizSessionViewModel : ViewModelBase
                 }
                 else
                 {
-                    // Quiz finished
                     JuegoTerminado = true;
                     EsModoTexto = false;
                     EsModoImagen = false;
@@ -260,6 +255,7 @@ public partial class QuizSessionViewModel : ViewModelBase
     private void ReiniciarPartida()
     {
         IndiceActual = 0;
+        PreguntasCorrectas = 0;
         ActualizarEstadoFase();
     }
 

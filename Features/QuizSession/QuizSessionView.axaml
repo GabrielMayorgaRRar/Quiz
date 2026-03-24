@@ -368,6 +368,62 @@
                             Foreground="#78716C"
                             Text="Has superado todas las misiones de esta partida."
                             TextAlignment="Center" />
+
+                        <Border
+                            Margin="0,16,0,0"
+                            Padding="48,24"
+                            Background="#FFFFFF"
+                            BorderBrush="#E7E5E4"
+                            BorderThickness="4"
+                            CornerRadius="24">
+                            <StackPanel Spacing="16">
+                                <TextBlock
+                                    FontSize="14"
+                                    FontWeight="Bold"
+                                    Foreground="#A8A29E"
+                                    LetterSpacing="2"
+                                    Text="ESTADÍSTICAS"
+                                    TextAlignment="Center" />
+                                <Grid HorizontalAlignment="Center" ColumnDefinitions="Auto, Auto, Auto">
+                                    <StackPanel Grid.Column="0" Spacing="4">
+                                        <TextBlock
+                                            FontSize="48"
+                                            FontWeight="Black"
+                                            Foreground="#E07A5F"
+                                            Text="{Binding PreguntasCorrectas}"
+                                            TextAlignment="Center" />
+                                        <TextBlock
+                                            FontSize="14"
+                                            FontWeight="Bold"
+                                            Foreground="#433829"
+                                            Text="ACIERTOS"
+                                            TextAlignment="Center" />
+                                    </StackPanel>
+                                    <TextBlock
+                                        Grid.Column="1"
+                                        Margin="32,0"
+                                        VerticalAlignment="Center"
+                                        FontSize="48"
+                                        FontWeight="Black"
+                                        Foreground="#E7E5E4"
+                                        Text="/" />
+                                    <StackPanel Grid.Column="2" Spacing="4">
+                                        <TextBlock
+                                            FontSize="48"
+                                            FontWeight="Black"
+                                            Foreground="#433829"
+                                            Text="{Binding Preguntas.Count}"
+                                            TextAlignment="Center" />
+                                        <TextBlock
+                                            FontSize="14"
+                                            FontWeight="Bold"
+                                            Foreground="#433829"
+                                            Text="TOTAL"
+                                            TextAlignment="Center" />
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
                     </StackPanel>
 
                     <StackPanel
