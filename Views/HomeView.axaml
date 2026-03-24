@@ -275,7 +275,7 @@
                         <ItemsControl ItemsSource="{Binding Categorias}">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <WrapPanel Orientation="Horizontal" />
+                                    <UniformGrid Columns="2" VerticalAlignment="Top" />
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
