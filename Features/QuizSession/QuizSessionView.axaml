@@ -176,12 +176,12 @@
 
             <TextBlock
                 Grid.Row="0"
-                Margin="0,48,0,64"
-                FontSize="48"
+                Margin="0,16,0,32"
+                FontSize="32"
                 FontWeight="Black"
                 Foreground="#433829"
                 IsVisible="{Binding !JuegoTerminado}"
-                LineHeight="56"
+                LineHeight="40"
                 Text="{Binding PreguntaActual.Enunciado}"
                 TextAlignment="Center"
                 TextWrapping="Wrap" />
@@ -230,9 +230,9 @@
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border
-                                Width="300"
-                                Height="200"
-                                Margin="16"
+                                Width="200"
+                                Height="140"
+                                Margin="12"
                                 Classes="optionImageCard"
                                 Cursor="Hand"
                                 Tag="{Binding}"
@@ -251,20 +251,22 @@
                 </ItemsControl>
 
                 <ItemsControl
-                    Width="500"
+                    MaxWidth="800"
                     IsVisible="{Binding EsModoAudio}"
                     ItemsSource="{Binding PreguntaActual.Opciones}">
                     <ItemsControl.ItemsPanel>
                         <ItemsPanelTemplate>
-                            <StackPanel
-                                HorizontalAlignment="Stretch"
+                            <UniformGrid
+                                HorizontalAlignment="Center"
                                 VerticalAlignment="Center"
-                                Spacing="16" />
+                                Columns="2"
+                                Rows="2" />
                         </ItemsPanelTemplate>
                     </ItemsControl.ItemsPanel>
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
                             <Border
+                                Margin="12"
                                 HorizontalAlignment="Stretch"
                                 Classes="optionAudioCard"
                                 Cursor="Hand"
@@ -298,6 +300,7 @@
                                         FontSize="18"
                                         FontWeight="SemiBold"
                                         Foreground="#433829"
+                                        TextWrapping="Wrap"
                                         Text="{Binding Contenido, Converter={StaticResource fileNameConverter}}" />
                                 </Grid>
                             </Border>
