@@ -14,7 +14,8 @@ using Quiz.Models;
 
 public partial class QuizSessionViewModel : ViewModelBase
 {
-    private readonly AppDbContext _context;
+    //private readonly AppDbContext _context;
+    private readonly IQuizService _service;
 
     [ObservableProperty]
     private ObservableCollection<Pregunta> _preguntas = [];
@@ -63,9 +64,9 @@ public partial class QuizSessionViewModel : ViewModelBase
 
     public Action? OnQuizFinished;
 
-    public QuizSessionViewModel(AppDbContext context)
+    public QuizSessionViewModel(IQuizService service)
     {
-        _context = context;
+        _service = service;
     }
 
     async partial void OnCategoriaSeleccionadaChanged(string? value)
@@ -78,20 +79,11 @@ public partial class QuizSessionViewModel : ViewModelBase
 
     private async Task CargarPreguntasPorCategoriaAsync(string? categoria)
     {
-        IQueryable<Pregunta> query = _context.Preguntas
-            .Include(p => p.Categoria)
-            .Include(p => p.Opciones);
+        var pregList = await _service.GetPreguntasPorCategoria(categoria ?? "");
 
-        if (!string.IsNullOrEmpty(categoria))
-        {
-            query = query.Where(p => p.Categoria != null && p.Categoria.Nombre == categoria);
-        }
-
-        var pregList = await query.ToListAsync();
-        
         var rng = new Random();
         int n = pregList.Count;
-        while (n > 1) 
+        while (n > 1)
         {
             n--;
             int k = rng.Next(n + 1);
@@ -114,16 +106,16 @@ public partial class QuizSessionViewModel : ViewModelBase
             ProgresoTexto = "Sin preguntas";
             return;
         }
-        
+
         PreguntaActual = Preguntas[IndiceActual];
         ProgresoTexto = $"{IndiceActual + 1} / {Preguntas.Count}";
-        
+
         var tipoRespuesta = TipoRespuesta.Texto;
         if (PreguntaActual.Opciones != null && PreguntaActual.Opciones.Any())
         {
             var primeraOpcion = PreguntaActual.Opciones.First();
             tipoRespuesta = primeraOpcion.TipoRespuesta;
-            
+
             if (tipoRespuesta == TipoRespuesta.Texto && !string.IsNullOrWhiteSpace(primeraOpcion.Contenido))
             {
                 var content = primeraOpcion.Contenido.Trim().ToLowerInvariant();
@@ -139,7 +131,7 @@ public partial class QuizSessionViewModel : ViewModelBase
         EsModoAudio = tipoRespuesta == TipoRespuesta.Audio;
         JuegoTerminado = false;
         MostrarFeedback = false;
-        
+
         StopAudio();
     }
 
@@ -159,7 +151,7 @@ public partial class QuizSessionViewModel : ViewModelBase
     private void PlayAudio(string? audioPath)
     {
         if (string.IsNullOrWhiteSpace(audioPath)) return;
-        
+
         string absolutePath = audioPath;
         if (!System.IO.Path.IsPathRooted(absolutePath))
         {
@@ -174,7 +166,7 @@ public partial class QuizSessionViewModel : ViewModelBase
 
         StopAudio();
 
-        Task.Run(() => 
+        Task.Run(() =>
         {
             try
             {
@@ -220,9 +212,9 @@ public partial class QuizSessionViewModel : ViewModelBase
     {
         StopAudio();
         OpcionSeleccionada = opcion;
-        
+
         EsCorrecta = opcion.EsCorrecta;
-        
+
         if (opcion.EsCorrecta)
         {
             MensajeFeedback = "¡Correcto!";
@@ -232,7 +224,7 @@ public partial class QuizSessionViewModel : ViewModelBase
         {
             var respuestaCorrecta = PreguntaActual.Opciones?.FirstOrDefault(o => o.EsCorrecta);
             var contenido = respuestaCorrecta?.Contenido ?? "No especificada";
-            
+
             if (EsModoImagen || EsModoAudio)
             {
                 try { contenido = System.IO.Path.GetFileNameWithoutExtension(contenido); } catch { }
@@ -241,15 +233,15 @@ public partial class QuizSessionViewModel : ViewModelBase
             RespuestaCorrectaTexto = contenido;
             MensajeFeedback = $"Incorrecto. La respuesta correcta era: {RespuestaCorrectaTexto}";
         }
-        
+
         MostrarFeedback = true;
-        
+
         Task.Delay(2000).ContinueWith(_ =>
         {
             Avalonia.Threading.Dispatcher.UIThread.Post(() =>
             {
                 MostrarFeedback = false;
-                
+
                 if (IndiceActual < Preguntas.Count - 1)
                 {
                     IndiceActual++;
