@@ -43,32 +43,28 @@
             <Setter Property="Foreground" Value="#433829" />
             <Setter Property="Background" Value="#F5F5F4" />
         </Style>
-        <Style Selector="TabItem:selected">
-            <Setter Property="Foreground" Value="#FAFAF9" />
-            <Setter Property="Background" Value="#E07A5F" />
-        </Style>
         <Style Selector="TabItem:selected /template/ Border#PART_SelectedPipe">
             <Setter Property="IsVisible" Value="False" />
         </Style>
     </Window.Styles>
 
     <TabControl SelectedIndex="{Binding SelectedTab}">
-        <TabItem Header="Inicio">
+        <TabItem Header="" >
             <views:HomeView DataContext="{Binding HomeVM}" />
         </TabItem>
-        <TabItem Header="Juegos">
+        <TabItem Header="Juegos" IsVisible="False">
             <features_juegos:JuegoView DataContext="{Binding JuegoVM}" />
         </TabItem>
-        <TabItem Header="Preguntas">
+        <TabItem Header="Preguntas" IsVisible="False">
             <features_preguntas:PreguntaView DataContext="{Binding PreguntaVM}" />
         </TabItem>
-        <TabItem Header="Categorías">
+        <TabItem Header="Categorías" IsVisible="False">
             <features_categorias:CategoriaView DataContext="{Binding CategoriaVM}" />
         </TabItem>
-        <TabItem Header="Usuarios">
+        <TabItem Header="Usuarios" IsVisible="False">
             <features_usuarios:UsuarioView DataContext="{Binding UsuarioVM}" />
         </TabItem>
-        <TabItem Header="Partida (Demo)">
+        <TabItem Header="Partida (Demo)" IsVisible="False">
             <features_quizsession:QuizSessionView DataContext="{Binding QuizSessionVM}" />
         </TabItem>
     </TabControl>

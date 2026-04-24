@@ -62,7 +62,7 @@
         </Style>
         <Style Selector="Button.geo:pointerover">
             <Setter Property="Background" Value="#0A66BB6A" />
-            <Setter Property="BorderBrush" Value="#66BB6A" />
+            <Setter Property="BorderBrush" Value="#667ABB" />
         </Style>
         <Style Selector="Button.art:pointerover">
             <Setter Property="Background" Value="#0AE65C00" />
