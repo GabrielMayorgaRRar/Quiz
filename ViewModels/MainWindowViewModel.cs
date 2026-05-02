@@ -5,6 +5,7 @@ using Quiz.Features.Juegos;
 using Quiz.Features.Preguntas;
 using Quiz.Features.QuizSession;
 using Quiz.Features.Usuarios;
+using Quiz.Models;
 
 namespace Quiz.ViewModels;
 

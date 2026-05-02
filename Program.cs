@@ -3,6 +3,7 @@ using Avalonia;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.EntityFrameworkCore;
 using Quiz.ViewModels;
+using Quiz.Models;
 
 namespace Quiz;
 

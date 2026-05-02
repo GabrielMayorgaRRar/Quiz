@@ -455,7 +455,7 @@ mc:Ignorable="d">
                     Header="ID" />
                     <DataGridTextColumn
                     Width="*"
-                    Binding="{Binding Enunciado}"
+                    Binding="{Binding Texto}"
                     Header="ENUNCIADO" />
                     <DataGridTextColumn
                     Width="80"

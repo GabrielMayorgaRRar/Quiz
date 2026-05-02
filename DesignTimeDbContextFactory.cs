@@ -1,6 +1,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
+using Quiz.Models;
 
 public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<AppDbContext>
 {

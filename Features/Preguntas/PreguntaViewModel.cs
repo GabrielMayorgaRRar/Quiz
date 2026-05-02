@@ -152,7 +152,7 @@ public partial class PreguntaViewModel : ObservableObject
         }
 
         bool existe = await _context.Preguntas.AnyAsync(p =>
-            p.Enunciado.ToLower().Trim() == Enunciado.ToLower().Trim()
+            p.Texto.ToLower().Trim() == Enunciado.ToLower().Trim()
             && p.CategoriaId == CategoriaSeleccionada.Id);
 
         if (existe)
@@ -201,7 +201,7 @@ public partial class PreguntaViewModel : ObservableObject
 
         var pregunta = new Pregunta
         {
-            Enunciado = Enunciado.Trim(),
+            Texto = Enunciado.Trim(),
             CategoriaId = CategoriaSeleccionada.Id
         };
 

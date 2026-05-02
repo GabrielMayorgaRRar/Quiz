@@ -182,7 +182,7 @@
                 Foreground="#433829"
                 IsVisible="{Binding !JuegoTerminado}"
                 LineHeight="40"
-                Text="{Binding PreguntaActual.Enunciado}"
+                Text="{Binding PreguntaActual.Texto}"
                 TextAlignment="Center"
                 TextWrapping="Wrap" />
 

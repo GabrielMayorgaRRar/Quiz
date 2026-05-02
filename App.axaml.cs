@@ -7,6 +7,7 @@ using Avalonia.Markup.Xaml;
 using Microsoft.EntityFrameworkCore;
 using Quiz.ViewModels;
 using Quiz.Views;
+using Quiz.Models;
 
 namespace Quiz;
 
@@ -24,7 +25,7 @@ public partial class App : Application
             DisableAvaloniaDataAnnotationValidation();
             desktop.MainWindow = new MainWindow
             {
-                DataContext = new MainWindowViewModel(),
+                //DataContext = new MainWindowViewModel(),
             };
         }
 
