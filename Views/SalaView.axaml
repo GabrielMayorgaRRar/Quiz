@@ -107,7 +107,7 @@ x:Class="Quiz.Views.SalaView">
 
                 <!-- TÍTULO -->
                 <TextBlock
-                Text="SALA"
+                Text="SALA DE ESPERA"
                 FontSize="28"
                 FontWeight="Bold"
                 HorizontalAlignment="Center"/>
@@ -151,6 +151,7 @@ x:Class="Quiz.Views.SalaView">
                 <Button
                 Content="INICIAR"
                 Classes="btnPrimary"
+                HorizontalAlignment="Center"
                 Command="{Binding IniciarCommand}"
                 IsVisible="{Binding PuedeIniciar}"/>
 
