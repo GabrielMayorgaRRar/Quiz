@@ -10,6 +10,14 @@ namespace Quiz.ViewModels;
 
 public partial class CrearSalaViewModel : ObservableObject
 {
+    private readonly MainWindowViewModel _main;
+
+    public CrearSalaViewModel(MainWindowViewModel main)
+    {
+        _main = main;
+        GenerarCodigo();
+    }
+
     [ObservableProperty]
     private string nombreSala = "";
 
@@ -39,11 +47,6 @@ public partial class CrearSalaViewModel : ObservableObject
         !string.IsNullOrWhiteSpace(Apodo) &&
         CategoriaSeleccionada != null;
 
-    public CrearSalaViewModel()
-    {
-        GenerarCodigo();
-    }
-
     partial void OnNombreSalaChanged(string value) => OnPropertyChanged(nameof(PuedeCrear));
     partial void OnNombreChanged(string value) => OnPropertyChanged(nameof(PuedeCrear));
     partial void OnApodoChanged(string value) => OnPropertyChanged(nameof(PuedeCrear));
@@ -59,15 +62,22 @@ public partial class CrearSalaViewModel : ObservableObject
     private async Task CopiarCodigo()
     {
         if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop &&
-            desktop.MainWindow?.Clipboard != null)
+            desktop.MainWindow?.Clipboard is { } clipboard)
         {
-            await desktop.MainWindow.Clipboard.SetTextAsync(CodigoSala);
+            await clipboard.SetTextAsync(CodigoSala);
         }
     }
 
     [RelayCommand]
     private void CrearSala()
     {
-        Console.WriteLine($"Sala creada: {NombreSala} - Código: {CodigoSala}");
+        Console.WriteLine($"Sala creada: {NombreSala}");
+    }
+
+    // 🔥 BOTÓN VOLVER
+    [RelayCommand]
+    private void Volver()
+    {
+        _main.IrAHome();
     }
 }

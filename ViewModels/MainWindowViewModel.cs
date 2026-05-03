@@ -10,34 +10,28 @@ namespace Quiz.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
-    // 🔥 NUEVO: vista actual
     [ObservableProperty]
     private object? currentView;
 
-    // (puedes dejar esto si quieres compatibilidad con tabs)
     [ObservableProperty]
     private int _selectedTab = 0;
 
     partial void OnSelectedTabChanged(int value)
     {
-        if (value == 0)
-        {
-        }
-        else if (value == 2)
+        if (value == 2)
         {
             PreguntaVM.RecargarDatos();
         }
     }
 
-    // ViewModels existentes
-    public HomeViewModel      HomeVM      { get; }
-    public UsuarioViewModel   UsuarioVM   { get; }
-    public PreguntaViewModel  PreguntaVM  { get; }
+    public HomeViewModel HomeVM { get; }
+    public UsuarioViewModel UsuarioVM { get; }
+    public PreguntaViewModel PreguntaVM { get; }
     public CategoriaViewModel CategoriaVM { get; }
-    public JuegoViewModel     JuegoVM     { get; }
+    public JuegoViewModel JuegoVM { get; }
     public QuizSessionViewModel QuizSessionVM { get; }
 
-    // 🔥 NUEVO: Crear Sala
+    // 🔥 NUEVO
     public CrearSalaViewModel CrearSalaVM { get; }
 
     public MainWindowViewModel() : this(App.CreateDbContext()) { }
@@ -50,12 +44,10 @@ public partial class MainWindowViewModel : ViewModelBase
         JuegoVM     = new JuegoViewModel(context);
         QuizSessionVM = new QuizSessionViewModel(context);
 
-        // 🔥 IMPORTANTE: pasar referencia de Main
+        // 🔥 PASAMOS "this"
         HomeVM = new HomeViewModel(this);
+        CrearSalaVM = new CrearSalaViewModel(this);
 
-        CrearSalaVM = new CrearSalaViewModel();
-
-        // 🔥 Vista inicial
         CurrentView = HomeVM;
     }
 

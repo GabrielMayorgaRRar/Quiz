@@ -92,6 +92,38 @@ x:Class="Quiz.Views.CrearSalaView">
             <Setter Property="Background" Value="#AFAFFF"/>
         </Style>
 
+        <Style Selector="Button.btnBack">
+
+            <!-- Tamaño base más pequeño -->
+            <Setter Property="Width" Value="140"/>
+            <Setter Property="Height" Value="38"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#333"/>
+            <Setter Property="Background" Value="#4AE9E9"/>
+
+            <!-- MISMAS TRANSICIONES -->
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="Height" Duration="0:0:0.15"/>
+                    <BrushTransition Property="Background" Duration="0:0:0.15"/>
+                </Transitions>
+            </Setter>
+
+        </Style>
+
+        <!-- Hover -->
+        <Style Selector="Button.btnBack:pointerover">
+            <Setter Property="Background" Value="#47D8D8"/>
+            <Setter Property="Height" Value="45"/> <!-- crece -->
+        </Style>
+
+        <!-- Click -->
+        <Style Selector="Button.btnBack:pressed">
+            <Setter Property="Background" Value="#3BC0C0"/>
+            <Setter Property="Height" Value="32"/> <!-- se encoge -->
+        </Style>
+
     </UserControl.Styles>
     <Grid>
 
@@ -114,6 +146,11 @@ x:Class="Quiz.Views.CrearSalaView">
         VerticalAlignment="Center">
 
             <StackPanel Spacing="16" HorizontalAlignment="Center">
+                <Button
+                Content="← Volver"
+                Classes="btnBack"
+                Command="{Binding VolverCommand}"
+                Margin="0,0,0,10"/>
 
                 <!-- Título -->
                 <TextBlock
