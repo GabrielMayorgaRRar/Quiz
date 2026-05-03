@@ -35,6 +35,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
     // 🔥 FALTABA ESTO
     public UnirseViewModel UnirseVM { get; }
+    public SalaViewModel SalaVM { get; }
 
     public MainWindowViewModel() : this(App.CreateDbContext()) { }
 
@@ -51,6 +52,7 @@ public partial class MainWindowViewModel : ViewModelBase
 
         // 🔥 YA FUNCIONA
         UnirseVM = new UnirseViewModel(this);
+        SalaVM = new SalaViewModel(this);
 
         CurrentView = HomeVM;
     }
@@ -68,5 +70,11 @@ public partial class MainWindowViewModel : ViewModelBase
     public void IrAUnirse()
     {
         CurrentView = UnirseVM;
+    }
+
+    public void IrASala(string codigo, string jugador, bool owner)
+    {
+        SalaVM.Inicializar(codigo, jugador, owner);
+        CurrentView = SalaVM;
     }
 }

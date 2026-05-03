@@ -125,7 +125,7 @@ x:Class="Quiz.Views.CrearSalaView">
         </Style>
 
     </UserControl.Styles>
-    
+
     <Grid>
 
         <!-- FONDO -->
@@ -190,7 +190,8 @@ x:Class="Quiz.Views.CrearSalaView">
                 <!-- BOTÓN PRINCIPAL -->
                 <Button
                 Content="CREAR"
-                Classes="btnPrimary"/>
+                Classes="btnPrimary"
+                Command="{Binding CrearSalaCommand}"/>
 
             </StackPanel>
 

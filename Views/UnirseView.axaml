@@ -182,7 +182,7 @@ x:Class="Quiz.Views.UnirseView">
                 <Button
                 Content="UNIRSE"
                 Classes="btnPrimary"
-                />
+                Command="{Binding UnirseCommand}"/>
 
             </StackPanel>
 

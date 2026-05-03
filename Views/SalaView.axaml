@@ -1,0 +1,75 @@
+<UserControl
+xmlns="https://github.com/avaloniaui"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+x:Class="Quiz.Views.SalaView">
+
+    <Grid>
+
+        <!-- FONDO -->
+        <Image
+        Source="avares://Quiz/Assets/4394250_91648.jpg"
+        Stretch="UniformToFill"
+        Opacity="0.35"/>
+
+        <Border Background="#55000000"/>
+
+        <!-- CARD -->
+        <Border
+        Width="420"
+        Padding="30"
+        CornerRadius="20"
+        Background="White"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center">
+
+            <StackPanel Spacing="16" HorizontalAlignment="Center">
+
+                <!-- VOLVER -->
+                <Button
+                Content="← Salir"
+                Classes="btnBack"
+                Command="{Binding VolverCommand}"/>
+
+                <!-- TÍTULO -->
+                <TextBlock
+                Text="SALA"
+                FontSize="28"
+                FontWeight="Bold"
+                HorizontalAlignment="Center"/>
+
+                <!-- CARGANDO -->
+                <TextBlock
+                Text="Cargando - Buscando usuarios..."
+                FontSize="14"
+                HorizontalAlignment="Center"/>
+
+                <!-- LISTA -->
+                <ItemsControl ItemsSource="{Binding Jugadores}">
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <Border
+                            Padding="10"
+                            Background="#F4F4F5"
+                            CornerRadius="10"
+                            Margin="0,4">
+
+                                <TextBlock Text="{Binding}"/>
+
+                            </Border>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!-- BOTÓN INICIAR -->
+                <Button
+                Content="INICIAR"
+                Classes="btnPrimary"
+                Command="{Binding IniciarCommand}"
+                IsVisible="{Binding PuedeIniciar}"/>
+
+            </StackPanel>
+
+        </Border>
+
+    </Grid>
+</UserControl>

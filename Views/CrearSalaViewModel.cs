@@ -33,6 +33,9 @@ public partial class CrearSalaViewModel : ObservableObject
     [ObservableProperty]
     private string codigoSala = "";
 
+    [ObservableProperty]
+    private string textoCopiar = "COPIAR";
+
     public ObservableCollection<string> Categorias { get; } = new()
     {
         "Historia",
@@ -58,6 +61,7 @@ public partial class CrearSalaViewModel : ObservableObject
         CodigoSala = random.Next(100000, 999999).ToString();
     }
 
+    // 🔥 COPIAR AL PORTAPAPELES
     [RelayCommand]
     private async Task CopiarCodigo()
     {
@@ -65,16 +69,24 @@ public partial class CrearSalaViewModel : ObservableObject
             desktop.MainWindow?.Clipboard is { } clipboard)
         {
             await clipboard.SetTextAsync(CodigoSala);
+
+            TextoCopiar = "COPIADO ✔";
+            await Task.Delay(1500);
+            TextoCopiar = "COPIAR";
         }
     }
 
+    // 🔥 CREAR SALA Y ENTRAR AL LOBBY
     [RelayCommand]
     private void CrearSala()
     {
-        Console.WriteLine($"Sala creada: {NombreSala}");
+        Console.WriteLine($"Sala creada: {CodigoSala}");
+
+        // 👇 AQUÍ ESTÁ LA CONEXIÓN IMPORTANTE
+        _main.IrASala(CodigoSala, Nombre, true);
     }
 
-    // 🔥 BOTÓN VOLVER
+    // 🔙 VOLVER
     [RelayCommand]
     private void Volver()
     {

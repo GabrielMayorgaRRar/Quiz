@@ -31,12 +31,17 @@ public partial class UnirseViewModel : ObservableObject
     partial void OnApodoChanged(string value) => OnPropertyChanged(nameof(PuedeUnirse));
     partial void OnCodigoSalaChanged(string value) => OnPropertyChanged(nameof(PuedeUnirse));
 
+    // 🔥 UNIRSE A LA SALA (IR AL MISMO LOBBY)
     [RelayCommand]
     private void Unirse()
     {
-        Console.WriteLine($"Uniéndose a sala: {CodigoSala}");
+        Console.WriteLine($"Intentando unirse a sala: {CodigoSala}");
+
+        // 👇 AQUÍ ESTÁ LA CONEXIÓN IMPORTANTE
+        _main.IrASala(CodigoSala, Nombre, false);
     }
 
+    // 🔙 VOLVER
     [RelayCommand]
     private void Volver()
     {
