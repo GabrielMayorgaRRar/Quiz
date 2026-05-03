@@ -1,0 +1,192 @@
+<UserControl
+xmlns="https://github.com/avaloniaui"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+x:Class="Quiz.Views.UnirseView">
+
+    <UserControl.Styles>
+
+        <!-- INPUTS -->
+        <Style Selector="TextBox.input">
+            <Setter Property="Height" Value="42"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Background" Value="#F4F4F5"/>
+            <Setter Property="BorderBrush" Value="#E4E4E7"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <Style Selector="TextBox.input:focus">
+            <Setter Property="BorderBrush" Value="#E05FAA"/>
+        </Style>
+
+        <Style Selector="ComboBox.input">
+            <Setter Property="Height" Value="42"/>
+        </Style>
+
+        <!-- 🔥 TEMPLATE BASE (PARA TODOS LOS BOTONES) -->
+        <Style Selector="Button">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border
+                    Background="{TemplateBinding Background}"
+                    CornerRadius="10">
+
+                        <ContentPresenter
+                        Content="{TemplateBinding Content}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        TextElement.Foreground="{TemplateBinding Foreground}"/>
+
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+
+        <!-- 🔥 BOTÓN PRINCIPAL -->
+        <Style Selector="Button.btnPrimary">
+            <Setter Property="Width" Value="220"/>
+            <Setter Property="Height" Value="55"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#E05FAA"/>
+
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="Height" Duration="0:0:0.15"/>
+                    <BrushTransition Property="Background" Duration="0:0:0.15"/>
+                </Transitions>
+            </Setter>
+        </Style>
+
+        <Style Selector="Button.btnPrimary:pointerover">
+            <Setter Property="Background" Value="#F07BC0"/>
+            <Setter Property="Height" Value="65"/>
+        </Style>
+
+        <Style Selector="Button.btnPrimary:pressed">
+            <Setter Property="Background" Value="#C94F98"/>
+            <Setter Property="Height" Value="50"/>
+        </Style>
+
+        <Style Selector="Button.btnSecondary">
+            <Setter Property="Height" Value="42"/>
+            <Setter Property="MinWidth" Value="90"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="12,6"/>
+
+            <Setter Property="Background" Value="#8282DD"/>
+            <Setter Property="Foreground" Value="White"/>
+
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Property="Background" Duration="0:0:0.15"/>
+                </Transitions>
+            </Setter>
+        </Style>
+
+        <Style Selector="Button.btnSecondary:pointerover">
+            <Setter Property="Background" Value="#8282DD"/>
+        </Style>
+
+        <Style Selector="Button.btnSecondary:pressed">
+            <Setter Property="Background" Value="#AFAFFF"/>
+        </Style>
+
+        <Style Selector="Button.btnBack">
+
+            <!-- Tamaño base más pequeño -->
+            <Setter Property="Width" Value="140"/>
+            <Setter Property="Height" Value="38"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#333"/>
+            <Setter Property="Background" Value="#4AE9E9"/>
+
+            <!-- MISMAS TRANSICIONES -->
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="Height" Duration="0:0:0.15"/>
+                    <BrushTransition Property="Background" Duration="0:0:0.15"/>
+                </Transitions>
+            </Setter>
+
+        </Style>
+
+        <!-- Hover -->
+        <Style Selector="Button.btnBack:pointerover">
+            <Setter Property="Background" Value="#47D8D8"/>
+            <Setter Property="Height" Value="45"/> <!-- crece -->
+        </Style>
+
+        <!-- Click -->
+        <Style Selector="Button.btnBack:pressed">
+            <Setter Property="Background" Value="#3BC0C0"/>
+            <Setter Property="Height" Value="32"/> <!-- se encoge -->
+        </Style>
+
+    </UserControl.Styles>
+
+    <Grid>
+
+        <!-- FONDO -->
+        <Image
+        Source="avares://Quiz/Assets/4394250_91648.jpg"
+        Stretch="UniformToFill"
+        Opacity="0.35"/>
+
+        <!-- Overlay -->
+        <Border Background="#55000000"/>
+
+        <!-- CARD -->
+        <Border
+        Width="420"
+        Padding="30"
+        CornerRadius="20"
+        Background="White"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center">
+
+            <StackPanel Spacing="16" HorizontalAlignment="Center">
+
+                <!-- VOLVER -->
+                <Button
+                Content="← Volver"
+                Classes="btnBack"
+                Command="{Binding VolverCommand}"
+                Margin="0,0,0,10"/>
+
+                <!-- TÍTULO -->
+                <TextBlock
+                Text="UNIRSE A SALA"
+                FontSize="28"
+                FontWeight="Bold"
+                HorizontalAlignment="Center"/>
+
+                <!-- INPUTS -->
+                <TextBox
+                Watermark="Nombre"
+                Classes="input"
+                Text="{Binding Nombre}"/>
+
+                <TextBox
+                Watermark="Apodo"
+                Classes="input"
+                Text="{Binding Apodo}"/>
+
+                <TextBox
+                Watermark="Código de sala"
+                Classes="input"
+                Text="{Binding CodigoSala}"/>
+
+                <!-- BOTÓN -->
+                <Button
+                Content="UNIRSE"
+                Classes="btnPrimary"
+                Command="{Binding UnirseCommand}"/>
+
+            </StackPanel>
+
+        </Border>
+
+    </Grid>
+</UserControl>

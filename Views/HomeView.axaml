@@ -1,333 +1,121 @@
 <UserControl
-    x:Class="Quiz.Views.HomeView"
-    xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:vm="using:Quiz.Features.Home"
-    d:DesignHeight="768"
-    d:DesignWidth="1024"
-    x:DataType="vm:HomeViewModel"
-    Background="#FAFAF9"
-    FontFamily="Inter, Roboto, sans-serif"
-    mc:Ignorable="d">
+xmlns="https://github.com/avaloniaui"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+x:Class="Quiz.Views.HomeView">
 
     <UserControl.Styles>
-        <Style Selector="TextBlock.serif">
-            <Setter Property="FontFamily" Value="Georgia, Times New Roman, serif" />
-        </Style>
-        <Style Selector="TextBlock.mono">
-            <Setter Property="FontFamily" Value="Consolas, Cascadia Code, Courier New, monospace" />
-        </Style>
-        <Style Selector="Button.categoryCard">
-            <Setter Property="Background" Value="#FAFAF9" />
-            <Setter Property="BorderThickness" Value="4" />
-            <Setter Property="BorderBrush" Value="#E7E5E4" />
-            <Setter Property="CornerRadius" Value="24" />
-            <Setter Property="Padding" Value="24" />
+
+        <!-- 🔥 TEMPLATE PROPIO (elimina efecto blanco del tema) -->
+        <Style Selector="Button">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border
+                    Background="{TemplateBinding Background}"
+                    CornerRadius="{TemplateBinding CornerRadius}">
+
+                        <ContentPresenter
+                        Content="{TemplateBinding Content}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        TextElement.Foreground="{TemplateBinding Foreground}"/>
+
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+
+            <Setter Property="Width" Value="200"/>
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="HorizontalContentAlignment" Value="Center"/>
+            <Setter Property="CornerRadius" Value="10"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="White"/>
+
             <Setter Property="Transitions">
                 <Transitions>
-                    <BrushTransition Property="Background" Duration="0:0:0.15" />
-                    <BrushTransition Property="BorderBrush" Duration="0:0:0.15" />
-                    <TransformOperationsTransition Property="RenderTransform" Duration="0:0:0.15" />
+                    <DoubleTransition Property="Height" Duration="0:0:0.15"/>
+                    <BrushTransition Property="Background" Duration="0:0:0.15"/>
                 </Transitions>
             </Setter>
-            <Setter Property="RenderTransform" Value="scale(1)" />
         </Style>
 
-        <Style Selector="Button.categoryCard:pointerover">
-            <Setter Property="RenderTransform" Value="scale(1.02)" />
-            <Setter Property="BorderThickness" Value="4" />
+        <!-- 🔥 CREAR -->
+        <Style Selector="Button#BtnCrear">
+            <Setter Property="Background" Value="#E05FAA"/>
         </Style>
 
-        <Style Selector="Button.history:pointerover">
-            <Setter Property="Background" Value="#0AE07A5F" />
-            <Setter Property="BorderBrush" Value="#E07A5F" />
-        </Style>
-        <Style Selector="Button.science:pointerover">
-            <Setter Property="Background" Value="#0ABC4749" />
-            <Setter Property="BorderBrush" Value="#BC4749" />
-        </Style>
-        <Style Selector="Button.music:pointerover">
-            <Setter Property="Background" Value="#0AF2CC8F" />
-            <Setter Property="BorderBrush" Value="#F2CC8F" />
-        </Style>
-        <Style Selector="Button.sports:pointerover">
-            <Setter Property="Background" Value="#0AD4A373" />
-            <Setter Property="BorderBrush" Value="#D4A373" />
-        </Style>
-        <Style Selector="Button.tech:pointerover">
-            <Setter Property="Background" Value="#0A5C6BC0" />
-            <Setter Property="BorderBrush" Value="#5C6BC0" />
-        </Style>
-        <Style Selector="Button.geo:pointerover">
-            <Setter Property="Background" Value="#0A66BB6A" />
-            <Setter Property="BorderBrush" Value="#66BB6A" />
-        </Style>
-        <Style Selector="Button.art:pointerover">
-            <Setter Property="Background" Value="#0AE65C00" />
-            <Setter Property="BorderBrush" Value="#E65C00" />
+        <Style Selector="Button#BtnCrear:pointerover">
+            <Setter Property="Background" Value="#F07BC0"/>
+            <Setter Property="Height" Value="55"/>
         </Style>
 
-        <Style Selector="TextBox.pinInput">
-            <Setter Property="Background" Value="#F5F5F4" />
-            <Setter Property="BorderBrush" Value="#D6D3D1" />
-            <Setter Property="BorderThickness" Value="2" />
-            <Setter Property="CornerRadius" Value="20" />
-            <Setter Property="Padding" Value="24,16" />
-            <Setter Property="FontSize" Value="24" />
-            <Setter Property="FontWeight" Value="Bold" />
-            <Setter Property="LetterSpacing" Value="4" />
-            <Setter Property="HorizontalContentAlignment" Value="Center" />
-            <Setter Property="Foreground" Value="#433829" />
-        </Style>
-        <Style Selector="TextBox.pinInput:focus /template/ Border#PART_BorderElement">
-            <Setter Property="Background" Value="#FAFAF9" />
-            <Setter Property="BorderBrush" Value="#E07A5F" />
-            <Setter Property="BorderThickness" Value="3" />
+        <Style Selector="Button#BtnCrear:pressed">
+            <Setter Property="Background" Value="#C94F98"/>
+            <Setter Property="Height" Value="40"/>
         </Style>
 
-        <Style Selector="Button.hero">
-            <Setter Property="Background" Value="#E07A5F" />
-            <Setter Property="Foreground" Value="#FAFAF9" />
-            <Setter Property="CornerRadius" Value="20" />
-            <Setter Property="Padding" Value="0,16" />
-            <Setter Property="HorizontalContentAlignment" Value="Center" />
-            <Setter Property="HorizontalAlignment" Value="Stretch" />
-            <Setter Property="FontWeight" Value="Heavy" />
+        <!-- 🔥 UNIRSE -->
+        <Style Selector="Button#BtnUnirse">
+            <Setter Property="Background" Value="#505DCE"/>
         </Style>
-        <Style Selector="Button.hero:pointerover">
-            <Setter Property="Background" Value="#C25A3F" />
+
+        <Style Selector="Button#BtnUnirse:pointerover">
+            <Setter Property="Background" Value="#6A75E0"/>
+            <Setter Property="Height" Value="55"/>
         </Style>
+
+        <Style Selector="Button#BtnUnirse:pressed">
+            <Setter Property="Background" Value="#3F49A8"/>
+            <Setter Property="Height" Value="40"/>
+        </Style>
+
     </UserControl.Styles>
 
-    <Grid RowDefinitions="Auto, *">
+    <Grid>
 
+        <!-- Fondo -->
+        <Image
+        Source="avares://Quiz/Assets/4167598.jpg"
+        Stretch="UniformToFill"
+        Opacity="0.4"/>
+
+        <!-- Overlay -->
+        <Border Background="#66000000"/>
+
+        <!-- Card -->
         <Border
-            Grid.Row="0"
-            BorderBrush="#E7E5E4"
-            BorderThickness="0,0,0,1">
-            <Grid
-                Margin="32,24"
-                VerticalAlignment="Center"
-                ColumnDefinitions="Auto,*,Auto">
+        Width="320"
+        Padding="30"
+        Background="#CCFFFFFF"
+        CornerRadius="15"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center">
 
-                <StackPanel
-                    Grid.Column="0"
-                    VerticalAlignment="Center"
-                    Orientation="Horizontal"
-                    Spacing="16">
-                    <Path
-                        Width="28"
-                        Height="28"
-                        Data="M18 4H6C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V6C20 4.89543 19.1046 4 18 4Z M10.5 15.5L6.5 11.5L7.91 10.09L10.5 12.67L16.09 7.09L17.5 8.5L10.5 15.5Z"
-                        Fill="#E07A5F"
-                        Stretch="Uniform" />
-                    <TextBlock
-                        VerticalAlignment="Center"
-                        FontSize="20"
-                        FontWeight="Heavy"
-                        Foreground="#433829"
-                        LetterSpacing="1"
-                        Text="QUIZ MASTER" />
-                </StackPanel>
+            <StackPanel
+            Spacing="15"
+            HorizontalAlignment="Center">
 
-                <StackPanel
-                    Grid.Column="1"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Orientation="Horizontal"
-                    Spacing="40">
-                    <TextBlock
-                        Cursor="Hand"
-                        FontSize="16"
-                        FontWeight="SemiBold"
-                        Foreground="#433829"
-                        Text="Jugar" />
-                    <TextBlock
-                        Cursor="Hand"
-                        FontSize="16"
-                        FontWeight="Medium"
-                        Foreground="#A8A29E"
-                        Text="Ranking" />
-                </StackPanel>
+                <TextBlock
+                Text="QUIZ MASTER"
+                FontSize="26"
+                FontWeight="Bold"
+                HorizontalAlignment="Center"
+                TextAlignment="Center"/>
 
-                <Border
-                    Grid.Column="2"
-                    Padding="16,8"
-                    Background="#F5F5F4"
-                    CornerRadius="20"
-                    Cursor="Hand">
-                    <StackPanel Orientation="Horizontal" Spacing="12">
-                        <TextBlock
-                            VerticalAlignment="Center"
-                            FontSize="14"
-                            FontWeight="Bold"
-                            Foreground="#433829"
-                            Text="Mi Perfil" />
-                        <Path
-                            Width="18"
-                            Height="18"
-                            VerticalAlignment="Center"
-                            Data="M12,4A4,4 0 0,1 16,8A4,4 0 0,1 12,12A4,4 0 0,1 8,8A4,4 0 0,1 12,4M12,14C16.42,14 20,15.79 20,18V20H4V18C4,15.79 7.58,14 12,14Z"
-                            Fill="#433829"
-                            Stretch="Uniform" />
-                    </StackPanel>
-                </Border>
-            </Grid>
+                <Button
+                x:Name="BtnCrear"
+                Content="CREAR SALA"
+                Command="{Binding CrearSalaCommand}" />
+
+
+                <Button
+                x:Name="BtnUnirse"
+                Content="UNIRSE"
+                Command="{Binding UnirseCommand}"/>
+
+            </StackPanel>
+
         </Border>
 
-        <ScrollViewer
-            Grid.Row="1"
-            HorizontalScrollBarVisibility="Disabled"
-            VerticalScrollBarVisibility="Auto">
-            <Grid
-                MaxWidth="1100"
-                Margin="40,56,40,40"
-                HorizontalAlignment="Center"
-                ColumnDefinitions="1*,1.5*">
-
-                <StackPanel
-                    Grid.Column="0"
-                    Margin="0,0,64,0"
-                    VerticalAlignment="Center"
-                    Spacing="40">
-                    <StackPanel Spacing="16">
-                        <Border
-                            Padding="16,8"
-                            HorizontalAlignment="Left"
-                            Background="#1AE07A5F"
-                            CornerRadius="12">
-                            <TextBlock
-                                FontSize="12"
-                                FontWeight="Black"
-                                Foreground="#E07A5F"
-                                LetterSpacing="2"
-                                Text="¡ES HORA DE JUGAR!" />
-                        </Border>
-                        <TextBlock
-                            FontSize="56"
-                            FontWeight="Black"
-                            Foreground="#433829"
-                            LineHeight="64"
-                            Text="Demuestra lo que sabes."
-                            TextWrapping="Wrap" />
-                        <TextBlock
-                            FontSize="18"
-                            Foreground="#78716C"
-                            LineHeight="28"
-                            Text="Ingresa el código que te dio el creador de la sala para unirte inmediatamente y competir."
-                            TextWrapping="Wrap" />
-                    </StackPanel>
-
-                    <Border
-                        Padding="32"
-                        Background="#FFFFFF"
-                        BorderBrush="#E7E5E4"
-                        BorderThickness="1"
-                        CornerRadius="32">
-                        <StackPanel Spacing="24">
-                            <StackPanel Spacing="8">
-                                <TextBlock
-                                    HorizontalAlignment="Center"
-                                    FontSize="12"
-                                    FontWeight="Bold"
-                                    Foreground="#A8A29E"
-                                    LetterSpacing="1"
-                                    Text="CÓDIGO DE PARTIDA" />
-                                <TextBox Classes="pinInput" Watermark="EJ: 260308-1530" />
-                            </StackPanel>
-                            <Button Classes="hero" Command="{Binding IniciarPartidaCommand}">
-                                <TextBlock
-                                    VerticalAlignment="Center"
-                                    FontSize="16"
-                                    Text="¡ENTRAR A LA SALA!" />
-                            </Button>
-                        </StackPanel>
-                    </Border>
-                </StackPanel>
-
-                <Grid
-                    Grid.Column="1"
-                    VerticalAlignment="Center"
-                    ColumnDefinitions="*, *"
-                    RowDefinitions="Auto, Auto, Auto, Auto">
-
-                    <TextBlock
-                        Grid.Row="0"
-                        Grid.ColumnSpan="2"
-                        Margin="0,0,0,24"
-                        FontSize="14"
-                        FontWeight="Heavy"
-                        Foreground="#D6D3D1"
-                        LetterSpacing="2"
-                        Text="EXPLORAR MAZOS" />
-
-                    <!-- Dynamic Categories -->
-                    <ScrollViewer
-                        Grid.Row="1"
-                        Grid.ColumnSpan="2"
-                        Height="460"
-                        Margin="-8,0,0,0"
-                        Padding="0,0,16,0"
-                        HorizontalScrollBarVisibility="Disabled"
-                        VerticalScrollBarVisibility="Auto">
-                        <ItemsControl ItemsSource="{Binding Categorias}">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <UniformGrid Columns="2" VerticalAlignment="Top" />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <Button
-                                        Width="260"
-                                        Margin="8"
-                                        Classes="categoryCard"
-                                        Command="{Binding $parent[UserControl].((vm:HomeViewModel)DataContext).IniciarPartidaConCategoriaCommand}"
-                                        CommandParameter="{Binding Nombre}"
-                                        Cursor="Hand">
-                                        <StackPanel Spacing="16">
-                                            <Border
-                                                Width="64"
-                                                Height="64"
-                                                Padding="16"
-                                                HorizontalAlignment="Left"
-                                                Background="#1AE07A5F"
-                                                CornerRadius="16">
-                                                <Path
-                                                    Width="32"
-                                                    Height="32"
-                                                    Data="M12,2A10,10 0 0,1 22,12A10,10 0 0,1 12,22A10,10 0 0,1 2,12A10,10 0 0,1 12,2M11,19.93C7.05,19.43 4,16.05 4,12C4,7.95 7.05,4.57 11,4.07V19.93M13,4.07C16.95,4.57 20,7.95 20,12C20,16.05 16.95,19.43 13,19.93V4.07Z"
-                                                    Fill="#E07A5F"
-                                                    Stretch="Uniform" />
-                                            </Border>
-                                            <TextBlock
-                                                FontSize="22"
-                                                FontWeight="Bold"
-                                                Foreground="#433829"
-                                                Text="{Binding Nombre}"
-                                                TextWrapping="Wrap" />
-                                            <TextBlock
-                                                FontSize="14"
-                                                Foreground="#A8A29E"
-                                                Text="{Binding Descripcion}"
-                                                TextWrapping="Wrap" />
-                                            <TextBlock
-                                                Margin="0,8,0,0"
-                                                Classes="mono"
-                                                FontSize="12"
-                                                FontWeight="Bold"
-                                                Foreground="#E07A5F"
-                                                Text="¡Jugar Ahora!" />
-                                        </StackPanel>
-                                    </Button>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ScrollViewer>
-                </Grid>
-            </Grid>
-        </ScrollViewer>
     </Grid>
 </UserControl>

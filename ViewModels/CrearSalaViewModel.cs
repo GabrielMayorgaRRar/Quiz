@@ -1,0 +1,95 @@
+using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+using System;
+using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
+
+namespace Quiz.ViewModels;
+
+public partial class CrearSalaViewModel : ObservableObject
+{
+    private readonly MainWindowViewModel _main;
+
+    public CrearSalaViewModel(MainWindowViewModel main)
+    {
+        _main = main;
+        GenerarCodigo();
+    }
+
+    [ObservableProperty]
+    private string nombreSala = "";
+
+    [ObservableProperty]
+    private string nombre = "";
+
+    [ObservableProperty]
+    private string apodo = "";
+
+    [ObservableProperty]
+    private string? categoriaSeleccionada;
+
+    [ObservableProperty]
+    private string codigoSala = "";
+
+    [ObservableProperty]
+    private string textoCopiar = "COPIAR";
+
+    public ObservableCollection<string> Categorias { get; } = new()
+    {
+        "Historia",
+        "Ciencia",
+        "Deportes",
+        "Tecnología"
+    };
+
+    public bool PuedeCrear =>
+        !string.IsNullOrWhiteSpace(NombreSala) &&
+        !string.IsNullOrWhiteSpace(Nombre) &&
+        !string.IsNullOrWhiteSpace(Apodo) &&
+        CategoriaSeleccionada != null;
+
+    partial void OnNombreSalaChanged(string value) => OnPropertyChanged(nameof(PuedeCrear));
+    partial void OnNombreChanged(string value) => OnPropertyChanged(nameof(PuedeCrear));
+    partial void OnApodoChanged(string value) => OnPropertyChanged(nameof(PuedeCrear));
+    partial void OnCategoriaSeleccionadaChanged(string? value) => OnPropertyChanged(nameof(PuedeCrear));
+
+    private void GenerarCodigo()
+    {
+        var random = new Random();
+        CodigoSala = random.Next(100000, 999999).ToString();
+    }
+
+    // 🔥 COPIAR AL PORTAPAPELES
+    [RelayCommand]
+    private async Task CopiarCodigo()
+    {
+        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop &&
+            desktop.MainWindow?.Clipboard is { } clipboard)
+        {
+            await clipboard.SetTextAsync(CodigoSala);
+
+            TextoCopiar = "COPIADO ✔";
+            await Task.Delay(1500);
+            TextoCopiar = "COPIAR";
+        }
+    }
+
+    // 🔥 CREAR SALA Y ENTRAR AL LOBBY
+    [RelayCommand]
+    private void CrearSala()
+    {
+        Console.WriteLine($"Sala creada: {CodigoSala}");
+
+        // 👇 AQUÍ ESTÁ LA CONEXIÓN IMPORTANTE
+        _main.IrASala(CodigoSala, Nombre, true);
+    }
+
+    // 🔙 VOLVER
+    [RelayCommand]
+    private void Volver()
+    {
+        _main.IrAHome();
+    }
+}

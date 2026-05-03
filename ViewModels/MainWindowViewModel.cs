@@ -11,49 +11,70 @@ namespace Quiz.ViewModels;
 public partial class MainWindowViewModel : ViewModelBase
 {
     [ObservableProperty]
+    private object? currentView;
+
+    [ObservableProperty]
     private int _selectedTab = 0;
 
     partial void OnSelectedTabChanged(int value)
     {
-        if (value == 0)
-        {
-            _ = HomeVM.CargarCategoriasAsync();
-        }
-        else if (value == 2)
+        if (value == 2)
         {
             PreguntaVM.RecargarDatos();
         }
     }
 
-    public HomeViewModel      HomeVM      { get; }
-    public UsuarioViewModel   UsuarioVM   { get; }
-    public PreguntaViewModel  PreguntaVM  { get; }
+    public HomeViewModel HomeVM { get; }
+    public UsuarioViewModel UsuarioVM { get; }
+    public PreguntaViewModel PreguntaVM { get; }
     public CategoriaViewModel CategoriaVM { get; }
-    public JuegoViewModel     JuegoVM     { get; }
+    public JuegoViewModel JuegoVM { get; }
     public QuizSessionViewModel QuizSessionVM { get; }
+
+    public CrearSalaViewModel CrearSalaVM { get; }
+
+    // 🔥 FALTABA ESTO
+    public UnirseViewModel UnirseVM { get; }
+    public SalaViewModel SalaVM { get; }
 
     public MainWindowViewModel() : this(App.CreateDbContext()) { }
 
     public MainWindowViewModel(AppDbContext context)
     {
         CategoriaVM = new CategoriaViewModel(context);
-        UsuarioVM   = new UsuarioViewModel(context);
-        PreguntaVM  = new PreguntaViewModel(context);
-        JuegoVM     = new JuegoViewModel(context);
-        
-        HomeVM = new HomeViewModel();
+        UsuarioVM = new UsuarioViewModel(context);
+        PreguntaVM = new PreguntaViewModel(context);
+        JuegoVM = new JuegoViewModel(context);
         QuizSessionVM = new QuizSessionViewModel(context);
 
-        // Wiring navigation
-        // Tabs: 0=Inicio, 1=Juegos, 2=Preguntas, 3=Categorias, 4=Usuarios, 5=Partida Activa
-        
-        HomeVM.OnStartQuizWithCategory = (categoria) => 
-        {
-            // Pasa la categoría seleccionada al QuizSession
-            QuizSessionVM.CategoriaSeleccionada = categoria;
-            SelectedTab = 5;
-        };
-        
-        QuizSessionVM.OnQuizFinished = () => SelectedTab = 0;
+        HomeVM = new HomeViewModel(this);
+        CrearSalaVM = new CrearSalaViewModel(this);
+
+        // 🔥 YA FUNCIONA
+        UnirseVM = new UnirseViewModel(this);
+        SalaVM = new SalaViewModel(this);
+
+        CurrentView = HomeVM;
+    }
+
+    public void IrACrearSala()
+    {
+        CurrentView = CrearSalaVM;
+    }
+
+    public void IrAHome()
+    {
+        CurrentView = HomeVM;
+    }
+
+    public void IrAUnirse()
+    {
+        CurrentView = UnirseVM;
+    }
+
+    public void IrASala(string codigo, string jugador, bool owner)
+    {
+        SalaVM.Inicializar(codigo, jugador, owner);
+        CurrentView = SalaVM;
     }
 }
