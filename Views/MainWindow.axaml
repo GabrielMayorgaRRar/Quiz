@@ -11,10 +11,12 @@ xmlns:features_usuarios="using:Quiz.Features.Usuarios"
 xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
 xmlns:views="using:Quiz.Views"
 xmlns:vm="using:Quiz.ViewModels"
+xmlns:home="using:Quiz.Features.Home"
 Title="Quiz"
 x:DataType="vm:MainWindowViewModel"
 Icon="/Assets/avalonia-logo.ico"
 mc:Ignorable="d">
+
 
     <Design.DataContext>
         <vm:MainWindowViewModel />
@@ -52,8 +54,20 @@ mc:Ignorable="d">
         </Style>
     </Window.Styles>
 
-    <Grid>
-        <views:HomeView DataContext="{Binding HomeVM}" />
-    </Grid>
+    <ContentControl Content="{Binding CurrentView}">
+        <ContentControl.DataTemplates>
+
+            <!-- 🔥 HOME (namespace correcto) -->
+            <DataTemplate DataType="home:HomeViewModel">
+                <views:HomeView />
+            </DataTemplate>
+
+            <!-- 🔥 CREAR SALA -->
+            <DataTemplate DataType="vm:CrearSalaViewModel">
+                <views:CrearSalaView />
+            </DataTemplate>
+
+        </ContentControl.DataTemplates>
+    </ContentControl>
 
 </Window>

@@ -1,20 +1,21 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Quiz.ViewModels;
 
-namespace Quiz.ViewModels
+namespace Quiz.Features.Home;
+
+public partial class HomeViewModel : ViewModelBase
 {
-    public partial class HomeViewModel : ViewModelBase
-    {
-        [RelayCommand]
-        private void CrearSala()
-        {
-            // TODO: lógica para crear sala
-        }
+    private readonly MainWindowViewModel _main;
 
-        [RelayCommand]
-        private void UnirseSala()
-        {
-            // TODO: lógica para unirse a sala
-        }
+    public HomeViewModel(MainWindowViewModel main)
+    {
+        _main = main;
+    }
+
+    [RelayCommand]
+    private void CrearSala()
+    {
+        _main.IrACrearSala();
     }
 }

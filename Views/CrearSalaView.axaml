@@ -1,0 +1,47 @@
+<UserControl
+    xmlns="https://github.com/avaloniaui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    x:Class="Quiz.Views.CrearSalaView">
+
+    <Grid>
+
+        <Border
+            Width="380"
+            Padding="30"
+            Background="#CCFFFFFF"
+            CornerRadius="15"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
+
+            <StackPanel Spacing="12">
+
+                <TextBlock
+                    Text="CREAR SALA"
+                    FontSize="24"
+                    FontWeight="Bold"
+                    HorizontalAlignment="Center"/>
+
+                <TextBox Watermark="Nombre de la sala"/>
+                <TextBox Watermark="Nombre"/>
+                <TextBox Watermark="Apodo"/>
+
+                <ComboBox>
+                    <ComboBoxItem Content="Historia"/>
+                    <ComboBoxItem Content="Ciencia"/>
+                    <ComboBoxItem Content="Deportes"/>
+                </ComboBox>
+
+                <TextBox IsReadOnly="True" Text="123456"/>
+
+                <Button
+                    Content="CREAR"
+                    Height="50"
+                    Background="#E05FAA"
+                    Foreground="White"/>
+
+            </StackPanel>
+
+        </Border>
+
+    </Grid>
+</UserControl>

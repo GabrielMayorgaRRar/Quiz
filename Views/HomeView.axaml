@@ -104,7 +104,9 @@ x:Class="Quiz.Views.HomeView">
 
                 <Button
                 x:Name="BtnCrear"
-                Content="CREAR SALA"/>
+                Content="CREAR SALA"
+                Command="{Binding CrearSalaCommand}" />
+
 
                 <Button
                 x:Name="BtnUnirse"
