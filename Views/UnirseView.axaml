@@ -1,0 +1,62 @@
+<UserControl
+xmlns="https://github.com/avaloniaui"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+x:Class="Quiz.Views.UnirseView">
+
+    <Grid>
+
+        <!-- FONDO -->
+        <Image
+        Source="avares://Quiz/Assets/4394250_91648.jpg"
+        Stretch="UniformToFill"
+        Opacity="0.35"/>
+
+        <Border Background="#55000000"/>
+
+        <!-- CARD -->
+        <Border
+        Width="420"
+        Padding="30"
+        CornerRadius="20"
+        Background="White"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center">
+
+            <StackPanel Spacing="16" HorizontalAlignment="Center">
+
+                <!-- VOLVER -->
+                <Button
+                Content="← Volver"
+                Classes="btnBack"
+                Command="{Binding VolverCommand}"
+                Margin="0,0,0,10"/>
+
+                <!-- TÍTULO -->
+                <TextBlock
+                Text="UNIRSE A SALA"
+                FontSize="28"
+                FontWeight="Bold"
+                HorizontalAlignment="Center"/>
+
+                <!-- INPUTS -->
+                <TextBox Watermark="Nombre" Classes="input"/>
+                <TextBox Watermark="Apodo" Classes="input"/>
+
+                <!-- CÓDIGO -->
+                <TextBox
+                Watermark="Código de sala"
+                Classes="input"/>
+
+                <!-- BOTÓN -->
+                <Button
+                Content="UNIRSE"
+                Classes="btnPrimary"
+                IsEnabled="{Binding PuedeUnirse}"
+                Command="{Binding UnirseCommand}"/>
+
+            </StackPanel>
+
+        </Border>
+
+    </Grid>
+</UserControl>

@@ -67,6 +67,10 @@ mc:Ignorable="d">
                 <views:CrearSalaView />
             </DataTemplate>
 
+            <DataTemplate DataType="vm:UnirseViewModel">
+                <views:UnirseView />
+            </DataTemplate>
+
         </ContentControl.DataTemplates>
     </ContentControl>
 

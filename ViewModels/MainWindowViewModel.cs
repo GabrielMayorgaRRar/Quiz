@@ -31,27 +31,30 @@ public partial class MainWindowViewModel : ViewModelBase
     public JuegoViewModel JuegoVM { get; }
     public QuizSessionViewModel QuizSessionVM { get; }
 
-    // 🔥 NUEVO
     public CrearSalaViewModel CrearSalaVM { get; }
+
+    // 🔥 FALTABA ESTO
+    public UnirseViewModel UnirseVM { get; }
 
     public MainWindowViewModel() : this(App.CreateDbContext()) { }
 
     public MainWindowViewModel(AppDbContext context)
     {
         CategoriaVM = new CategoriaViewModel(context);
-        UsuarioVM   = new UsuarioViewModel(context);
-        PreguntaVM  = new PreguntaViewModel(context);
-        JuegoVM     = new JuegoViewModel(context);
+        UsuarioVM = new UsuarioViewModel(context);
+        PreguntaVM = new PreguntaViewModel(context);
+        JuegoVM = new JuegoViewModel(context);
         QuizSessionVM = new QuizSessionViewModel(context);
 
-        // 🔥 PASAMOS "this"
         HomeVM = new HomeViewModel(this);
         CrearSalaVM = new CrearSalaViewModel(this);
+
+        // 🔥 YA FUNCIONA
+        UnirseVM = new UnirseViewModel(this);
 
         CurrentView = HomeVM;
     }
 
-    // 🔥 NAVEGACIÓN
     public void IrACrearSala()
     {
         CurrentView = CrearSalaVM;
@@ -60,5 +63,10 @@ public partial class MainWindowViewModel : ViewModelBase
     public void IrAHome()
     {
         CurrentView = HomeVM;
+    }
+
+    public void IrAUnirse()
+    {
+        CurrentView = UnirseVM;
     }
 }

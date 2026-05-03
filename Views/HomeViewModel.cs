@@ -18,4 +18,10 @@ public partial class HomeViewModel : ViewModelBase
     {
         _main.IrACrearSala();
     }
+
+    [RelayCommand]
+    private void Unirse()
+    {
+        _main.IrAUnirse();
+    }
 }

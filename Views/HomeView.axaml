@@ -110,7 +110,8 @@ x:Class="Quiz.Views.HomeView">
 
                 <Button
                 x:Name="BtnUnirse"
-                Content="UNIRSE"/>
+                Content="UNIRSE"
+                Command="{Binding UnirseCommand}"/>
 
             </StackPanel>
 
