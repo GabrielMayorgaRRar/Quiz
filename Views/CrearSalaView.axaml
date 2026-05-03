@@ -1,43 +1,158 @@
 <UserControl
-    xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    x:Class="Quiz.Views.CrearSalaView">
+xmlns="https://github.com/avaloniaui"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+x:Class="Quiz.Views.CrearSalaView">
 
+    <UserControl.Styles>
+
+        <!-- INPUTS -->
+        <Style Selector="TextBox.input">
+            <Setter Property="Height" Value="42"/>
+            <Setter Property="Padding" Value="10"/>
+            <Setter Property="Background" Value="#F4F4F5"/>
+            <Setter Property="BorderBrush" Value="#E4E4E7"/>
+            <Setter Property="BorderThickness" Value="1"/>
+        </Style>
+
+        <Style Selector="TextBox.input:focus">
+            <Setter Property="BorderBrush" Value="#E05FAA"/>
+        </Style>
+
+        <Style Selector="ComboBox.input">
+            <Setter Property="Height" Value="42"/>
+        </Style>
+
+        <!-- 🔥 TEMPLATE BASE (PARA TODOS LOS BOTONES) -->
+        <Style Selector="Button">
+            <Setter Property="Template">
+                <ControlTemplate>
+                    <Border
+                    Background="{TemplateBinding Background}"
+                    CornerRadius="10">
+
+                        <ContentPresenter
+                        Content="{TemplateBinding Content}"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        TextElement.Foreground="{TemplateBinding Foreground}"/>
+
+                    </Border>
+                </ControlTemplate>
+            </Setter>
+        </Style>
+
+        <!-- 🔥 BOTÓN PRINCIPAL -->
+        <Style Selector="Button.btnPrimary">
+            <Setter Property="Width" Value="220"/>
+            <Setter Property="Height" Value="55"/>
+            <Setter Property="HorizontalAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background" Value="#E05FAA"/>
+
+            <Setter Property="Transitions">
+                <Transitions>
+                    <DoubleTransition Property="Height" Duration="0:0:0.15"/>
+                    <BrushTransition Property="Background" Duration="0:0:0.15"/>
+                </Transitions>
+            </Setter>
+        </Style>
+
+        <Style Selector="Button.btnPrimary:pointerover">
+            <Setter Property="Background" Value="#F07BC0"/>
+            <Setter Property="Height" Value="65"/>
+        </Style>
+
+        <Style Selector="Button.btnPrimary:pressed">
+            <Setter Property="Background" Value="#C94F98"/>
+            <Setter Property="Height" Value="50"/>
+        </Style>
+
+        <Style Selector="Button.btnSecondary">
+            <Setter Property="Height" Value="42"/>
+            <Setter Property="MinWidth" Value="90"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="12,6"/>
+
+            <Setter Property="Background" Value="#8282DD"/>
+            <Setter Property="Foreground" Value="White"/>
+
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Property="Background" Duration="0:0:0.15"/>
+                </Transitions>
+            </Setter>
+        </Style>
+
+        <Style Selector="Button.btnSecondary:pointerover">
+            <Setter Property="Background" Value="#8282DD"/>
+        </Style>
+
+        <Style Selector="Button.btnSecondary:pressed">
+            <Setter Property="Background" Value="#AFAFFF"/>
+        </Style>
+
+    </UserControl.Styles>
     <Grid>
 
+        <!-- FONDO -->
+        <Image
+        Source="avares://Quiz/Assets/4394250_91648.jpg"
+        Stretch="UniformToFill"
+        Opacity="0.35"/>
+
+        <!-- Overlay -->
+        <Border Background="#55000000"/>
+
+        <!-- CARD -->
         <Border
-            Width="380"
-            Padding="30"
-            Background="#CCFFFFFF"
-            CornerRadius="15"
-            HorizontalAlignment="Center"
-            VerticalAlignment="Center">
+        Width="420"
+        Padding="30"
+        CornerRadius="20"
+        Background="White"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center">
 
-            <StackPanel Spacing="12">
+            <StackPanel Spacing="16" HorizontalAlignment="Center">
 
+                <!-- Título -->
                 <TextBlock
-                    Text="CREAR SALA"
-                    FontSize="24"
-                    FontWeight="Bold"
-                    HorizontalAlignment="Center"/>
+                Text="CREAR SALA"
+                FontSize="28"
+                FontWeight="Bold"
+                HorizontalAlignment="Center"/>
 
-                <TextBox Watermark="Nombre de la sala"/>
-                <TextBox Watermark="Nombre"/>
-                <TextBox Watermark="Apodo"/>
+                <!-- Inputs -->
+                <TextBox Watermark="Nombre de la sala" Classes="input"/>
+                <TextBox Watermark="Nombre" Classes="input"/>
+                <TextBox Watermark="Apodo" Classes="input"/>
 
-                <ComboBox>
+                <!-- Categoría -->
+                <ComboBox Classes="input">
                     <ComboBoxItem Content="Historia"/>
                     <ComboBoxItem Content="Ciencia"/>
                     <ComboBoxItem Content="Deportes"/>
                 </ComboBox>
 
-                <TextBox IsReadOnly="True" Text="123456"/>
+                <!-- Código -->
+                <StackPanel Orientation="Horizontal" Spacing="20">
 
+                    <TextBox
+                    Width="250"
+                    Text="{Binding CodigoSala}"
+                    IsReadOnly="True"
+                    Classes="input"/>
+
+                    <Button
+                    Content="COPIAR"
+                    Command="{Binding CopiarCodigoCommand}"
+                    Classes="btnSecondary"/>
+                </StackPanel>
+
+                <!-- BOTÓN PRINCIPAL -->
                 <Button
-                    Content="CREAR"
-                    Height="50"
-                    Background="#E05FAA"
-                    Foreground="White"/>
+                Content="CREAR"
+                Classes="btnPrimary"/>
 
             </StackPanel>
 

@@ -2,6 +2,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.ObjectModel;
+using System.Threading.Tasks;
+using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
 
 namespace Quiz.ViewModels;
 
@@ -53,15 +56,18 @@ public partial class CrearSalaViewModel : ObservableObject
     }
 
     [RelayCommand]
-    private void CopiarCodigo()
+    private async Task CopiarCodigo()
     {
-        // Opcional: implementar clipboard real después
-        Console.WriteLine($"Código copiado: {CodigoSala}");
+        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop &&
+            desktop.MainWindow?.Clipboard != null)
+        {
+            await desktop.MainWindow.Clipboard.SetTextAsync(CodigoSala);
+        }
     }
 
     [RelayCommand]
     private void CrearSala()
     {
-        Console.WriteLine("Sala creada");
+        Console.WriteLine($"Sala creada: {NombreSala} - Código: {CodigoSala}");
     }
 }
