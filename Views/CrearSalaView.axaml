@@ -125,6 +125,7 @@ x:Class="Quiz.Views.CrearSalaView">
         </Style>
 
     </UserControl.Styles>
+    
     <Grid>
 
         <!-- FONDO -->
