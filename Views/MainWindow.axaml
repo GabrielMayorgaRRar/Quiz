@@ -1,20 +1,20 @@
 <Window
-    x:Class="Quiz.Views.MainWindow"
-    xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:features_categorias="using:Quiz.Features.Categorias"
-    xmlns:features_juegos="using:Quiz.Features.Juegos"
-    xmlns:features_preguntas="using:Quiz.Features.Preguntas"
-    xmlns:features_quizsession="using:Quiz.Features.QuizSession"
-    xmlns:features_usuarios="using:Quiz.Features.Usuarios"
-    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:views="using:Quiz.Views"
-    xmlns:vm="using:Quiz.ViewModels"
-    Title="Quiz"
-    x:DataType="vm:MainWindowViewModel"
-    Icon="/Assets/avalonia-logo.ico"
-    mc:Ignorable="d">
+x:Class="Quiz.Views.MainWindow"
+xmlns="https://github.com/avaloniaui"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+xmlns:features_categorias="using:Quiz.Features.Categorias"
+xmlns:features_juegos="using:Quiz.Features.Juegos"
+xmlns:features_preguntas="using:Quiz.Features.Preguntas"
+xmlns:features_quizsession="using:Quiz.Features.QuizSession"
+xmlns:features_usuarios="using:Quiz.Features.Usuarios"
+xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+xmlns:views="using:Quiz.Views"
+xmlns:vm="using:Quiz.ViewModels"
+Title="Quiz"
+x:DataType="vm:MainWindowViewModel"
+Icon="/Assets/avalonia-logo.ico"
+mc:Ignorable="d">
 
     <Design.DataContext>
         <vm:MainWindowViewModel />
@@ -52,25 +52,8 @@
         </Style>
     </Window.Styles>
 
-    <TabControl SelectedIndex="{Binding SelectedTab}">
-        <TabItem Header="Inicio">
-            <views:HomeView DataContext="{Binding HomeVM}" />
-        </TabItem>
-        <TabItem Header="Juegos">
-            <features_juegos:JuegoView DataContext="{Binding JuegoVM}" />
-        </TabItem>
-        <TabItem Header="Preguntas">
-            <features_preguntas:PreguntaView DataContext="{Binding PreguntaVM}" />
-        </TabItem>
-        <TabItem Header="Categorías">
-            <features_categorias:CategoriaView DataContext="{Binding CategoriaVM}" />
-        </TabItem>
-        <TabItem Header="Usuarios">
-            <features_usuarios:UsuarioView DataContext="{Binding UsuarioVM}" />
-        </TabItem>
-        <TabItem Header="Partida (Demo)">
-            <features_quizsession:QuizSessionView DataContext="{Binding QuizSessionVM}" />
-        </TabItem>
-    </TabControl>
+    <Grid>
+        <views:HomeView DataContext="{Binding HomeVM}" />
+    </Grid>
 
 </Window>

@@ -17,7 +17,7 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         if (value == 0)
         {
-            _ = HomeVM.CargarCategoriasAsync();
+            
         }
         else if (value == 2)
         {
@@ -44,16 +44,5 @@ public partial class MainWindowViewModel : ViewModelBase
         HomeVM = new HomeViewModel();
         QuizSessionVM = new QuizSessionViewModel(context);
 
-        // Wiring navigation
-        // Tabs: 0=Inicio, 1=Juegos, 2=Preguntas, 3=Categorias, 4=Usuarios, 5=Partida Activa
-        
-        HomeVM.OnStartQuizWithCategory = (categoria) => 
-        {
-            // Pasa la categoría seleccionada al QuizSession
-            QuizSessionVM.CategoriaSeleccionada = categoria;
-            SelectedTab = 5;
-        };
-        
-        QuizSessionVM.OnQuizFinished = () => SelectedTab = 0;
     }
 }
