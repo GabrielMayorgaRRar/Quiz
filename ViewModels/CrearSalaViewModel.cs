@@ -109,7 +109,7 @@ public partial class CrearSalaViewModel : ObservableObject
         {
             CodigoSala = res.Game.Key;
             Console.WriteLine($"Sala creada: {CodigoSala}");
-            _main.IrASala(CodigoSala, res.Game.Id, Nombre, true);
+            _main.IrASala(CodigoSala, res.Game.Id, Nombre, true, res.Departure?.Id ?? 0, res.Players);
         }
     }
     [RelayCommand]

@@ -83,22 +83,29 @@ public class QuizApiService
         }
     }
 
-    public async Task<bool> EnviarRespuestaAsync(int gameId, int optionId)
+    public async Task<bool> EnviarRespuestaAsync(SubmitAnswerRequest request)
     {
         try
         {
-            Console.WriteLine($"POST → game/{gameId}/answer/{optionId}");
-
-            var res = await _http.PostAsync($"game/{gameId}/answer/{optionId}", null);
-
-            Console.WriteLine($"Status: {res.StatusCode}");
-
+            var res = await _http.PostAsJsonAsync("game/answer", request);
             return res.IsSuccessStatusCode;
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Error: {ex.Message}");
             return false;
+        }
+    }
+    public async Task<List<DepartureData>> GetScoreboardAsync(int gameId)
+    {
+        try
+        {
+            var response = await _http.GetFromJsonAsync<ApiResponse<List<DepartureData>>>($"game/{gameId}/scoreboard");
+            return response?.Data ?? new List<DepartureData>();
+        }
+        catch
+        {
+            return new List<DepartureData>();
         }
     }
 }

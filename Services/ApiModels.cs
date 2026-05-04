@@ -97,6 +97,9 @@ public class CategoryData
 
 public class QuestionData
 {
+    [JsonPropertyName("id")]
+    public int Id { get; set; }
+
     [JsonPropertyName("text")]
     public string Question { get; set; } = "";
 
@@ -114,4 +117,22 @@ public class OptionData
 
     [JsonPropertyName("is_correct")]
     public bool IsCorrect { get; set; }
+}
+
+public class SubmitAnswerRequest
+{
+    [JsonPropertyName("departure_id")]
+    public int DepartureId { get; set; }
+
+    [JsonPropertyName("question_id")]
+    public int QuestionId { get; set; }
+
+    [JsonPropertyName("answer_id")]
+    public int AnswerId { get; set; }
+
+    [JsonPropertyName("response_time")]
+    public int ResponseTime { get; set; }
+
+    [JsonPropertyName("game_key")]
+    public string GameKey { get; set; } = "";
 }

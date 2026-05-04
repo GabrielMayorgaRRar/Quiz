@@ -38,15 +38,18 @@ public partial class JuegoViewModel : ObservableObject
 {
     private readonly MainWindowViewModel _main;
     private readonly int _gameId;
+    private readonly int _departureId;
     private readonly WsClient _ws = new();
 
     private string _respuestaCorrecta = "";
+    private int _questionId;
     private CancellationTokenSource? _cts;
 
-    public JuegoViewModel(MainWindowViewModel main, int gameId)
+    public JuegoViewModel(MainWindowViewModel main, int gameId, int departureId)
     {
         _main = main;
         _gameId = gameId;
+        _departureId = departureId;
 
         Console.WriteLine($"WS KEY: {_main.SalaVM.Codigo}");
 
@@ -106,6 +109,7 @@ public partial class JuegoViewModel : ObservableObject
 
         if (PreguntasRespondidas >= 12)
         {
+            await ObtenerScoreboardFinal();
             JuegoTerminado = true;
             MostrarEstadisticas = true;
             return;
@@ -118,6 +122,8 @@ public partial class JuegoViewModel : ObservableObject
             Console.WriteLine("No llegó pregunta");
             return;
         }
+
+        _questionId = q.Id;
 
         Pregunta = q.Question;
 
@@ -214,7 +220,16 @@ public partial class JuegoViewModel : ObservableObject
                 r.Background = "#555";
         }
 
-        await _main.ApiService.EnviarRespuestaAsync(_gameId, item.Id);
+        var req = new SubmitAnswerRequest
+        {
+            DepartureId = _departureId,
+            QuestionId = _questionId,
+            AnswerId = item.Id,
+            ResponseTime = 15 - TiempoRestante,
+            GameKey = _main.SalaVM.Codigo
+        };
+
+        await _main.ApiService.EnviarRespuestaAsync(req);
         
         PreguntasRespondidas++;
         OnPropertyChanged(nameof(PreguntaActual));
@@ -227,8 +242,25 @@ public partial class JuegoViewModel : ObservableObject
     }
 
     // =========================
-    // WEBSOCKET
+    // WEBSOCKET & SCOREBOARD
     // =========================
+
+    private async Task ObtenerScoreboardFinal()
+    {
+        var scoreboard = await _main.ApiService.GetScoreboardAsync(_gameId);
+        Dispatcher.UIThread.Post(() =>
+        {
+            Estadisticas.Clear();
+            foreach (var item in scoreboard)
+            {
+                Estadisticas.Add(new JugadorStats
+                {
+                    Nombre = item.User?.Nickname ?? "",
+                    Puntos = (int)item.Score
+                });
+            }
+        });
+    }
 
     private void Ws_OnMessageReceived(string eventName, JsonElement data)
     {

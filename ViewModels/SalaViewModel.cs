@@ -37,14 +37,16 @@ public partial class SalaViewModel : ObservableObject
 
 
     private int _gameId;
+    private int _departureId;
     public WsClient Ws { get; } = new();
 
     public bool PuedeIniciar => EsOwner;
 
-    public void Inicializar(string codigoSala, int gameId, string jugador, bool owner, System.Collections.Generic.List<DepartureData>? players = null)
+    public void Inicializar(string codigoSala, int gameId, string jugador, bool owner, int departureId, System.Collections.Generic.List<DepartureData>? players = null)
     {
         Codigo = codigoSala;
         _gameId = gameId;
+        _departureId = departureId;
         EsOwner = owner;
 
         Jugadores.Clear();
@@ -96,7 +98,7 @@ public partial class SalaViewModel : ObservableObject
             {
                 if (!EsOwner)
                 {
-                    _main.IrAJuego(_gameId);
+                    _main.IrAJuego(_gameId, _departureId);
                 }
             }
         });
@@ -113,7 +115,7 @@ public partial class SalaViewModel : ObservableObject
             return;
         }
 
-        _main.IrAJuego(_gameId);
+        _main.IrAJuego(_gameId, _departureId);
     }
     [RelayCommand]
     private void Volver()
