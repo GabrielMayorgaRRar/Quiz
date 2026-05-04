@@ -74,10 +74,15 @@ x:Class="Quiz.Views.JuegoView">
 
             <!-- HEADER -->
             <StackPanel Grid.Row="0" Spacing="10">
-                <TextBlock Text="¡¡¡RESPONDE ANTES DE QUE LA BARRA LLEGUE A SU FIN!!!"
-                           FontSize="28"
-                           FontWeight="Bold"
-                           HorizontalAlignment="Center"/>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Spacing="15">
+                    <TextBlock Text="{Binding PreguntaActual, StringFormat='Pregunta {0}/12'}"
+                               FontSize="28"
+                               FontWeight="Bold"
+                               Foreground="#FFC107"/>
+                    <TextBlock Text="¡¡¡RESPONDE ANTES DE QUE LA BARRA LLEGUE A SU FIN!!!"
+                               FontSize="28"
+                               FontWeight="Bold"/>
+                </StackPanel>
 
                 <ProgressBar Value="{Binding TiempoRestante}"
                              Maximum="15"
@@ -307,6 +312,16 @@ x:Class="Quiz.Views.JuegoView">
                     </ItemsControl>
 
                 </StackPanel>
+
+                <Button Content="Salir"
+                        Command="{Binding VolverCommand}"
+                        IsVisible="{Binding JuegoTerminado}"
+                        HorizontalAlignment="Center"
+                        Background="#F44336"
+                        Foreground="White"
+                        FontWeight="Bold"
+                        Padding="20,10"
+                        Margin="0,20,0,0"/>
 
             </Border>
 

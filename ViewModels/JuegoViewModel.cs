@@ -58,6 +58,15 @@ public partial class JuegoViewModel : ObservableObject
 
     public int Id { get; set; }
 
+    [ObservableProperty]
+    private int preguntasRespondidas = 0;
+
+    public int PreguntaActual => Math.Min(PreguntasRespondidas + 1, 12);
+
+    [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(PreguntaActual))]
+    private bool juegoTerminado = false;
+
     // =========================
     // PROPIEDADES
     // =========================
@@ -93,6 +102,15 @@ public partial class JuegoViewModel : ObservableObject
 
     private async Task CargarPregunta()
     {
+        OnPropertyChanged(nameof(PreguntaActual));
+
+        if (PreguntasRespondidas >= 12)
+        {
+            JuegoTerminado = true;
+            MostrarEstadisticas = true;
+            return;
+        }
+
         var q = await _main.ApiService.GetQuestionAsync(_gameId);
 
         if (q == null)
@@ -197,13 +215,13 @@ public partial class JuegoViewModel : ObservableObject
         }
 
         await _main.ApiService.EnviarRespuestaAsync(_gameId, item.Id);
-        await Task.Delay(1500);
+        
+        PreguntasRespondidas++;
+        OnPropertyChanged(nameof(PreguntaActual));
+
+        await Task.Delay(500); // Tarda menos, de 1500 a 500
 
         MostrarResultado = false;
-
-        await Task.Delay(3000);
-
-        MostrarEstadisticas = false;
 
         await CargarPregunta();
     }
@@ -218,7 +236,7 @@ public partial class JuegoViewModel : ObservableObject
 
         if (eventName == "score_update")
         {
-            Dispatcher.UIThread.Post(async () =>
+            Dispatcher.UIThread.Post(() =>
             {
                 Estadisticas.Clear();
 
@@ -233,14 +251,6 @@ public partial class JuegoViewModel : ObservableObject
                         Puntos = puntos
                     });
                 }
-
-                MostrarEstadisticas = true;
-
-                await Task.Delay(3000);
-
-                MostrarEstadisticas = false;
-
-                await CargarPregunta(); // 🔥 IMPORTANTE
             });
         }
     }
@@ -253,6 +263,9 @@ public partial class JuegoViewModel : ObservableObject
     {
         MostrarResultado = false;
         MostrarEstadisticas = false;
+        
+        PreguntasRespondidas++;
+        OnPropertyChanged(nameof(PreguntaActual));
 
         await CargarPregunta();
     }
