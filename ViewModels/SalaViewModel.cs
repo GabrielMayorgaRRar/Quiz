@@ -43,7 +43,7 @@ public partial class SalaViewModel : ObservableObject
     [RelayCommand]
     private void Iniciar()
     {
-        Console.WriteLine("Juego iniciado");
+        _main.IrAJuego();
     }
 
     [RelayCommand]
@@ -79,4 +79,6 @@ public partial class SalaViewModel : ObservableObject
     {
         _cts?.Cancel();
     }
+
+
 }
