@@ -74,9 +74,9 @@ public partial class MainWindowViewModel : ViewModelBase
         CurrentView = UnirseVM;
     }
 
-    public void IrASala(string codigo, int gameId, string jugador, bool owner)
+    public void IrASala(string codigo, int gameId, string jugador, bool owner, System.Collections.Generic.List<DepartureData>? players = null)
     {
-        SalaVM.Inicializar(codigo, gameId, jugador, owner);
+        SalaVM.Inicializar(codigo, gameId, jugador, owner, players);
         CurrentView = SalaVM;
     }
 

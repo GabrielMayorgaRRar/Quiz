@@ -8,7 +8,7 @@ using Quiz.Services;
 using System.Text.Json;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
-using System.Threading.Tasks;
+
 
 namespace Quiz.ViewModels;
 
@@ -41,14 +41,32 @@ public partial class SalaViewModel : ObservableObject
 
     public bool PuedeIniciar => EsOwner;
 
-    public void Inicializar(string codigoSala, int gameId, string jugador, bool owner)
+    public void Inicializar(string codigoSala, int gameId, string jugador, bool owner, System.Collections.Generic.List<DepartureData>? players = null)
     {
         Codigo = codigoSala;
         _gameId = gameId;
         EsOwner = owner;
 
         Jugadores.Clear();
-        Jugadores.Add(jugador);
+        
+        if (players != null && players.Count > 0)
+        {
+            foreach (var p in players)
+            {
+                if (p.User != null && !string.IsNullOrWhiteSpace(p.User.Nickname))
+                {
+                    if (!Jugadores.Contains(p.User.Nickname))
+                    {
+                        Jugadores.Add(p.User.Nickname);
+                    }
+                }
+            }
+        }
+        
+        if (!Jugadores.Contains(jugador))
+        {
+            Jugadores.Add(jugador);
+        }
 
         Ws.OnMessageReceived += Ws_OnMessageReceived;
         _ = Ws.ConnectAsync(Codigo);
@@ -72,6 +90,13 @@ public partial class SalaViewModel : ObservableObject
                     {
                         Jugadores.Add(name);
                     }
+                }
+            }
+            else if (eventName == "game_started")
+            {
+                if (!EsOwner)
+                {
+                    _main.IrAJuego(_gameId);
                 }
             }
         });

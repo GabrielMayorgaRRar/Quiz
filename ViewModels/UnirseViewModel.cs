@@ -65,7 +65,7 @@ public partial class UnirseViewModel : ObservableObject
         var res = await _main.ApiService.JoinRoomAsync(request);
         if (res != null && res.Game != null)
         {
-            _main.IrASala(CodigoSala, res.Game.Id, Nombre, false);
+            _main.IrASala(CodigoSala, res.Game.Id, Nombre, false, res.Players);
         }
         else
         {

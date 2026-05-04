@@ -10,7 +10,7 @@ public class RespuestaTemplateSelector : IDataTemplate
     public IDataTemplate? ImagenTemplate { get; set; }
     public IDataTemplate? AudioTemplate { get; set; }
 
-    public Control Build(object? param)
+    public Control? Build(object? param)
     {
         if (param is RespuestaItem item)
         {

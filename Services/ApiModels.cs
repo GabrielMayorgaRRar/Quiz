@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
-using System.Text.Json.Serialization;
-using System.Collections.Generic;
-
 namespace Quiz.Services;
 
 public class ApiResponse<T>
@@ -72,6 +69,9 @@ public class DepartureData
     public int UserId { get; set; }
     [JsonPropertyName("score")]
     public int Score { get; set; }
+    
+    [JsonPropertyName("user")]
+    public UserData? User { get; set; }
 }
 
 public class RoomResponseData
@@ -82,6 +82,9 @@ public class RoomResponseData
     public UserData? User { get; set; }
     [JsonPropertyName("departure")]
     public DepartureData? Departure { get; set; }
+    
+    [JsonPropertyName("players")]
+    public List<DepartureData>? Players { get; set; }
 }
 
 public class CategoryData
