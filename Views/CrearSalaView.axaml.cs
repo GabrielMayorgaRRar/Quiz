@@ -1,11 +1,14 @@
 using Avalonia.Controls;
 
-namespace Quiz.Views;
-
-public partial class CrearSalaView : UserControl
+namespace Quiz.Views
 {
-    public CrearSalaView()
+
+    public partial class CrearSalaView : UserControl
     {
-        InitializeComponent();
+        public CrearSalaView()
+        {
+            InitializeComponent();
+        }
     }
 }
+
