@@ -26,7 +26,7 @@ public partial class SalaViewModel : ObservableObject
 
     [ObservableProperty]
     private string textoEstado = "Buscando jugadores";
-    
+
     private int _gameId;
     public WsClient Ws { get; } = new();
 
@@ -70,9 +70,16 @@ public partial class SalaViewModel : ObservableObject
     [RelayCommand]
     private async Task Iniciar()
     {
-        _main.IrAJuego();
-    }
+        var ok = await _main.ApiService.StartGameAsync(_gameId);
 
+        if (!ok)
+        {
+            Console.WriteLine("Error al iniciar juego");
+            return;
+        }
+
+        _main.IrAJuego(_gameId);
+    }
     [RelayCommand]
     private void Volver()
     {

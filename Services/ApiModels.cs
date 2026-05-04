@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using System.Text.Json.Serialization;
+using System.Collections.Generic;
 
 namespace Quiz.Services;
 
@@ -88,4 +90,22 @@ public class CategoryData
     public int Id { get; set; }
     [JsonPropertyName("name")]
     public string Name { get; set; } = "";
+}
+
+public class QuestionData
+{
+    [JsonPropertyName("text")]
+    public string Question { get; set; } = "";
+
+    [JsonPropertyName("options")]
+    public List<OptionData> Options { get; set; } = new();
+}
+
+public class OptionData
+{
+    [JsonPropertyName("content")]
+    public string Content { get; set; } = "";
+
+    [JsonPropertyName("is_correct")]
+    public bool IsCorrect { get; set; }
 }
