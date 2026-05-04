@@ -76,7 +76,7 @@ public partial class JuegoViewModel : ObservableObject
                 {
                     new() { Contenido = "1919", Tipo = TipoRespuesta.Texto },
                     new() { Contenido = "1925", Tipo = TipoRespuesta.Texto },
-                    new() { Contenido = "avares://Quiz/Assets/sample.jpg", Tipo = TipoRespuesta.Imagen },
+                    new() { Contenido = "avares://Quiz/Assets/5566.jpg", Tipo = TipoRespuesta.Imagen },
                     new() { Contenido = "audio.mp3", Tipo = TipoRespuesta.Audio }
                 }
             },

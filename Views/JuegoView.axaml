@@ -5,7 +5,6 @@ xmlns:vm="clr-namespace:Quiz.ViewModels"
 xmlns:selectors="clr-namespace:Quiz.Selectors"
 x:Class="Quiz.Views.JuegoView">
 
-
     <!-- 🔧 TEMPLATES + SELECTOR -->
     <UserControl.Resources>
 
@@ -45,7 +44,7 @@ x:Class="Quiz.Views.JuegoView">
 
                 </StackPanel>
             </Border>
-        </DataTemplate> 
+        </DataTemplate>
 
         <!-- SELECTOR -->
         <selectors:RespuestaTemplateSelector x:Key="RespuestaSelector"
@@ -55,133 +54,144 @@ x:Class="Quiz.Views.JuegoView">
 
     </UserControl.Resources>
 
+    <!-- 🔥 CONTENEDOR GENERAL -->
+    <Grid>
+
+        <!-- 🖼️ FONDO -->
+        <Image Source="avares://Quiz/Assets/11587928_4786503.jpg"
+               Stretch="UniformToFill"
+               Opacity="0.3"/>
+
+        <!-- OSCURECER -->
 
 
-    <!-- 🔳 UI -->
-    <Grid RowDefinitions="Auto,Auto,*"
-          Margin="20">
+        <!-- 🔳 UI ORIGINAL -->
+        <Grid RowDefinitions="Auto,Auto,*"
+              Margin="20">
 
-        <!-- HEADER -->
-        <StackPanel Grid.Row="0" Spacing="10">
+            <!-- HEADER -->
+            <StackPanel Grid.Row="0" Spacing="10">
 
-            <TextBlock Text="Wikipedia"
-                       FontSize="28"
-                       FontWeight="Bold"
-                       HorizontalAlignment="Center"/>
+                <TextBlock Text="Wikipedia"
+                           FontSize="28"
+                           FontWeight="Bold"
+                           HorizontalAlignment="Center"/>
 
-            <ProgressBar Value="{Binding TiempoRestante}"
-                         Maximum="15"
-                         Height="15"/>
-        </StackPanel>
+                <ProgressBar Value="{Binding TiempoRestante}"
+                             Maximum="15"
+                             Height="15"
+                             Foreground="#51A7E0"/>
+            </StackPanel>
 
-        <!-- PREGUNTA -->
-        <Border Grid.Row="1"
-                Background="#F2F2F2"
-                CornerRadius="10"
-                Padding="15"
-                Margin="0,10">
+            <!-- PREGUNTA -->
+            <Border Grid.Row="1"
+                    Background="#F2F2F2"
+                    CornerRadius="10"
+                    Padding="15"
+                    Margin="0,10">
 
-            <TextBlock Text="{Binding Pregunta}"
-                       Foreground="Black"
-                       FontSize="26"
-                       FontWeight="Bold"
-                       TextWrapping="Wrap"
-                       TextAlignment="Center"/>
-        </Border>
+                <TextBlock Text="{Binding Pregunta}"
+                           Foreground="Black"
+                           FontSize="26"
+                           FontWeight="Bold"
+                           TextWrapping="Wrap"
+                           TextAlignment="Center"/>
+            </Border>
 
-        <!-- RESPUESTAS -->
-        <UniformGrid Grid.Row="2"
-                     Rows="2"
-                     Columns="2"
-                     Margin="0,20"
-                     HorizontalAlignment="Stretch"
-                     VerticalAlignment="Stretch">
+            <!-- RESPUESTAS -->
+            <UniformGrid Grid.Row="2"
+                         Rows="2"
+                         Columns="2"
+                         Margin="0,20"
+                         HorizontalAlignment="Stretch"
+                         VerticalAlignment="Stretch">
 
-            <!-- 🔵 -->
-            <Button Command="{Binding SeleccionarRespuestaCommand}"
-                    CommandParameter="{Binding Respuestas[0]}"
-                    Margin="10"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch">
+                <!-- 🔵 -->
+                <Button Command="{Binding SeleccionarRespuestaCommand}"
+                        CommandParameter="{Binding Respuestas[0]}"
+                        Margin="10"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch">
 
-                <Border Background="#3A5A80" CornerRadius="12">
-                    <Grid>
-                        <TextBlock Text="▲"
-                                   Foreground="White"
-                                   Margin="10"
-                                   HorizontalAlignment="Left"
-                                   VerticalAlignment="Top"/>
+                    <Border Background="#01DDF5" CornerRadius="12">
+                        <Grid>
+                            <TextBlock Text="▲"
+                                       Foreground="White"
+                                       Margin="10"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Top"/>
 
-                        <ContentControl Content="{Binding Respuestas[0]}"
-                                        ContentTemplate="{StaticResource RespuestaSelector}"/>
-                    </Grid>
-                </Border>
-            </Button>
+                            <ContentControl Content="{Binding Respuestas[0]}"
+                                            ContentTemplate="{StaticResource RespuestaSelector}"/>
+                        </Grid>
+                    </Border>
+                </Button>
 
-            <!-- 🟢 -->
-            <Button Command="{Binding SeleccionarRespuestaCommand}"
-                    CommandParameter="{Binding Respuestas[1]}"
-                    Margin="10"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch">
+                <!-- 🟢 -->
+                <Button Command="{Binding SeleccionarRespuestaCommand}"
+                        CommandParameter="{Binding Respuestas[1]}"
+                        Margin="10"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch">
 
-                <Border Background="#3E6F64" CornerRadius="12">
-                    <Grid>
-                        <TextBlock Text="◆"
-                                   Foreground="White"
-                                   Margin="10"
-                                   HorizontalAlignment="Left"
-                                   VerticalAlignment="Top"/>
+                    <Border Background="#EF1F6B" CornerRadius="12">
+                        <Grid>
+                            <TextBlock Text="◆"
+                                       Foreground="White"
+                                       Margin="10"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Top"/>
 
-                        <ContentControl Content="{Binding Respuestas[1]}"
-                                        ContentTemplate="{StaticResource RespuestaSelector}"/>
-                    </Grid>
-                </Border>
-            </Button>
+                            <ContentControl Content="{Binding Respuestas[1]}"
+                                            ContentTemplate="{StaticResource RespuestaSelector}"/>
+                        </Grid>
+                    </Border>
+                </Button>
 
-            <!-- 🔴 -->
-            <Button Command="{Binding SeleccionarRespuestaCommand}"
-                    CommandParameter="{Binding Respuestas[2]}"
-                    Margin="10"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch">
+                <!-- 🔴 -->
+                <Button Command="{Binding SeleccionarRespuestaCommand}"
+                        CommandParameter="{Binding Respuestas[2]}"
+                        Margin="10"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch">
 
-                <Border Background="#6A3B3F" CornerRadius="12">
-                    <Grid>
-                        <TextBlock Text="●"
-                                   Foreground="White"
-                                   Margin="10"
-                                   HorizontalAlignment="Left"
-                                   VerticalAlignment="Top"/>
+                    <Border Background="#0B6354" CornerRadius="12">
+                        <Grid>
+                            <TextBlock Text="●"
+                                       Foreground="White"
+                                       Margin="10"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Top"/>
 
-                        <ContentControl Content="{Binding Respuestas[2]}"
-                                        ContentTemplate="{StaticResource RespuestaSelector}"/>
-                    </Grid>
-                </Border>
-            </Button>
+                            <ContentControl Content="{Binding Respuestas[2]}"
+                                            ContentTemplate="{StaticResource RespuestaSelector}"/>
+                        </Grid>
+                    </Border>
+                </Button>
 
-            <!-- 🟣 -->
-            <Button Command="{Binding SeleccionarRespuestaCommand}"
-                    CommandParameter="{Binding Respuestas[3]}"
-                    Margin="10"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch">
+                <!-- 🟣 -->
+                <Button Command="{Binding SeleccionarRespuestaCommand}"
+                        CommandParameter="{Binding Respuestas[3]}"
+                        Margin="10"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch">
 
-                <Border Background="#4B3B6F" CornerRadius="12">
-                    <Grid>
-                        <TextBlock Text="■"
-                                   Foreground="White"
-                                   Margin="10"
-                                   HorizontalAlignment="Left"
-                                   VerticalAlignment="Top"/>
+                    <Border Background="#08444E" CornerRadius="12">
+                        <Grid>
+                            <TextBlock Text="■"
+                                       Foreground="White"
+                                       Margin="10"
+                                       HorizontalAlignment="Left"
+                                       VerticalAlignment="Top"/>
 
-                        <ContentControl Content="{Binding Respuestas[3]}"
-                                        ContentTemplate="{StaticResource RespuestaSelector}"/>
-                    </Grid>
-                </Border>
-            </Button>
+                            <ContentControl Content="{Binding Respuestas[3]}"
+                                            ContentTemplate="{StaticResource RespuestaSelector}"/>
+                        </Grid>
+                    </Border>
+                </Button>
 
-        </UniformGrid>
+            </UniformGrid>
 
+        </Grid>
     </Grid>
 </UserControl>
