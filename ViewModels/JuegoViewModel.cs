@@ -51,6 +51,15 @@ public partial class JuegoViewModel : ObservableObject
     [ObservableProperty]
     private bool puedeReproducirAudio = true;
 
+    [ObservableProperty]
+    private string mensajeResultado = "";
+
+    [ObservableProperty]
+    private bool mostrarResultado = false;
+
+    [ObservableProperty]
+    private string colorResultado = "#333"; // default
+
     // =========================
     // 🌐 API
     // =========================
@@ -61,7 +70,7 @@ public partial class JuegoViewModel : ObservableObject
 
         if (q == null)
         {
-            Console.WriteLine("❌ No llegó pregunta");
+            Console.WriteLine("No llegó pregunta");
             return;
         }
 
@@ -151,20 +160,24 @@ public partial class JuegoViewModel : ObservableObject
     [RelayCommand]
     private async Task SeleccionarRespuesta(RespuestaItem item)
     {
-        _cts?.Cancel();
-
         if (item.Tipo == TipoRespuesta.Audio)
         {
             await ReproducirAudio(item.Contenido);
             return;
         }
 
-        if (item.Contenido == _respuestaCorrecta)
-            Console.WriteLine("✅ Correcto");
-        else
-            Console.WriteLine("❌ Incorrecto");
+        bool correcta = item.Contenido == _respuestaCorrecta;
 
-        await Task.Delay(800);
+        MensajeResultado = correcta ? "✔ Correcto" : "❌ Incorrecto";
+
+        // 🔥 COLOR AQUÍ
+        ColorResultado = correcta ? "#4CAF50" : "#F44336";
+
+        MostrarResultado = true;
+
+        await Task.Delay(1500);
+
+        MostrarResultado = false;
 
         await CargarPregunta();
     }
