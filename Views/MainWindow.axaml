@@ -73,6 +73,10 @@ mc:Ignorable="d">
                 <views:SalaView />
             </DataTemplate>
 
+            <DataTemplate DataType="vm:JuegoViewModel">
+                <views:JuegoView />
+            </DataTemplate>
+
         </ContentControl.DataTemplates>
     </ContentControl>
 

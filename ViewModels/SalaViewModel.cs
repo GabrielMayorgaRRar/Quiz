@@ -70,11 +70,7 @@ public partial class SalaViewModel : ObservableObject
     [RelayCommand]
     private async Task Iniciar()
     {
-        if (EsOwner)
-        {
-            Console.WriteLine("Iniciando juego...");
-            await _main.ApiService.StartGameAsync(_gameId);
-        }
+        _main.IrAJuego();
     }
 
     [RelayCommand]
@@ -113,4 +109,6 @@ public partial class SalaViewModel : ObservableObject
     {
         _cts?.Cancel();
     }
+
+
 }

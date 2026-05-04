@@ -39,6 +39,7 @@ public partial class MainWindowViewModel : ViewModelBase
     public UnirseViewModel UnirseVM { get; }
     public SalaViewModel SalaVM { get; }
 
+
     public MainWindowViewModel() : this(App.CreateDbContext()) { }
 
     public MainWindowViewModel(AppDbContext context)
@@ -46,7 +47,9 @@ public partial class MainWindowViewModel : ViewModelBase
         CategoriaVM = new CategoriaViewModel(context);
         UsuarioVM = new UsuarioViewModel(context);
         PreguntaVM = new PreguntaViewModel(context);
-        JuegoVM = new JuegoViewModel(context);
+
+        JuegoVM = new JuegoViewModel(this);
+
         QuizSessionVM = new QuizSessionViewModel(context);
 
         HomeVM = new HomeViewModel(this);
@@ -77,5 +80,10 @@ public partial class MainWindowViewModel : ViewModelBase
     {
         SalaVM.Inicializar(codigo, gameId, jugador, owner);
         CurrentView = SalaVM;
+    }
+
+    public void IrAJuego()
+    {
+        CurrentView = JuegoVM;
     }
 }
