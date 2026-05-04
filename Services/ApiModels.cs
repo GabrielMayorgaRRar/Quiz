@@ -103,6 +103,9 @@ public class QuestionData
 
 public class OptionData
 {
+    [JsonPropertyName("id")]
+    public int Id { get; set; }
+
     [JsonPropertyName("content")]
     public string Content { get; set; } = "";
 

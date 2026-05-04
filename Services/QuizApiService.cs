@@ -82,4 +82,23 @@ public class QuizApiService
             return null;
         }
     }
+
+    public async Task<bool> EnviarRespuestaAsync(int gameId, int optionId)
+    {
+        try
+        {
+            Console.WriteLine($"POST → game/{gameId}/answer/{optionId}");
+
+            var res = await _http.PostAsync($"game/{gameId}/answer/{optionId}", null);
+
+            Console.WriteLine($"Status: {res.StatusCode}");
+
+            return res.IsSuccessStatusCode;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+            return false;
+        }
+    }
 }

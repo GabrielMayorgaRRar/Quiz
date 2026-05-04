@@ -6,6 +6,9 @@ using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
 using Quiz.Services;
 using System.Text.Json;
+using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
+using System.Threading.Tasks;
 
 namespace Quiz.ViewModels;
 
@@ -18,6 +21,8 @@ public partial class SalaViewModel : ObservableObject
         _main = main;
     }
 
+    public ObservableCollection<string> Jugadores { get; } = new();
+
     [ObservableProperty]
     private string codigo = "";
 
@@ -27,10 +32,12 @@ public partial class SalaViewModel : ObservableObject
     [ObservableProperty]
     private string textoEstado = "Buscando jugadores";
 
+    [ObservableProperty]
+    private string textoCopiar = "COPIAR";
+
+
     private int _gameId;
     public WsClient Ws { get; } = new();
-
-    public ObservableCollection<string> Jugadores { get; } = new();
 
     public bool PuedeIniciar => EsOwner;
 
@@ -55,14 +62,17 @@ public partial class SalaViewModel : ObservableObject
         {
             if (eventName == "player_joined")
             {
-                if (data.TryGetProperty("user", out var user) && user.TryGetProperty("nickname", out var nickname))
+                if (data.TryGetProperty("user", out var user) &&
+                    user.TryGetProperty("nickname", out var nickname))
                 {
-                    Jugadores.Add(nickname.GetString() ?? "");
+                    var name = nickname.GetString() ?? "";
+
+                    // 🔥 evita duplicados
+                    if (!Jugadores.Contains(name))
+                    {
+                        Jugadores.Add(name);
+                    }
                 }
-            }
-            else if (eventName == "game_started")
-            {
-                Console.WriteLine("El admin inició el juego.");
             }
         });
     }
@@ -87,6 +97,20 @@ public partial class SalaViewModel : ObservableObject
         Ws.OnMessageReceived -= Ws_OnMessageReceived;
         DetenerAnimacion();
         _main.IrAHome();
+    }
+
+    [RelayCommand]
+    private async Task CopiarCodigo()
+    {
+        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop &&
+            desktop.MainWindow?.Clipboard is { } clipboard)
+        {
+            await clipboard.SetTextAsync(Codigo);
+
+            TextoCopiar = "COPIADO ✔";
+            await Task.Delay(1500);
+            TextoCopiar = "COPIAR";
+        }
     }
 
     private CancellationTokenSource? _cts;
@@ -116,6 +140,8 @@ public partial class SalaViewModel : ObservableObject
     {
         _cts?.Cancel();
     }
+
+
 
 
 }

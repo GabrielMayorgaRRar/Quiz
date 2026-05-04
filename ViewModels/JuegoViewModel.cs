@@ -4,6 +4,9 @@ using System;
 using System.Collections.ObjectModel;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Text.Json;
+using Avalonia.Threading;
+using Quiz.Services;
 
 namespace Quiz.ViewModels;
 
@@ -14,16 +17,28 @@ public enum TipoRespuesta
     Audio
 }
 
-public class RespuestaItem
+public partial class RespuestaItem : ObservableObject
 {
+    public int Id { get; set; } // 🔥 ESTE ES EL QUE TE FALTA O ESTÁ MAL
+
     public string Contenido { get; set; } = "";
     public TipoRespuesta Tipo { get; set; }
+
+    [ObservableProperty]
+    private string background = "#444";
+}
+
+public class JugadorStats
+{
+    public string Nombre { get; set; } = "";
+    public int Puntos { get; set; }
 }
 
 public partial class JuegoViewModel : ObservableObject
 {
     private readonly MainWindowViewModel _main;
     private readonly int _gameId;
+    private readonly WsClient _ws = new();
 
     private string _respuestaCorrecta = "";
     private CancellationTokenSource? _cts;
@@ -33,11 +48,18 @@ public partial class JuegoViewModel : ObservableObject
         _main = main;
         _gameId = gameId;
 
+        Console.WriteLine($"WS KEY: {_main.SalaVM.Codigo}");
+
+        _ws.OnMessageReceived += Ws_OnMessageReceived;
+        _ = _ws.ConnectAsync(_main.SalaVM.Codigo);
+
         _ = CargarPregunta();
     }
 
+    public int Id { get; set; }
+
     // =========================
-    // 🔹 PROPIEDADES
+    // PROPIEDADES
     // =========================
 
     [ObservableProperty]
@@ -58,10 +80,15 @@ public partial class JuegoViewModel : ObservableObject
     private bool mostrarResultado = false;
 
     [ObservableProperty]
-    private string colorResultado = "#333"; // default
+    private string colorResultado = "#333";
+
+    [ObservableProperty]
+    private bool mostrarEstadisticas = false;
+
+    public ObservableCollection<JugadorStats> Estadisticas { get; } = new();
 
     // =========================
-    // 🌐 API
+    // API
     // =========================
 
     private async Task CargarPregunta()
@@ -74,8 +101,6 @@ public partial class JuegoViewModel : ObservableObject
             return;
         }
 
-        Console.WriteLine($"✅ Pregunta: {q.Question}");
-
         Pregunta = q.Question;
 
         Respuestas.Clear();
@@ -84,8 +109,10 @@ public partial class JuegoViewModel : ObservableObject
         {
             Respuestas.Add(new RespuestaItem
             {
+                Id = op.Id, // 🔥 ESTA LÍNEA ES CLAVE
                 Contenido = op.Content,
-                Tipo = TipoRespuesta.Texto
+                Tipo = TipoRespuesta.Texto,
+                Background = "#444"
             });
 
             if (op.IsCorrect)
@@ -95,19 +122,8 @@ public partial class JuegoViewModel : ObservableObject
         IniciarTimer();
     }
 
-    private TipoRespuesta DetectarTipo(string contenido)
-    {
-        if (contenido.EndsWith(".jpg") || contenido.EndsWith(".png"))
-            return TipoRespuesta.Imagen;
-
-        if (contenido.EndsWith(".mp3") || contenido.EndsWith(".wav"))
-            return TipoRespuesta.Audio;
-
-        return TipoRespuesta.Texto;
-    }
-
     // =========================
-    // ⏱️ TIMER
+    // TIMER
     // =========================
 
     private async void IniciarTimer()
@@ -128,38 +144,35 @@ public partial class JuegoViewModel : ObservableObject
 
             if (!token.IsCancellationRequested)
             {
-                await CargarPregunta(); // tiempo agotado → siguiente
+                await PasarASiguientePregunta();
             }
         }
-        catch (TaskCanceledException) { }
+        catch { }
     }
 
     // =========================
-    // 🔊 AUDIO
+    // AUDIO
     // =========================
 
     [RelayCommand]
     private async Task ReproducirAudio(string ruta)
     {
-        if (!PuedeReproducirAudio)
-            return;
+        if (!PuedeReproducirAudio) return;
 
         PuedeReproducirAudio = false;
-
-        Console.WriteLine($"Reproduciendo audio: {ruta}");
         await Task.Delay(3000);
-        Console.WriteLine("Audio detenido");
-
         PuedeReproducirAudio = true;
     }
 
     // =========================
-    // 🎯 RESPUESTA
+    // RESPUESTA
     // =========================
 
     [RelayCommand]
     private async Task SeleccionarRespuesta(RespuestaItem item)
     {
+        _cts?.Cancel();
+
         if (item.Tipo == TipoRespuesta.Audio)
         {
             await ReproducirAudio(item.Contenido);
@@ -168,28 +181,100 @@ public partial class JuegoViewModel : ObservableObject
 
         bool correcta = item.Contenido == _respuestaCorrecta;
 
-        MensajeResultado = correcta ? "✔ Correcto" : "❌ Incorrecto";
-
-        // 🔥 COLOR AQUÍ
+        MensajeResultado = correcta ? "Correcto" : "Incorrecto";
         ColorResultado = correcta ? "#4CAF50" : "#F44336";
 
         MostrarResultado = true;
 
+        foreach (var r in Respuestas)
+        {
+            if (r.Contenido == _respuestaCorrecta)
+                r.Background = "#4CAF50";
+            else if (r == item)
+                r.Background = "#F44336";
+            else
+                r.Background = "#555";
+        }
+
+        await _main.ApiService.EnviarRespuestaAsync(_gameId, item.Id);
         await Task.Delay(1500);
 
         MostrarResultado = false;
+
+        await Task.Delay(3000);
+
+        MostrarEstadisticas = false;
 
         await CargarPregunta();
     }
 
     // =========================
-    // 🔙 NAV
+    // WEBSOCKET
+    // =========================
+
+    private void Ws_OnMessageReceived(string eventName, JsonElement data)
+    {
+        Console.WriteLine($"Evento recibido: {eventName}");
+
+        if (eventName == "score_update")
+        {
+            Dispatcher.UIThread.Post(async () =>
+            {
+                Estadisticas.Clear();
+
+                foreach (var item in data.EnumerateArray())
+                {
+                    var nombre = item.GetProperty("user").GetProperty("nickname").GetString();
+                    var puntos = item.GetProperty("score").GetInt32();
+
+                    Estadisticas.Add(new JugadorStats
+                    {
+                        Nombre = nombre ?? "",
+                        Puntos = puntos
+                    });
+                }
+
+                MostrarEstadisticas = true;
+
+                await Task.Delay(3000);
+
+                MostrarEstadisticas = false;
+
+                await CargarPregunta(); // 🔥 IMPORTANTE
+            });
+        }
+    }
+
+    // =========================
+    // FLUJO CENTRAL
+    // =========================
+
+    private async Task PasarASiguientePregunta()
+    {
+        MostrarResultado = false;
+        MostrarEstadisticas = false;
+
+        await CargarPregunta();
+    }
+
+    // =========================
+    // CLEANUP
+    // =========================
+
+    public void Cleanup()
+    {
+        _ws.OnMessageReceived -= Ws_OnMessageReceived;
+        _ = _ws.DisconnectAsync();
+    }
+
+    // =========================
+    // NAV
     // =========================
 
     [RelayCommand]
     private void Volver()
     {
-        _cts?.Cancel();
+        Cleanup();
         _main.IrAHome();
     }
 }

@@ -73,6 +73,31 @@ x:Class="Quiz.Views.SalaView">
             <Setter Property="Height" Value="32"/>
         </Style>
 
+        <Style Selector="Button.btnSecondary">
+            <Setter Property="Height" Value="42"/>
+            <Setter Property="MinWidth" Value="90"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Padding" Value="12,6"/>
+
+            <Setter Property="Background" Value="#8282DD"/>
+            <Setter Property="Foreground" Value="White"/>
+
+            <Setter Property="Transitions">
+                <Transitions>
+                    <BrushTransition Property="Background" Duration="0:0:0.15"/>
+                </Transitions>
+            </Setter>
+        </Style>
+
+        <Style Selector="Button.btnSecondary:pointerover">
+            <Setter Property="Background" Value="#8282DD"/>
+        </Style>
+
+        <Style Selector="Button.btnSecondary:pressed">
+            <Setter Property="Background" Value="#AFAFFF"/>
+        </Style>
+
+
     </UserControl.Styles>
 
     <Grid>
@@ -134,6 +159,25 @@ x:Class="Quiz.Views.SalaView">
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
+
+                <StackPanel HorizontalAlignment="Center" Margin="0,20">
+
+                    <TextBlock Text="Código de sala"
+                               FontSize="16"
+                               HorizontalAlignment="Center"/>
+
+                    <TextBlock Text="{Binding Codigo}"
+                               FontSize="30"
+                               FontWeight="Bold"
+                               HorizontalAlignment="Center"/>
+
+                    <Button
+                    Content="{Binding TextoCopiar}"
+                    Command="{Binding CopiarCodigoCommand}"
+                    HorizontalAlignment="Center"
+                    Classes="btnSecondary"/>
+
+                </StackPanel>
 
                 <Button
                 Content="INICIAR"
