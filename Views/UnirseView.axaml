@@ -1,11 +1,10 @@
 <UserControl
 xmlns="https://github.com/avaloniaui"
 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+xmlns:converters="using:Quiz.Converters"
 x:Class="Quiz.Views.UnirseView">
 
     <UserControl.Styles>
-
-        <!-- INPUTS -->
         <Style Selector="TextBox.input">
             <Setter Property="Height" Value="42"/>
             <Setter Property="Padding" Value="10"/>
@@ -22,7 +21,6 @@ x:Class="Quiz.Views.UnirseView">
             <Setter Property="Height" Value="42"/>
         </Style>
 
-        <!-- 🔥 TEMPLATE BASE (PARA TODOS LOS BOTONES) -->
         <Style Selector="Button">
             <Setter Property="Template">
                 <ControlTemplate>
@@ -41,7 +39,6 @@ x:Class="Quiz.Views.UnirseView">
             </Setter>
         </Style>
 
-        <!-- 🔥 BOTÓN PRINCIPAL -->
         <Style Selector="Button.btnPrimary">
             <Setter Property="Width" Value="220"/>
             <Setter Property="Height" Value="55"/>
@@ -94,7 +91,6 @@ x:Class="Quiz.Views.UnirseView">
 
         <Style Selector="Button.btnBack">
 
-            <!-- Tamaño base más pequeño -->
             <Setter Property="Width" Value="140"/>
             <Setter Property="Height" Value="38"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
@@ -102,7 +98,6 @@ x:Class="Quiz.Views.UnirseView">
             <Setter Property="Foreground" Value="#333"/>
             <Setter Property="Background" Value="#4AE9E9"/>
 
-            <!-- MISMAS TRANSICIONES -->
             <Setter Property="Transitions">
                 <Transitions>
                     <DoubleTransition Property="Height" Duration="0:0:0.15"/>
@@ -112,34 +107,28 @@ x:Class="Quiz.Views.UnirseView">
 
         </Style>
 
-        <!-- Hover -->
         <Style Selector="Button.btnBack:pointerover">
             <Setter Property="Background" Value="#47D8D8"/>
-            <Setter Property="Height" Value="45"/> <!-- crece -->
+            <Setter Property="Height" Value="45"/>
         </Style>
 
-        <!-- Click -->
         <Style Selector="Button.btnBack:pressed">
             <Setter Property="Background" Value="#3BC0C0"/>
-            <Setter Property="Height" Value="32"/> <!-- se encoge -->
+            <Setter Property="Height" Value="32"/>
         </Style>
 
     </UserControl.Styles>
 
     <Grid>
-
-        <!-- FONDO -->
         <Image
         Source="avares://Quiz/Assets/4394250_91648.jpg"
         Stretch="UniformToFill"
         Opacity="0.35"/>
 
-        <!-- Overlay -->
         <Border Background="#55000000"/>
 
-        <!-- CARD -->
         <Border
-        Width="420"
+        Width="550"
         Padding="30"
         CornerRadius="20"
         Background="White"
@@ -148,14 +137,12 @@ x:Class="Quiz.Views.UnirseView">
 
             <StackPanel Spacing="16" HorizontalAlignment="Center">
 
-                <!-- VOLVER -->
                 <Button
                 Content="← Volver"
                 Classes="btnBack"
                 Command="{Binding VolverCommand}"
                 Margin="0,0,0,10"/>
 
-                <!-- TÍTULO -->
                 <TextBlock
                 Text="UNIRSE A SALA"
                 FontSize="28"
@@ -178,7 +165,39 @@ x:Class="Quiz.Views.UnirseView">
                 Classes="input"
                 Text="{Binding CodigoSala}"/>
 
-                <!-- BOTÓN -->
+                <ListBox ItemsSource="{Binding Avatares}" SelectedItem="{Binding AvatarSeleccionado}" Background="Transparent" Margin="0" Padding="0">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Width="50" Height="50" CornerRadius="25" ClipToBounds="True">
+                                <Image Source="{Binding Imagen}" Stretch="UniformToFill" />
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <ListBox.Styles>
+                        <Style Selector="ListBoxItem">
+                            <Setter Property="Padding" Value="2" />
+                            <Setter Property="Margin" Value="4" />
+                            <Setter Property="CornerRadius" Value="30" />
+                            <Setter Property="BorderThickness" Value="2" />
+                            <Setter Property="BorderBrush" Value="Transparent" />
+                        </Style>
+                        <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
+                            <Setter Property="Background" Value="Transparent" />
+                        </Style>
+                        <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+                            <Setter Property="Background" Value="Transparent" />
+                        </Style>
+                        <Style Selector="ListBoxItem:selected">
+                            <Setter Property="BorderBrush" Value="#E05FAA" />
+                        </Style>
+                    </ListBox.Styles>
+                </ListBox>
+
                 <Button
                 Content="UNIRSE"
                 Classes="btnPrimary"

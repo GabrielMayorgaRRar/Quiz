@@ -1,0 +1,91 @@
+using System;
+using System.Collections.Generic;
+using System.Text.Json.Serialization;
+
+namespace Quiz.Services;
+
+public class ApiResponse<T>
+{
+    [JsonPropertyName("data")]
+    public T? Data { get; set; }
+    [JsonPropertyName("message")]
+    public string? Message { get; set; }
+}
+
+public class CreateRoomRequest
+{
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = "";
+    [JsonPropertyName("nickname")]
+    public string Nickname { get; set; } = "";
+    [JsonPropertyName("avatar_url")]
+    public string AvatarUrl { get; set; } = "";
+    [JsonPropertyName("category_id")]
+    public int CategoryId { get; set; }
+}
+
+public class JoinRoomRequest
+{
+    [JsonPropertyName("key")]
+    public string Key { get; set; } = "";
+    [JsonPropertyName("nickname")]
+    public string Nickname { get; set; } = "";
+    [JsonPropertyName("avatar_url")]
+    public string AvatarUrl { get; set; } = "";
+}
+
+public class GameData
+{
+    [JsonPropertyName("id")]
+    public int Id { get; set; }
+    [JsonPropertyName("key")]
+    public string Key { get; set; } = "";
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = "";
+    [JsonPropertyName("status")]
+    public string Status { get; set; } = "";
+    [JsonPropertyName("user_id")]
+    public int UserId { get; set; }
+    [JsonPropertyName("category_id")]
+    public int CategoryId { get; set; }
+}
+
+public class UserData
+{
+    [JsonPropertyName("id")]
+    public int Id { get; set; }
+    [JsonPropertyName("nickname")]
+    public string Nickname { get; set; } = "";
+    [JsonPropertyName("avatar_url")]
+    public string AvatarUrl { get; set; } = "";
+}
+
+public class DepartureData
+{
+    [JsonPropertyName("id")]
+    public int Id { get; set; }
+    [JsonPropertyName("game_id")]
+    public int GameId { get; set; }
+    [JsonPropertyName("user_id")]
+    public int UserId { get; set; }
+    [JsonPropertyName("score")]
+    public int Score { get; set; }
+}
+
+public class RoomResponseData
+{
+    [JsonPropertyName("game")]
+    public GameData? Game { get; set; }
+    [JsonPropertyName("user")]
+    public UserData? User { get; set; }
+    [JsonPropertyName("departure")]
+    public DepartureData? Departure { get; set; }
+}
+
+public class CategoryData
+{
+    [JsonPropertyName("id")]
+    public int Id { get; set; }
+    [JsonPropertyName("name")]
+    public string Name { get; set; } = "";
+}

@@ -28,6 +28,13 @@ public class BitmapAssetValueConverter : IValueConverter
                     }
                 }
 
+                if (rawUri.StartsWith("http://", StringComparison.OrdinalIgnoreCase) || rawUri.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+                {
+                    using var client = new System.Net.Http.HttpClient();
+                    var stream = client.GetStreamAsync(rawUri).GetAwaiter().GetResult();
+                    return new Bitmap(stream);
+                }
+
                 if (rawUri.StartsWith("avares://"))
                 {
                     return new Bitmap(AssetLoader.Open(new Uri(rawUri)));

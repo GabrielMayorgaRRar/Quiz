@@ -1,11 +1,10 @@
 <UserControl
 xmlns="https://github.com/avaloniaui"
 xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+xmlns:converters="using:Quiz.Converters"
 x:Class="Quiz.Views.CrearSalaView">
 
     <UserControl.Styles>
-
-        <!-- INPUTS -->
         <Style Selector="TextBox.input">
             <Setter Property="Height" Value="42"/>
             <Setter Property="Padding" Value="10"/>
@@ -22,7 +21,6 @@ x:Class="Quiz.Views.CrearSalaView">
             <Setter Property="Height" Value="42"/>
         </Style>
 
-        <!-- 🔥 TEMPLATE BASE (PARA TODOS LOS BOTONES) -->
         <Style Selector="Button">
             <Setter Property="Template">
                 <ControlTemplate>
@@ -41,7 +39,6 @@ x:Class="Quiz.Views.CrearSalaView">
             </Setter>
         </Style>
 
-        <!-- 🔥 BOTÓN PRINCIPAL -->
         <Style Selector="Button.btnPrimary">
             <Setter Property="Width" Value="220"/>
             <Setter Property="Height" Value="55"/>
@@ -93,8 +90,6 @@ x:Class="Quiz.Views.CrearSalaView">
         </Style>
 
         <Style Selector="Button.btnBack">
-
-            <!-- Tamaño base más pequeño -->
             <Setter Property="Width" Value="140"/>
             <Setter Property="Height" Value="38"/>
             <Setter Property="HorizontalAlignment" Value="Left"/>
@@ -102,7 +97,6 @@ x:Class="Quiz.Views.CrearSalaView">
             <Setter Property="Foreground" Value="#333"/>
             <Setter Property="Background" Value="#4AE9E9"/>
 
-            <!-- MISMAS TRANSICIONES -->
             <Setter Property="Transitions">
                 <Transitions>
                     <DoubleTransition Property="Height" Duration="0:0:0.15"/>
@@ -112,34 +106,28 @@ x:Class="Quiz.Views.CrearSalaView">
 
         </Style>
 
-        <!-- Hover -->
         <Style Selector="Button.btnBack:pointerover">
             <Setter Property="Background" Value="#47D8D8"/>
-            <Setter Property="Height" Value="45"/> <!-- crece -->
+            <Setter Property="Height" Value="45"/>
         </Style>
 
-        <!-- Click -->
         <Style Selector="Button.btnBack:pressed">
             <Setter Property="Background" Value="#3BC0C0"/>
-            <Setter Property="Height" Value="32"/> <!-- se encoge -->
+            <Setter Property="Height" Value="32"/>
         </Style>
 
     </UserControl.Styles>
 
     <Grid>
-
-        <!-- FONDO -->
         <Image
         Source="avares://Quiz/Assets/4394250_91648.jpg"
         Stretch="UniformToFill"
         Opacity="0.35"/>
 
-        <!-- Overlay -->
         <Border Background="#55000000"/>
 
-        <!-- CARD -->
         <Border
-        Width="420"
+        Width="550"
         Padding="30"
         CornerRadius="20"
         Background="White"
@@ -153,28 +141,81 @@ x:Class="Quiz.Views.CrearSalaView">
                 Command="{Binding VolverCommand}"
                 Margin="0,0,0,10"/>
 
-                <!-- Título -->
                 <TextBlock
                 Text="CREAR SALA"
                 FontSize="28"
                 FontWeight="Bold"
                 HorizontalAlignment="Center"/>
 
-                <!-- Inputs -->
-                <TextBox Watermark="Nombre de la sala" Classes="input"/>
-                <TextBox Watermark="Nombre" Classes="input"/>
-                <TextBox Watermark="Apodo" Classes="input"/>
+                <TextBox Watermark="Nombre de la sala" Text="{Binding NombreSala}" Classes="input"/>
+                <TextBox Watermark="Nombre" Text="{Binding Nombre}" Classes="input"/>
+                <TextBox Watermark="Apodo" Text="{Binding Apodo}" Classes="input"/>
 
-                <!-- Categoría -->
-                <ComboBox Classes="input">
-                    <ComboBoxItem Content="Historia"/>
-                    <ComboBoxItem Content="Ciencia"/>
-                    <ComboBoxItem Content="Deportes"/>
-                </ComboBox>
+                <ListBox ItemsSource="{Binding Avatares}" SelectedItem="{Binding AvatarSeleccionado}" Background="Transparent" Margin="0" Padding="0">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Width="50" Height="50" CornerRadius="25" ClipToBounds="True">
+                                <Image Source="{Binding Imagen}" Stretch="UniformToFill" />
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <ListBox.Styles>
+                        <Style Selector="ListBoxItem">
+                            <Setter Property="Padding" Value="2" />
+                            <Setter Property="Margin" Value="4" />
+                            <Setter Property="CornerRadius" Value="30" />
+                            <Setter Property="BorderThickness" Value="2" />
+                            <Setter Property="BorderBrush" Value="Transparent" />
+                        </Style>
+                        <Style Selector="ListBoxItem:pointerover /template/ ContentPresenter">
+                            <Setter Property="Background" Value="Transparent" />
+                        </Style>
+                        <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+                            <Setter Property="Background" Value="Transparent" />
+                        </Style>
+                        <Style Selector="ListBoxItem:selected">
+                            <Setter Property="BorderBrush" Value="#E05FAA" />
+                        </Style>
+                    </ListBox.Styles>
+                </ListBox>
 
-                <!-- Código -->
+                <ListBox ItemsSource="{Binding Categorias}" SelectedItem="{Binding CategoriaSeleccionada}" Background="Transparent" Margin="0" Padding="0">
+                    <ListBox.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <WrapPanel Orientation="Horizontal" HorizontalAlignment="Center" />
+                        </ItemsPanelTemplate>
+                    </ListBox.ItemsPanel>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <Border Background="#F4F4F5" CornerRadius="16" Padding="12,6" BorderBrush="#E4E4E7" BorderThickness="1" x:Name="ChipBorder">
+                                <TextBlock Text="{Binding Name}" FontSize="12" FontWeight="SemiBold" x:Name="ChipText" />
+                            </Border>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                    <ListBox.Styles>
+                        <Style Selector="ListBoxItem">
+                            <Setter Property="Padding" Value="0" />
+                            <Setter Property="Margin" Value="4" />
+                        </Style>
+                        <Style Selector="ListBoxItem:selected /template/ ContentPresenter">
+                            <Setter Property="Background" Value="Transparent" />
+                        </Style>
+                        <Style Selector="ListBoxItem:selected Border#ChipBorder">
+                            <Setter Property="Background" Value="#E05FAA" />
+                            <Setter Property="BorderBrush" Value="#E05FAA" />
+                        </Style>
+                        <Style Selector="ListBoxItem:selected TextBlock#ChipText">
+                            <Setter Property="Foreground" Value="White" />
+                        </Style>
+                    </ListBox.Styles>
+                </ListBox>
+
                 <StackPanel Orientation="Horizontal" Spacing="20">
-
                     <TextBox
                     Width="250"
                     Text="{Binding CodigoSala}"
@@ -182,12 +223,11 @@ x:Class="Quiz.Views.CrearSalaView">
                     Classes="input"/>
 
                     <Button
-                    Content="COPIAR"
+                    Content="{Binding TextoCopiar}"
                     Command="{Binding CopiarCodigoCommand}"
                     Classes="btnSecondary"/>
                 </StackPanel>
 
-                <!-- BOTÓN PRINCIPAL -->
                 <Button
                 Content="CREAR"
                 Classes="btnPrimary"

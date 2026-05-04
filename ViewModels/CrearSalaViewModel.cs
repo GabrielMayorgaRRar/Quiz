@@ -5,6 +5,8 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Avalonia;
 using Avalonia.Controls.ApplicationLifetimes;
+using Quiz.Services;
+using System.Linq;
 
 namespace Quiz.ViewModels;
 
@@ -15,7 +17,14 @@ public partial class CrearSalaViewModel : ObservableObject
     public CrearSalaViewModel(MainWindowViewModel main)
     {
         _main = main;
-        GenerarCodigo();
+        _ = CargarCategoriasAsync();
+    }
+
+    private async Task CargarCategoriasAsync()
+    {
+        var cats = await _main.ApiService.GetCategoriesAsync();
+        Categorias.Clear();
+        foreach (var c in cats) Categorias.Add(c);
     }
 
     [ObservableProperty]
@@ -28,7 +37,7 @@ public partial class CrearSalaViewModel : ObservableObject
     private string apodo = "";
 
     [ObservableProperty]
-    private string? categoriaSeleccionada;
+    private CategoryData? categoriaSeleccionada;
 
     [ObservableProperty]
     private string codigoSala = "";
@@ -36,32 +45,38 @@ public partial class CrearSalaViewModel : ObservableObject
     [ObservableProperty]
     private string textoCopiar = "COPIAR";
 
-    public ObservableCollection<string> Categorias { get; } = new()
+    public ObservableCollection<CategoryData> Categorias { get; } = new();
+
+    public ObservableCollection<AvatarItem> Avatares { get; } = new()
     {
-        "Historia",
-        "Ciencia",
-        "Deportes",
-        "Tecnología"
+        new AvatarItem("https://drive.google.com/uc?export=view&id=1ycLLwdHblj_0d2AwxJb4x5zRdLGZ9S28"),
+        new AvatarItem("https://drive.google.com/uc?export=view&id=1IACUfAUF33xmeo5KRvdONSIsEt7yeDRj"),
+        new AvatarItem("https://drive.google.com/uc?export=view&id=1S9M9ymGL5gbsJUn1Y74L0WXm0zi0AoMr"),
+        new AvatarItem("https://drive.google.com/uc?export=view&id=1obVlKml9-eRpXDOIu-bioqiNRTuTSl0x"),
+        new AvatarItem("https://drive.google.com/uc?export=view&id=1gNQ15eDDu933yT7D9j5WD6bM8pw5LM2w"),
+        new AvatarItem("https://drive.google.com/uc?export=view&id=1rCDWAGB6pb8HKcZjPF0r7CzHEE3tCbT7"),
+        new AvatarItem("https://drive.google.com/uc?export=view&id=1XSwV66l1n-h6qC-RczE_CexjuchOvS43"),
+        new AvatarItem("https://drive.google.com/uc?export=view&id=1wj6zxCWCdMU1BJoPAyxxOCTbvOGzT5mz")
     };
+
+    [ObservableProperty]
+    private AvatarItem? avatarSeleccionado;
 
     public bool PuedeCrear =>
         !string.IsNullOrWhiteSpace(NombreSala) &&
         !string.IsNullOrWhiteSpace(Nombre) &&
         !string.IsNullOrWhiteSpace(Apodo) &&
-        CategoriaSeleccionada != null;
+        CategoriaSeleccionada != null &&
+        AvatarSeleccionado != null;
 
     partial void OnNombreSalaChanged(string value) => OnPropertyChanged(nameof(PuedeCrear));
     partial void OnNombreChanged(string value) => OnPropertyChanged(nameof(PuedeCrear));
     partial void OnApodoChanged(string value) => OnPropertyChanged(nameof(PuedeCrear));
-    partial void OnCategoriaSeleccionadaChanged(string? value) => OnPropertyChanged(nameof(PuedeCrear));
+    partial void OnCategoriaSeleccionadaChanged(CategoryData? value) => OnPropertyChanged(nameof(PuedeCrear));
+    partial void OnAvatarSeleccionadoChanged(AvatarItem? value) => OnPropertyChanged(nameof(PuedeCrear));
 
-    private void GenerarCodigo()
-    {
-        var random = new Random();
-        CodigoSala = random.Next(100000, 999999).ToString();
-    }
 
-    // 🔥 COPIAR AL PORTAPAPELES
+
     [RelayCommand]
     private async Task CopiarCodigo()
     {
@@ -76,17 +91,27 @@ public partial class CrearSalaViewModel : ObservableObject
         }
     }
 
-    // 🔥 CREAR SALA Y ENTRAR AL LOBBY
     [RelayCommand]
-    private void CrearSala()
+    private async Task CrearSala()
     {
-        Console.WriteLine($"Sala creada: {CodigoSala}");
-
-        // 👇 AQUÍ ESTÁ LA CONEXIÓN IMPORTANTE
-        _main.IrASala(CodigoSala, Nombre, true);
+        if (CategoriaSeleccionada == null) return;
+        
+        var request = new CreateRoomRequest
+        {
+            Name = NombreSala,
+            Nickname = Nombre,
+            AvatarUrl = AvatarSeleccionado?.Url ?? "",
+            CategoryId = CategoriaSeleccionada.Id
+        };
+        
+        var res = await _main.ApiService.CreateRoomAsync(request);
+        if (res != null && res.Game != null)
+        {
+            CodigoSala = res.Game.Key;
+            Console.WriteLine($"Sala creada: {CodigoSala}");
+            _main.IrASala(CodigoSala, res.Game.Id, Nombre, true);
+        }
     }
-
-    // 🔙 VOLVER
     [RelayCommand]
     private void Volver()
     {

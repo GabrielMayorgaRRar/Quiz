@@ -1,4 +1,5 @@
 using CommunityToolkit.Mvvm.ComponentModel;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Quiz.Models;
 
@@ -25,4 +26,8 @@ public partial class Opciones : ObservableObject
     public int PreguntaId { get; set; }
 
     public Pregunta? Pregunta { get; set; }
+
+    [NotMapped]
+    [ObservableProperty]
+    private Avalonia.Media.Imaging.Bitmap? _imagenCargada;
 }

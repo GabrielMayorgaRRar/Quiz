@@ -243,7 +243,7 @@
                                     Background="#F5F5F4"
                                     ClipToBounds="True"
                                     CornerRadius="16">
-                                    <Image Source="{Binding Contenido, Converter={StaticResource bitmapConverter}}" Stretch="Uniform" />
+                                    <Image Source="{Binding ImagenCargada}" Stretch="Uniform" />
                                 </Border>
                             </Border>
                         </DataTemplate>
