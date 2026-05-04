@@ -31,7 +31,6 @@ public partial class MainWindowViewModel : ViewModelBase
     public UsuarioViewModel UsuarioVM { get; }
     public PreguntaViewModel PreguntaVM { get; }
     public CategoriaViewModel CategoriaVM { get; }
-    public JuegoViewModel JuegoVM { get; }
     public QuizSessionViewModel QuizSessionVM { get; }
 
     public CrearSalaViewModel CrearSalaVM { get; }
@@ -48,7 +47,6 @@ public partial class MainWindowViewModel : ViewModelBase
         UsuarioVM = new UsuarioViewModel(context);
         PreguntaVM = new PreguntaViewModel(context);
 
-        JuegoVM = new JuegoViewModel(this);
 
         QuizSessionVM = new QuizSessionViewModel(context);
 
@@ -82,8 +80,8 @@ public partial class MainWindowViewModel : ViewModelBase
         CurrentView = SalaVM;
     }
 
-    public void IrAJuego()
+    public void IrAJuego(int gameId)
     {
-        CurrentView = JuegoVM;
+        CurrentView = new JuegoViewModel(this, gameId);
     }
 }

@@ -18,7 +18,7 @@ public class QuizApiService
 
     public async Task<List<CategoryData>> GetCategoriesAsync()
     {
-        try 
+        try
         {
             var response = await _http.GetFromJsonAsync<ApiResponse<List<CategoryData>>>("categories");
             return response?.Data ?? new List<CategoryData>();
@@ -37,7 +37,10 @@ public class QuizApiService
                 return content?.Data;
             }
         }
-        catch {}
+        catch
+        {
+
+        }
         return null;
     }
 
@@ -52,7 +55,7 @@ public class QuizApiService
                 return content?.Data;
             }
         }
-        catch {}
+        catch { }
         return null;
     }
 
@@ -64,5 +67,38 @@ public class QuizApiService
             return res.IsSuccessStatusCode;
         }
         catch { return false; }
+    }
+
+    public async Task<QuestionData?> GetQuestionAsync(int gameId)
+    {
+        try
+        {
+            var response = await _http.GetFromJsonAsync<ApiResponse<QuestionData>>($"game/{gameId}/question");
+            return response?.Data;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+            return null;
+        }
+    }
+
+    public async Task<bool> EnviarRespuestaAsync(int gameId, int optionId)
+    {
+        try
+        {
+            Console.WriteLine($"POST → game/{gameId}/answer/{optionId}");
+
+            var res = await _http.PostAsync($"game/{gameId}/answer/{optionId}", null);
+
+            Console.WriteLine($"Status: {res.StatusCode}");
+
+            return res.IsSuccessStatusCode;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error: {ex.Message}");
+            return false;
+        }
     }
 }

@@ -2,10 +2,11 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.ObjectModel;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Avalonia.Media;
+using System.Text.Json;
+using Avalonia.Threading;
+using Quiz.Services;
 
 namespace Quiz.ViewModels;
 
@@ -16,40 +17,55 @@ public enum TipoRespuesta
     Audio
 }
 
-public class RespuestaItem
+public partial class RespuestaItem : ObservableObject
 {
+    public int Id { get; set; } // 🔥 ESTE ES EL QUE TE FALTA O ESTÁ MAL
+
     public string Contenido { get; set; } = "";
     public TipoRespuesta Tipo { get; set; }
+
+    [ObservableProperty]
+    private string background = "#444";
 }
 
-public class PreguntaItem
+public class JugadorStats
 {
-    public string Texto { get; set; } = "";
-    public List<RespuestaItem> Opciones { get; set; } = new();
+    public string Nombre { get; set; } = "";
+    public int Puntos { get; set; }
 }
-
-
 
 public partial class JuegoViewModel : ObservableObject
 {
     private readonly MainWindowViewModel _main;
+    private readonly int _gameId;
+    private readonly WsClient _ws = new();
 
-    // 🔥 AQUÍ VAN (CORREGIDO)
-    private List<PreguntaItem> _preguntas = new();
-    private int _indicePregunta = 0;
+    private string _respuestaCorrecta = "";
+    private CancellationTokenSource? _cts;
 
-    public JuegoViewModel(MainWindowViewModel main)
+    public JuegoViewModel(MainWindowViewModel main, int gameId)
     {
         _main = main;
-        CargarPreguntaDemo();
+        _gameId = gameId;
+
+        Console.WriteLine($"WS KEY: {_main.SalaVM.Codigo}");
+
+        _ws.OnMessageReceived += Ws_OnMessageReceived;
+        _ = _ws.ConnectAsync(_main.SalaVM.Codigo);
+
+        _ = CargarPregunta();
     }
 
+    public int Id { get; set; }
+
     // =========================
-    // 🔹 PROPIEDADES
+    // PROPIEDADES
     // =========================
 
     [ObservableProperty]
     private string pregunta = "";
+
+    public ObservableCollection<RespuestaItem> Respuestas { get; } = new();
 
     [ObservableProperty]
     private int tiempoRestante = 15;
@@ -57,74 +73,57 @@ public partial class JuegoViewModel : ObservableObject
     [ObservableProperty]
     private bool puedeReproducirAudio = true;
 
-    public ObservableCollection<RespuestaItem> Respuestas { get; } = new();
+    [ObservableProperty]
+    private string mensajeResultado = "";
 
-    private CancellationTokenSource? _cts;
+    [ObservableProperty]
+    private bool mostrarResultado = false;
+
+    [ObservableProperty]
+    private string colorResultado = "#333";
+
+    [ObservableProperty]
+    private bool mostrarEstadisticas = false;
+
+    public ObservableCollection<JugadorStats> Estadisticas { get; } = new();
 
     // =========================
-    // 🔥 PREGUNTAS (3)
+    // API
     // =========================
 
-    public void CargarPreguntaDemo()
+    private async Task CargarPregunta()
     {
-        _preguntas = new List<PreguntaItem>
+        var q = await _main.ApiService.GetQuestionAsync(_gameId);
+
+        if (q == null)
         {
-            new PreguntaItem
-            {
-                Texto = "¿Cuándo fue el tratado de Versalles?",
-                Opciones = new List<RespuestaItem>
-                {
-                    new() { Contenido = "1919", Tipo = TipoRespuesta.Texto },
-                    new() { Contenido = "1925", Tipo = TipoRespuesta.Texto },
-                    new() { Contenido = "avares://Quiz/Assets/5566.jpg", Tipo = TipoRespuesta.Imagen },
-                    new() { Contenido = "audio.mp3", Tipo = TipoRespuesta.Audio }
-                }
-            },
+            Console.WriteLine("No llegó pregunta");
+            return;
+        }
 
-            new PreguntaItem
-            {
-                Texto = "¿Capital de Francia?",
-                Opciones = new List<RespuestaItem>
-                {
-                    new() { Contenido = "Madrid", Tipo = TipoRespuesta.Texto },
-                    new() { Contenido = "París", Tipo = TipoRespuesta.Texto },
-                    new() { Contenido = "Roma", Tipo = TipoRespuesta.Texto },
-                    new() { Contenido = "Berlín", Tipo = TipoRespuesta.Texto }
-                }
-            },
-
-            new PreguntaItem
-            {
-                Texto = "¿Cuánto es 2 + 2?",
-                Opciones = new List<RespuestaItem>
-                {
-                    new() { Contenido = "3", Tipo = TipoRespuesta.Texto },
-                    new() { Contenido = "4", Tipo = TipoRespuesta.Texto },
-                    new() { Contenido = "5", Tipo = TipoRespuesta.Texto },
-                    new() { Contenido = "22", Tipo = TipoRespuesta.Texto }
-                }
-            }
-        };
-
-        _indicePregunta = 0;
-        CargarPreguntaActual();
-    }
-
-    private void CargarPreguntaActual()
-    {
-        var preguntaActual = _preguntas[_indicePregunta];
-
-        Pregunta = preguntaActual.Texto;
+        Pregunta = q.Question;
 
         Respuestas.Clear();
-        foreach (var r in preguntaActual.Opciones)
-            Respuestas.Add(r);
+
+        foreach (var op in q.Options)
+        {
+            Respuestas.Add(new RespuestaItem
+            {
+                Id = op.Id, // 🔥 ESTA LÍNEA ES CLAVE
+                Contenido = op.Content,
+                Tipo = TipoRespuesta.Texto,
+                Background = "#444"
+            });
+
+            if (op.IsCorrect)
+                _respuestaCorrecta = op.Content;
+        }
 
         IniciarTimer();
     }
 
     // =========================
-    // ⏱️ TIMER
+    // TIMER
     // =========================
 
     private async void IniciarTimer()
@@ -142,66 +141,140 @@ public partial class JuegoViewModel : ObservableObject
                 await Task.Delay(1000, token);
                 TiempoRestante--;
             }
+
+            if (!token.IsCancellationRequested)
+            {
+                await PasarASiguientePregunta();
+            }
         }
-        catch (TaskCanceledException) { }
+        catch { }
     }
 
     // =========================
-    // 🔊 AUDIO
+    // AUDIO
     // =========================
 
     [RelayCommand]
     private async Task ReproducirAudio(string ruta)
     {
-        if (!PuedeReproducirAudio)
-            return;
+        if (!PuedeReproducirAudio) return;
 
         PuedeReproducirAudio = false;
-
-        Console.WriteLine($"Reproduciendo audio: {ruta}");
         await Task.Delay(3000);
-        Console.WriteLine("Audio detenido");
-
         PuedeReproducirAudio = true;
     }
 
     // =========================
-    // 🎯 RESPUESTA
+    // RESPUESTA
     // =========================
 
     [RelayCommand]
     private async Task SeleccionarRespuesta(RespuestaItem item)
     {
+        _cts?.Cancel();
+
         if (item.Tipo == TipoRespuesta.Audio)
         {
             await ReproducirAudio(item.Contenido);
             return;
         }
 
-        Console.WriteLine($"Seleccionaste: {item.Contenido}");
+        bool correcta = item.Contenido == _respuestaCorrecta;
 
-        await Task.Delay(800);
+        MensajeResultado = correcta ? "Correcto" : "Incorrecto";
+        ColorResultado = correcta ? "#4CAF50" : "#F44336";
 
-        _indicePregunta++;
+        MostrarResultado = true;
 
-        if (_indicePregunta < _preguntas.Count)
+        foreach (var r in Respuestas)
         {
-            CargarPreguntaActual();
+            if (r.Contenido == _respuestaCorrecta)
+                r.Background = "#4CAF50";
+            else if (r == item)
+                r.Background = "#F44336";
+            else
+                r.Background = "#555";
         }
-        else
+
+        await _main.ApiService.EnviarRespuestaAsync(_gameId, item.Id);
+        await Task.Delay(1500);
+
+        MostrarResultado = false;
+
+        await Task.Delay(3000);
+
+        MostrarEstadisticas = false;
+
+        await CargarPregunta();
+    }
+
+    // =========================
+    // WEBSOCKET
+    // =========================
+
+    private void Ws_OnMessageReceived(string eventName, JsonElement data)
+    {
+        Console.WriteLine($"Evento recibido: {eventName}");
+
+        if (eventName == "score_update")
         {
-            Console.WriteLine("Fin del juego");
+            Dispatcher.UIThread.Post(async () =>
+            {
+                Estadisticas.Clear();
+
+                foreach (var item in data.EnumerateArray())
+                {
+                    var nombre = item.GetProperty("user").GetProperty("nickname").GetString();
+                    var puntos = item.GetProperty("score").GetInt32();
+
+                    Estadisticas.Add(new JugadorStats
+                    {
+                        Nombre = nombre ?? "",
+                        Puntos = puntos
+                    });
+                }
+
+                MostrarEstadisticas = true;
+
+                await Task.Delay(3000);
+
+                MostrarEstadisticas = false;
+
+                await CargarPregunta(); // 🔥 IMPORTANTE
+            });
         }
     }
 
     // =========================
-    // 🔙 NAV
+    // FLUJO CENTRAL
+    // =========================
+
+    private async Task PasarASiguientePregunta()
+    {
+        MostrarResultado = false;
+        MostrarEstadisticas = false;
+
+        await CargarPregunta();
+    }
+
+    // =========================
+    // CLEANUP
+    // =========================
+
+    public void Cleanup()
+    {
+        _ws.OnMessageReceived -= Ws_OnMessageReceived;
+        _ = _ws.DisconnectAsync();
+    }
+
+    // =========================
+    // NAV
     // =========================
 
     [RelayCommand]
     private void Volver()
     {
-        _cts?.Cancel();
+        Cleanup();
         _main.IrAHome();
     }
 }
