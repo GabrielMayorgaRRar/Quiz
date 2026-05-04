@@ -4,6 +4,8 @@ using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System.Collections.ObjectModel;
+using Quiz.Services;
+using System.Text.Json;
 
 namespace Quiz.ViewModels;
 
@@ -24,31 +26,63 @@ public partial class SalaViewModel : ObservableObject
 
     [ObservableProperty]
     private string textoEstado = "Buscando jugadores";
+    
+    private int _gameId;
+    public WsClient Ws { get; } = new();
 
     public ObservableCollection<string> Jugadores { get; } = new();
 
     public bool PuedeIniciar => EsOwner;
 
-    public void Inicializar(string codigoSala, string jugador, bool owner)
+    public void Inicializar(string codigoSala, int gameId, string jugador, bool owner)
     {
         Codigo = codigoSala;
+        _gameId = gameId;
         EsOwner = owner;
 
         Jugadores.Clear();
         Jugadores.Add(jugador);
 
+        Ws.OnMessageReceived += Ws_OnMessageReceived;
+        _ = Ws.ConnectAsync(Codigo);
+
         IniciarAnimacion();
     }
 
-    [RelayCommand]
-    private void Iniciar()
+    private void Ws_OnMessageReceived(string eventName, JsonElement data)
     {
-        Console.WriteLine("Juego iniciado");
+        Avalonia.Threading.Dispatcher.UIThread.Post(() =>
+        {
+            if (eventName == "player_joined")
+            {
+                if (data.TryGetProperty("user", out var user) && user.TryGetProperty("nickname", out var nickname))
+                {
+                    Jugadores.Add(nickname.GetString() ?? "");
+                }
+            }
+            else if (eventName == "game_started")
+            {
+                Console.WriteLine("El admin inició el juego.");
+            }
+        });
+    }
+
+    [RelayCommand]
+    private async Task Iniciar()
+    {
+        if (EsOwner)
+        {
+            Console.WriteLine("Iniciando juego...");
+            await _main.ApiService.StartGameAsync(_gameId);
+        }
     }
 
     [RelayCommand]
     private void Volver()
     {
+        _ = Ws.DisconnectAsync();
+        Ws.OnMessageReceived -= Ws_OnMessageReceived;
+        DetenerAnimacion();
         _main.IrAHome();
     }
 

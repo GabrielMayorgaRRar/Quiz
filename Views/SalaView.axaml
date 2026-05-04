@@ -5,7 +5,6 @@ x:Class="Quiz.Views.SalaView">
 
     <UserControl.Styles>
 
-        <!-- TEMPLATE BASE BOTONES -->
         <Style Selector="Button">
             <Setter Property="Template">
                 <ControlTemplate>
@@ -24,7 +23,6 @@ x:Class="Quiz.Views.SalaView">
             </Setter>
         </Style>
 
-        <!-- BOTÓN PRINCIPAL -->
         <Style Selector="Button.btnPrimary">
             <Setter Property="Width" Value="220"/>
             <Setter Property="Height" Value="55"/>
@@ -50,7 +48,6 @@ x:Class="Quiz.Views.SalaView">
             <Setter Property="Height" Value="50"/>
         </Style>
 
-        <!-- BOTÓN BACK -->
         <Style Selector="Button.btnBack">
             <Setter Property="Width" Value="140"/>
             <Setter Property="Height" Value="38"/>
@@ -80,7 +77,6 @@ x:Class="Quiz.Views.SalaView">
 
     <Grid>
 
-        <!-- FONDO -->
         <Image
         Source="avares://Quiz/Assets/5566.jpg"
         Stretch="UniformToFill"
@@ -88,7 +84,6 @@ x:Class="Quiz.Views.SalaView">
 
         <Border Background="#55000000"/>
 
-        <!-- CARD -->
         <Border
         Width="420"
         Padding="30"
@@ -99,27 +94,22 @@ x:Class="Quiz.Views.SalaView">
 
             <StackPanel Spacing="16" HorizontalAlignment="Center">
 
-                <!-- VOLVER -->
                 <Button
                 Content="← Salir"
                 Classes="btnBack"
                 Command="{Binding VolverCommand}"/>
-
-                <!-- TÍTULO -->
                 <TextBlock
                 Text="SALA DE ESPERA"
                 FontSize="28"
                 FontWeight="Bold"
                 HorizontalAlignment="Center"/>
 
-                <!-- ESTADO -->
                 <TextBlock
                 Text="{Binding TextoEstado}"
                 FontSize="14"
                 Foreground="#666"
                 HorizontalAlignment="Center"/>
 
-                <!-- LISTA MEJORADA -->
                 <ItemsControl ItemsSource="{Binding Jugadores}">
                     <ItemsControl.ItemTemplate>
                         <DataTemplate>
@@ -132,10 +122,8 @@ x:Class="Quiz.Views.SalaView">
 
                                 <StackPanel Orientation="Horizontal" Spacing="10">
 
-                                    <!-- Icono simple -->
                                     <TextBlock Text="👤"/>
 
-                                    <!-- Nombre -->
                                     <TextBlock
                                     Text="{Binding}"
                                     FontWeight="SemiBold"/>
@@ -147,7 +135,6 @@ x:Class="Quiz.Views.SalaView">
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
 
-                <!-- BOTÓN INICIAR -->
                 <Button
                 Content="INICIAR"
                 Classes="btnPrimary"

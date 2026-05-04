@@ -5,11 +5,14 @@ using Quiz.Features.Juegos;
 using Quiz.Features.Preguntas;
 using Quiz.Features.QuizSession;
 using Quiz.Features.Usuarios;
+using Quiz.Services;
 
 namespace Quiz.ViewModels;
 
 public partial class MainWindowViewModel : ViewModelBase
 {
+    public QuizApiService ApiService { get; } = new();
+
     [ObservableProperty]
     private object? currentView;
 
@@ -33,7 +36,6 @@ public partial class MainWindowViewModel : ViewModelBase
 
     public CrearSalaViewModel CrearSalaVM { get; }
 
-    // 🔥 FALTABA ESTO
     public UnirseViewModel UnirseVM { get; }
     public SalaViewModel SalaVM { get; }
 
@@ -50,7 +52,6 @@ public partial class MainWindowViewModel : ViewModelBase
         HomeVM = new HomeViewModel(this);
         CrearSalaVM = new CrearSalaViewModel(this);
 
-        // 🔥 YA FUNCIONA
         UnirseVM = new UnirseViewModel(this);
         SalaVM = new SalaViewModel(this);
 
@@ -72,9 +73,9 @@ public partial class MainWindowViewModel : ViewModelBase
         CurrentView = UnirseVM;
     }
 
-    public void IrASala(string codigo, string jugador, bool owner)
+    public void IrASala(string codigo, int gameId, string jugador, bool owner)
     {
-        SalaVM.Inicializar(codigo, jugador, owner);
+        SalaVM.Inicializar(codigo, gameId, jugador, owner);
         CurrentView = SalaVM;
     }
 }

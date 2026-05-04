@@ -141,6 +141,29 @@ public partial class QuizSessionViewModel : ViewModelBase
         MostrarFeedback = false;
         
         StopAudio();
+
+        if (EsModoImagen && PreguntaActual.Opciones != null)
+        {
+            foreach (var opcion in PreguntaActual.Opciones)
+            {
+                if (opcion.ImagenCargada == null && !string.IsNullOrWhiteSpace(opcion.Contenido))
+                {
+                    _ = CargarImagenOpcionAsync(opcion);
+                }
+            }
+        }
+    }
+
+    private async Task CargarImagenOpcionAsync(Opciones opcion)
+    {
+        try
+        {
+            using var client = new System.Net.Http.HttpClient();
+            var bytes = await client.GetByteArrayAsync(opcion.Contenido);
+            using var stream = new System.IO.MemoryStream(bytes);
+            opcion.ImagenCargada = new Avalonia.Media.Imaging.Bitmap(stream);
+        }
+        catch { }
     }
 
     private System.Diagnostics.Process? _currentAudioProcess;
@@ -156,25 +179,46 @@ public partial class QuizSessionViewModel : ViewModelBase
     }
 
     [RelayCommand]
-    private void PlayAudio(string? audioPath)
+    private async Task PlayAudio(string? audioPath)
     {
         if (string.IsNullOrWhiteSpace(audioPath)) return;
         
         string absolutePath = audioPath;
-        if (!System.IO.Path.IsPathRooted(absolutePath))
-        {
-            absolutePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, audioPath.TrimStart('/'));
-        }
 
-        if (!System.IO.File.Exists(absolutePath))
+        if (audioPath.StartsWith("http://", StringComparison.OrdinalIgnoreCase) || audioPath.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
         {
-            System.Diagnostics.Debug.WriteLine($"Audio no encontrado en: {absolutePath}");
-            return;
+            try
+            {
+                var uri = new Uri(audioPath);
+                string tempFile = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "quiz_audio_" + Guid.NewGuid().ToString() + ".mp3");
+                using var client = new System.Net.Http.HttpClient();
+                var bytes = await client.GetByteArrayAsync(uri);
+                await System.IO.File.WriteAllBytesAsync(tempFile, bytes);
+                absolutePath = tempFile;
+            }
+            catch (Exception ex)
+            {
+                System.Diagnostics.Debug.WriteLine($"Error descargando audio: {ex.Message}");
+                return;
+            }
+        }
+        else
+        {
+            if (!System.IO.Path.IsPathRooted(absolutePath))
+            {
+                absolutePath = System.IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, audioPath.TrimStart('/'));
+            }
+
+            if (!System.IO.File.Exists(absolutePath))
+            {
+                System.Diagnostics.Debug.WriteLine($"Audio no encontrado en: {absolutePath}");
+                return;
+            }
         }
 
         StopAudio();
 
-        Task.Run(() => 
+        _ = Task.Run(() => 
         {
             try
             {

@@ -6,7 +6,7 @@ namespace Quiz.Features.Home;
 
 public partial class HomeViewModel : ViewModelBase
 {
-    private readonly MainWindowViewModel _main;
+    private readonly MainWindowViewModel _main = null!;
 
     public HomeViewModel(MainWindowViewModel main)
     {

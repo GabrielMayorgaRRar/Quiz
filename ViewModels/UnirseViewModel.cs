@@ -1,6 +1,8 @@
 using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using Quiz.Services;
+using System.Threading.Tasks;
 
 namespace Quiz.ViewModels;
 
@@ -22,26 +24,55 @@ public partial class UnirseViewModel : ObservableObject
     [ObservableProperty]
     private string codigoSala = "";
 
+    public System.Collections.ObjectModel.ObservableCollection<AvatarItem> Avatares { get; } = new()
+    {
+        new AvatarItem("https://drive.google.com/uc?export=view&id=1ycLLwdHblj_0d2AwxJb4x5zRdLGZ9S28"),
+        new AvatarItem("https://drive.google.com/uc?export=view&id=1IACUfAUF33xmeo5KRvdONSIsEt7yeDRj"),
+        new AvatarItem("https://drive.google.com/uc?export=view&id=1S9M9ymGL5gbsJUn1Y74L0WXm0zi0AoMr"),
+        new AvatarItem("https://drive.google.com/uc?export=view&id=1obVlKml9-eRpXDOIu-bioqiNRTuTSl0x"),
+        new AvatarItem("https://drive.google.com/uc?export=view&id=1gNQ15eDDu933yT7D9j5WD6bM8pw5LM2w"),
+        new AvatarItem("https://drive.google.com/uc?export=view&id=1rCDWAGB6pb8HKcZjPF0r7CzHEE3tCbT7"),
+        new AvatarItem("https://drive.google.com/uc?export=view&id=1XSwV66l1n-h6qC-RczE_CexjuchOvS43"),
+        new AvatarItem("https://drive.google.com/uc?export=view&id=1wj6zxCWCdMU1BJoPAyxxOCTbvOGzT5mz")
+    };
+
+    [ObservableProperty]
+    private AvatarItem? avatarSeleccionado;
+
     public bool PuedeUnirse =>
         !string.IsNullOrWhiteSpace(Nombre) &&
         !string.IsNullOrWhiteSpace(Apodo) &&
-        !string.IsNullOrWhiteSpace(CodigoSala);
+        !string.IsNullOrWhiteSpace(CodigoSala) &&
+        AvatarSeleccionado != null;
 
     partial void OnNombreChanged(string value) => OnPropertyChanged(nameof(PuedeUnirse));
     partial void OnApodoChanged(string value) => OnPropertyChanged(nameof(PuedeUnirse));
     partial void OnCodigoSalaChanged(string value) => OnPropertyChanged(nameof(PuedeUnirse));
+    partial void OnAvatarSeleccionadoChanged(AvatarItem? value) => OnPropertyChanged(nameof(PuedeUnirse));
 
-    // 🔥 UNIRSE A LA SALA (IR AL MISMO LOBBY)
     [RelayCommand]
-    private void Unirse()
+    private async Task Unirse()
     {
         Console.WriteLine($"Intentando unirse a sala: {CodigoSala}");
 
-        // 👇 AQUÍ ESTÁ LA CONEXIÓN IMPORTANTE
-        _main.IrASala(CodigoSala, Nombre, false);
+        var request = new JoinRoomRequest
+        {
+            Key = CodigoSala,
+            Nickname = Nombre,
+            AvatarUrl = AvatarSeleccionado?.Url ?? ""
+        };
+
+        var res = await _main.ApiService.JoinRoomAsync(request);
+        if (res != null && res.Game != null)
+        {
+            _main.IrASala(CodigoSala, res.Game.Id, Nombre, false);
+        }
+        else
+        {
+            Console.WriteLine("Error al unirse a la sala");
+        }
     }
 
-    // 🔙 VOLVER
     [RelayCommand]
     private void Volver()
     {

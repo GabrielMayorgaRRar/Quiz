@@ -57,12 +57,10 @@ mc:Ignorable="d">
     <ContentControl Content="{Binding CurrentView}">
         <ContentControl.DataTemplates>
 
-            <!-- 🔥 HOME (namespace correcto) -->
             <DataTemplate DataType="home:HomeViewModel">
                 <views:HomeView />
             </DataTemplate>
 
-            <!-- 🔥 CREAR SALA -->
             <DataTemplate DataType="vm:CrearSalaViewModel">
                 <views:CrearSalaView />
             </DataTemplate>

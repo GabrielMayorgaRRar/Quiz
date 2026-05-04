@@ -5,3 +5,11 @@ bin/
 obj/
 .vs/
 .env/
+
+api.md
+avatars.md
+flujo.md
+render.md
+requets.md
+websocket.md
+Reporte Interfaces Graficas.pdf
