@@ -3,8 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
-using Avalonia;
-using Avalonia.Controls.ApplicationLifetimes;
 using Quiz.Services;
 using System.Linq;
 
@@ -39,12 +37,6 @@ public partial class CrearSalaViewModel : ObservableObject
     [ObservableProperty]
     private CategoryData? categoriaSeleccionada;
 
-    [ObservableProperty]
-    private string codigoSala = "";
-
-    [ObservableProperty]
-    private string textoCopiar = "COPIAR";
-
     public ObservableCollection<CategoryData> Categorias { get; } = new();
 
     public ObservableCollection<AvatarItem> Avatares { get; } = new()
@@ -75,22 +67,6 @@ public partial class CrearSalaViewModel : ObservableObject
     partial void OnCategoriaSeleccionadaChanged(CategoryData? value) => OnPropertyChanged(nameof(PuedeCrear));
     partial void OnAvatarSeleccionadoChanged(AvatarItem? value) => OnPropertyChanged(nameof(PuedeCrear));
 
-
-
-    [RelayCommand]
-    private async Task CopiarCodigo()
-    {
-        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop &&
-            desktop.MainWindow?.Clipboard is { } clipboard)
-        {
-            await clipboard.SetTextAsync(CodigoSala);
-
-            TextoCopiar = "COPIADO ✔";
-            await Task.Delay(1500);
-            TextoCopiar = "COPIAR";
-        }
-    }
-
     [RelayCommand]
     private async Task CrearSala()
     {
@@ -107,9 +83,8 @@ public partial class CrearSalaViewModel : ObservableObject
         var res = await _main.ApiService.CreateRoomAsync(request);
         if (res != null && res.Game != null)
         {
-            CodigoSala = res.Game.Key;
-            Console.WriteLine($"Sala creada: {CodigoSala}");
-            _main.IrASala(CodigoSala, res.Game.Id, Nombre, true, res.Departure?.Id ?? 0, res.Players);
+            Console.WriteLine($"Sala creada: {res.Game.Key}");
+            _main.IrASala(res.Game.Key, res.Game.Id, Nombre, true, res.Departure?.Id ?? 0, res.Players, CategoriaSeleccionada.Id);
         }
     }
     [RelayCommand]

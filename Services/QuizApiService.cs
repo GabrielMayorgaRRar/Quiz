@@ -9,7 +9,7 @@ namespace Quiz.Services;
 public class QuizApiService
 {
     private readonly HttpClient _http;
-    private const string BaseUrl = "http://10.103.150.110:4100/api/v1";
+    private const string BaseUrl = "http://192.168.101.108:4100/api/v1";
 
     public QuizApiService()
     {
@@ -69,11 +69,16 @@ public class QuizApiService
         catch { return false; }
     }
 
-    public async Task<QuestionData?> GetQuestionAsync(int gameId)
+    public async Task<QuestionData?> GetQuestionAsync(int gameId, int categoryId = 0)
     {
         try
         {
-            var response = await _http.GetFromJsonAsync<ApiResponse<QuestionData>>($"game/{gameId}/question");
+            string endpoint = $"game/{gameId}/question";
+            if (categoryId > 0)
+            {
+                endpoint += $"?categoryId={categoryId}";
+            }
+            var response = await _http.GetFromJsonAsync<ApiResponse<QuestionData>>(endpoint);
             return response?.Data;
         }
         catch (Exception ex)

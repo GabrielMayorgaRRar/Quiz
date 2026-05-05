@@ -1,68 +1,68 @@
 <UserControl
-    x:Class="Quiz.Views.JuegoView"
-    xmlns="https://github.com/avaloniaui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:conv="clr-namespace:Quiz.Converters"
-    xmlns:selectors="clr-namespace:Quiz.Selectors">
+x:Class="Quiz.Views.JuegoView"
+xmlns="https://github.com/avaloniaui"
+xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+xmlns:conv="clr-namespace:Quiz.Converters"
+xmlns:selectors="clr-namespace:Quiz.Selectors">
 
     <UserControl.Resources>
 
         <!--  TEXTO  -->
         <DataTemplate x:Key="TextoTemplate">
             <Border
-                Padding="10"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch">
+            Padding="10"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch">
                 <TextBlock
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    FontSize="24"
-                    FontWeight="Bold"
-                    Foreground="White"
-                    Text="{Binding Contenido}"
-                    TextAlignment="Center"
-                    TextWrapping="Wrap" />
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="24"
+                FontWeight="Bold"
+                Foreground="White"
+                Text="{Binding Contenido}"
+                TextAlignment="Center"
+                TextWrapping="Wrap" />
             </Border>
         </DataTemplate>
 
         <!--  IMAGEN  -->
         <DataTemplate x:Key="ImagenTemplate">
             <Border
-                Margin="10"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
-                ClipToBounds="True"
-                CornerRadius="10">
-                <Image Source="{Binding Contenido}" Stretch="Uniform" />
+            Margin="10"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            ClipToBounds="True"
+            CornerRadius="10">
+                <Image Source="{Binding Imagen}" Stretch="Uniform" />
             </Border>
         </DataTemplate>
 
         <!--  AUDIO  -->
         <DataTemplate x:Key="AudioTemplate">
             <StackPanel
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Spacing="8">
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Spacing="8">
 
                 <Border
-                    Padding="10"
-                    Background="#FFFFFF22"
-                    CornerRadius="50">
+                Padding="10"
+                Background="#FFFFFF22"
+                CornerRadius="50">
                     <TextBlock FontSize="32" Text="🔊" />
                 </Border>
 
                 <TextBlock
-                    FontSize="14"
-                    Foreground="White"
-                    Text="Reproducir" />
+                FontSize="14"
+                Foreground="White"
+                Text="Reproducir" />
             </StackPanel>
         </DataTemplate>
 
         <selectors:RespuestaTemplateSelector
-            x:Key="RespuestaSelector"
-            AudioTemplate="{StaticResource AudioTemplate}"
-            ImagenTemplate="{StaticResource ImagenTemplate}"
-            TextoTemplate="{StaticResource TextoTemplate}" />
+        x:Key="RespuestaSelector"
+        AudioTemplate="{StaticResource AudioTemplate}"
+        ImagenTemplate="{StaticResource ImagenTemplate}"
+        TextoTemplate="{StaticResource TextoTemplate}" />
 
         <conv:IndexVisibleConverter x:Key="IndexVisibleConverter" />
 
@@ -72,205 +72,248 @@
 
         <!--  FONDO  -->
         <Image
-            Opacity="0.3"
-            Source="avares://Quiz/Assets/11587928_4786503.jpg"
-            Stretch="UniformToFill" />
+        Opacity="0.3"
+        Source="avares://Quiz/Assets/11587928_4786503.jpg"
+        Stretch="UniformToFill" />
 
         <Grid Margin="20" RowDefinitions="Auto,Auto,*">
 
             <!--  HEADER  -->
-            <StackPanel Grid.Row="0" Spacing="10">
-                <StackPanel
-                    HorizontalAlignment="Center"
-                    Orientation="Horizontal"
-                    Spacing="15">
-                    <TextBlock
-                        FontSize="28"
-                        FontWeight="Bold"
-                        Foreground="#FFC107"
-                        Text="{Binding PreguntaActual, StringFormat='Pregunta {0}/12'}" />
-                    <TextBlock
-                        FontSize="28"
-                        FontWeight="Bold"
-                        Text="¡¡¡RESPONDE ANTES DE QUE LA BARRA LLEGUE A SU FIN!!!" />
-                </StackPanel>
+            <StackPanel Grid.Row="0" Spacing="12">
 
-                <ProgressBar
-                    Height="15"
-                    Foreground="#51A7E0"
+                <!-- CONTENEDOR -->
+                <Border
+                Padding="15"
+                Background="#AA000000"
+                CornerRadius="14">
+
+                    <StackPanel Spacing="8">
+
+                        <!-- PREGUNTA -->
+                        <TextBlock
+                        HorizontalAlignment="Center"
+                        FontSize="30"
+                        FontWeight="Bold"
+                        Foreground="#78D874"
+                        Text="{Binding PreguntaActual, StringFormat='Pregunta {0} de 12'}" />
+
+                        <!-- TEXTO MEJORADO -->
+                        <Border
+                        Padding="6,3"
+                        Background="#22FFFFFF"
+                        CornerRadius="8"
+                        HorizontalAlignment="Center">
+
+                            <TextBlock
+                            FontSize="15"
+                            FontWeight="SemiBold"
+                            Foreground="#FFFFFF"
+                            Text="⏳ ¡Apresúrate! El tiempo se está acabando"
+                            TextAlignment="Center" />
+                        </Border>
+
+                    </StackPanel>
+                </Border>
+
+                <!-- BARRA PRO -->
+                <Grid>
+
+                    <!-- FONDO -->
+                    <Border
+                    Height="20"
+                    Background="#222"
+                    CornerRadius="12" />
+
+                    <!-- PROGRESS -->
+                    <ProgressBar
+                    Height="20"
                     Maximum="15"
-                    Value="{Binding TiempoRestante}" />
+                    Value="{Binding TiempoRestante}"
+                    Background="#00196B75"
+                    Foreground="#EE00A5BB"
+                    CornerRadius="12" />
+
+                    <!-- TEXTO ENCIMA -->
+                    <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    Text="{Binding TiempoRestante, StringFormat='{}{0}s'}" />
+
+                </Grid>
+
             </StackPanel>
 
             <!--  PREGUNTA  -->
             <Border
-                Grid.Row="1"
-                Margin="0,10"
-                Padding="15"
-                Background="#F2F2F2"
-                CornerRadius="10">
+            Grid.Row="1"
+            Margin="0,10"
+            Padding="15"
+            Background="#F2F2F2"
+            CornerRadius="10">
                 <TextBlock
-                    FontSize="26"
-                    FontWeight="Bold"
-                    Foreground="Black"
-                    Text="{Binding Pregunta}"
-                    TextAlignment="Center"
-                    TextWrapping="Wrap" />
+                FontSize="26"
+                FontWeight="Bold"
+                Foreground="Black"
+                Text="{Binding Pregunta}"
+                TextAlignment="Center"
+                TextWrapping="Wrap" />
             </Border>
 
             <!--  RESPUESTAS  -->
             <UniformGrid
-                Grid.Row="2"
-                Margin="0,20"
-                HorizontalAlignment="Stretch"
-                VerticalAlignment="Stretch"
-                Columns="2"
-                Rows="2">
+            Grid.Row="2"
+            Margin="0,20"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Stretch"
+            Columns="2"
+            Rows="2">
 
                 <!--  🔵  -->
                 <Button
-                    Margin="10"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    Command="{Binding SeleccionarRespuestaCommand}"
-                    CommandParameter="{Binding Respuestas[0]}"
-                    IsVisible="{Binding Respuestas.Count, Converter={StaticResource IndexVisibleConverter}, ConverterParameter=0}">
+                Margin="10"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Command="{Binding SeleccionarRespuestaCommand}"
+                CommandParameter="{Binding Respuestas[0]}"
+                IsVisible="{Binding Respuestas.Count, Converter={StaticResource IndexVisibleConverter}, ConverterParameter=0}">
 
                     <Border
-                        Padding="5"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        Background="#01DDF5"
-                        CornerRadius="12">
+                    Padding="5"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Background="#01DDF5"
+                    CornerRadius="12">
 
                         <Grid
-                            Margin="10"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch">
+                        Margin="10"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch">
 
                             <TextBlock
-                                Margin="10"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Top"
-                                Foreground="White"
-                                Text="▲" />
+                            Margin="10"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Foreground="White"
+                            Text="▲" />
 
                             <ContentControl
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Stretch"
-                                Content="{Binding Respuestas[0]}"
-                                ContentTemplate="{StaticResource RespuestaSelector}" />
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Content="{Binding Respuestas[0]}"
+                            ContentTemplate="{StaticResource RespuestaSelector}" />
                         </Grid>
                     </Border>
                 </Button>
 
                 <!--  🟢  -->
                 <Button
-                    Margin="10"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    Command="{Binding SeleccionarRespuestaCommand}"
-                    CommandParameter="{Binding Respuestas[1]}"
-                    IsVisible="{Binding Respuestas.Count, Converter={StaticResource IndexVisibleConverter}, ConverterParameter=1}">
+                Margin="10"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Command="{Binding SeleccionarRespuestaCommand}"
+                CommandParameter="{Binding Respuestas[1]}"
+                IsVisible="{Binding Respuestas.Count, Converter={StaticResource IndexVisibleConverter}, ConverterParameter=1}">
 
                     <Border
-                        Padding="5"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        Background="#EF1F6B"
-                        CornerRadius="12">
+                    Padding="5"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Background="#EF1F6B"
+                    CornerRadius="12">
 
                         <Grid
-                            Margin="10"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch">
+                        Margin="10"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch">
 
                             <TextBlock
-                                Margin="10"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Top"
-                                Foreground="White"
-                                Text="◆" />
+                            Margin="10"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Foreground="White"
+                            Text="◆" />
 
                             <ContentControl
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Stretch"
-                                Content="{Binding Respuestas[1]}"
-                                ContentTemplate="{StaticResource RespuestaSelector}" />
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Content="{Binding Respuestas[1]}"
+                            ContentTemplate="{StaticResource RespuestaSelector}" />
                         </Grid>
                     </Border>
                 </Button>
 
                 <!--  🔴  -->
                 <Button
-                    Margin="10"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    Command="{Binding SeleccionarRespuestaCommand}"
-                    CommandParameter="{Binding Respuestas[2]}"
-                    IsVisible="{Binding Respuestas.Count, Converter={StaticResource IndexVisibleConverter}, ConverterParameter=2}">
+                Margin="10"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Command="{Binding SeleccionarRespuestaCommand}"
+                CommandParameter="{Binding Respuestas[2]}"
+                IsVisible="{Binding Respuestas.Count, Converter={StaticResource IndexVisibleConverter}, ConverterParameter=2}">
 
                     <Border
-                        Padding="5"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        Background="#0B6354"
-                        CornerRadius="12">
+                    Padding="5"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Background="#0B6354"
+                    CornerRadius="12">
 
                         <Grid
-                            Margin="10"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch">
+                        Margin="10"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch">
 
                             <TextBlock
-                                Margin="10"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Top"
-                                Foreground="White"
-                                Text="●" />
+                            Margin="10"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Foreground="White"
+                            Text="●" />
 
                             <ContentControl
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Stretch"
-                                Content="{Binding Respuestas[2]}"
-                                ContentTemplate="{StaticResource RespuestaSelector}" />
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Content="{Binding Respuestas[2]}"
+                            ContentTemplate="{StaticResource RespuestaSelector}" />
                         </Grid>
                     </Border>
                 </Button>
 
                 <!--  🟣  -->
                 <Button
-                    Margin="10"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Stretch"
-                    Command="{Binding SeleccionarRespuestaCommand}"
-                    CommandParameter="{Binding Respuestas[3]}"
-                    IsVisible="{Binding Respuestas.Count, Converter={StaticResource IndexVisibleConverter}, ConverterParameter=3}">
+                Margin="10"
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                Command="{Binding SeleccionarRespuestaCommand}"
+                CommandParameter="{Binding Respuestas[3]}"
+                IsVisible="{Binding Respuestas.Count, Converter={StaticResource IndexVisibleConverter}, ConverterParameter=3}">
 
                     <Border
-                        Padding="5"
-                        HorizontalAlignment="Stretch"
-                        VerticalAlignment="Stretch"
-                        Background="#08444E"
-                        CornerRadius="12">
+                    Padding="5"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Stretch"
+                    Background="#08444E"
+                    CornerRadius="12">
 
                         <Grid
-                            Margin="10"
-                            HorizontalAlignment="Stretch"
-                            VerticalAlignment="Stretch">
+                        Margin="10"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch">
 
                             <TextBlock
-                                Margin="10"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Top"
-                                Foreground="White"
-                                Text="■" />
+                            Margin="10"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            Foreground="White"
+                            Text="■" />
 
                             <ContentControl
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Stretch"
-                                Content="{Binding Respuestas[3]}"
-                                ContentTemplate="{StaticResource RespuestaSelector}" />
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Stretch"
+                            Content="{Binding Respuestas[3]}"
+                            ContentTemplate="{StaticResource RespuestaSelector}" />
                         </Grid>
                     </Border>
                 </Button>
@@ -279,90 +322,119 @@
 
         </Grid>
         <Border
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            Background="#80000000"
-            IsVisible="{Binding MostrarResultado}"
-            ZIndex="999">
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch"
+        Background="#80000000"
+        IsVisible="{Binding MostrarResultado}"
+        ZIndex="999">
 
             <Border
-                Padding="30"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Background="{Binding ColorResultado}"
-                CornerRadius="15">
+            Padding="30"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Background="{Binding ColorResultado}"
+            CornerRadius="15">
 
                 <TextBlock
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    FontSize="40"
-                    FontWeight="Bold"
-                    Foreground="White"
-                    Text="{Binding MensajeResultado}" />
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontSize="40"
+                FontWeight="Bold"
+                Foreground="White"
+                Text="{Binding MensajeResultado}" />
             </Border>
 
         </Border>
 
         <Border
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            Background="#CC000000"
-            IsVisible="{Binding MostrarEstadisticas}"
-            ZIndex="998">
+        HorizontalAlignment="Stretch"
+        VerticalAlignment="Stretch"
+        Background="#7E000000"
+        IsVisible="{Binding MostrarEstadisticas}"
+        ZIndex="998">
 
             <Border
-                Width="400"
-                Padding="20"
-                HorizontalAlignment="Center"
-                VerticalAlignment="Center"
-                Background="#222"
-                CornerRadius="15">
+            Width="400"
+            Padding="20"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center"
+            Background="White"
+            CornerRadius="15">
 
-                <StackPanel Spacing="10">
+                <StackPanel Spacing="12">
 
-                    <TextBlock
-                        HorizontalAlignment="Center"
-                        FontSize="24"
+                    <!-- TÍTULO -->
+                    <Border
+                    Padding="10"
+                    Background="White"
+                    CornerRadius="12"
+                    HorizontalAlignment="Center">
+
+                        <TextBlock
+                        FontSize="26"
                         FontWeight="Bold"
-                        Foreground="White"
-                        Text="📊 Estadísticas" />
+                        Foreground="Black"
+                        Text="Estadísticas" />
+                    </Border>
 
+                    <!-- LISTA -->
                     <ItemsControl ItemsSource="{Binding Estadisticas}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
+
                                 <Border
-                                    Margin="5"
-                                    Padding="10"
-                                    Background="#333"
-                                    CornerRadius="8">
+                                Margin="5"
+                                Padding="12"
+                                Background="#C7ACACAC"
+                                CornerRadius="10">
 
                                     <Grid ColumnDefinitions="*,Auto">
 
-                                        <TextBlock Foreground="White" Text="{Binding Nombre}" />
-
+                                        <!-- NOMBRE -->
                                         <TextBlock
-                                            Grid.Column="1"
+                                        Foreground="#CF45CF"
+                                        FontSize="16"
+                                        FontWeight="SemiBold"
+                                        Text="{Binding Nombre}" />
+
+                                        <!-- PUNTOS -->
+                                        <Border
+                                        Grid.Column="1"
+                                        Padding="10,4"
+                                        Background="#4CAF50"
+                                        CornerRadius="8">
+
+                                            <TextBlock
+                                            Foreground="Black"
                                             FontWeight="Bold"
-                                            Foreground="#4CAF50"
                                             Text="{Binding Puntos}" />
+                                        </Border>
 
                                     </Grid>
 
                                 </Border>
+
                             </DataTemplate>
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
 
+                    <!-- BOTÓN -->
                     <Button
-                        Margin="0,20,0,0"
-                        Padding="20,10"
-                        HorizontalAlignment="Center"
-                        Background="#F44336"
-                        Command="{Binding VolverCommand}"
-                        Content="Salir"
-                        FontWeight="Bold"
-                        Foreground="White"
-                        IsVisible="{Binding JuegoTerminado}" />
+                    Margin="0,15,0,0"
+                    Padding="20,10"
+                    HorizontalAlignment="Center"
+                    Background="#F836BE"
+                    Command="{Binding VolverCommand}"
+                    FontWeight="Bold"
+                    Foreground="White"
+                    IsVisible="{Binding JuegoTerminado}">
+
+                        <StackPanel Orientation="Horizontal" Spacing="6">
+                            <TextBlock Text="X"/>
+                            <TextBlock Text="Salir"/>
+                        </StackPanel>
+
+                    </Button>
 
                 </StackPanel>
 

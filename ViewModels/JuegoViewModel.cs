@@ -2,9 +2,12 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using System;
 using System.Collections.ObjectModel;
+using System.IO;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Text.Json;
+using Avalonia.Media.Imaging;
 using Avalonia.Threading;
 using Quiz.Services;
 
@@ -25,6 +28,9 @@ public partial class RespuestaItem : ObservableObject
     public TipoRespuesta Tipo { get; set; }
 
     [ObservableProperty]
+    private Bitmap? imagen;
+
+    [ObservableProperty]
     private string background = "#444";
 }
 
@@ -39,17 +45,21 @@ public partial class JuegoViewModel : ObservableObject
     private readonly MainWindowViewModel _main;
     private readonly int _gameId;
     private readonly int _departureId;
+    private readonly int _categoryId;
     private readonly WsClient _ws = new();
+    private static readonly HttpClient _httpClient = new();
 
+    private const int TotalPreguntas = 12;
     private string _respuestaCorrecta = "";
     private int _questionId;
     private CancellationTokenSource? _cts;
 
-    public JuegoViewModel(MainWindowViewModel main, int gameId, int departureId)
+    public JuegoViewModel(MainWindowViewModel main, int gameId, int departureId, int categoryId = 0)
     {
         _main = main;
         _gameId = gameId;
         _departureId = departureId;
+        _categoryId = categoryId;
 
         Console.WriteLine($"WS KEY: {_main.SalaVM.Codigo}");
 
@@ -107,15 +117,13 @@ public partial class JuegoViewModel : ObservableObject
     {
         OnPropertyChanged(nameof(PreguntaActual));
 
-        if (PreguntasRespondidas >= 12)
+        if (PreguntasRespondidas >= TotalPreguntas)
         {
-            await ObtenerScoreboardFinal();
-            JuegoTerminado = true;
-            MostrarEstadisticas = true;
+            await FinalizarJuego();
             return;
         }
 
-        var q = await _main.ApiService.GetQuestionAsync(_gameId);
+        var q = await _main.ApiService.GetQuestionAsync(_gameId, _categoryId);
 
         if (q == null)
         {
@@ -129,15 +137,28 @@ public partial class JuegoViewModel : ObservableObject
 
         Respuestas.Clear();
 
+        bool esPreguntaImagen = q.MediaType?.Equals("image", StringComparison.OrdinalIgnoreCase) == true;
+
         foreach (var op in q.Options)
         {
-            Respuestas.Add(new RespuestaItem
+            var tipo = esPreguntaImagen || EsUrlDeImagen(op.Content)
+                ? TipoRespuesta.Imagen
+                : TipoRespuesta.Texto;
+
+            var respuesta = new RespuestaItem
             {
                 Id = op.Id, // 🔥 ESTA LÍNEA ES CLAVE
                 Contenido = op.Content,
-                Tipo = TipoRespuesta.Texto,
+                Tipo = tipo,
                 Background = "#444"
-            });
+            };
+
+            Respuestas.Add(respuesta);
+
+            if (tipo == TipoRespuesta.Imagen)
+            {
+                _ = CargarImagenAsync(respuesta);
+            }
 
             if (op.IsCorrect)
                 _respuestaCorrecta = op.Content;
@@ -238,6 +259,12 @@ public partial class JuegoViewModel : ObservableObject
 
         MostrarResultado = false;
 
+        if (PreguntasRespondidas >= TotalPreguntas)
+        {
+            await FinalizarJuego();
+            return;
+        }
+
         await CargarPregunta();
     }
 
@@ -260,6 +287,55 @@ public partial class JuegoViewModel : ObservableObject
                 });
             }
         });
+    }
+
+    private async Task FinalizarJuego()
+    {
+        await ObtenerScoreboardFinal();
+        JuegoTerminado = true;
+        MostrarEstadisticas = true;
+    }
+
+    private static bool EsUrlDeImagen(string contenido)
+    {
+        if (string.IsNullOrWhiteSpace(contenido))
+            return false;
+
+        if (Uri.TryCreate(contenido, UriKind.Absolute, out var uri))
+        {
+            var lower = contenido.ToLowerInvariant();
+            if (lower.Contains("drive.google.com") || lower.Contains("docs.google.com") || lower.Contains("imgur.com")
+                || lower.EndsWith(".png") || lower.EndsWith(".jpg") || lower.EndsWith(".jpeg") || lower.EndsWith(".gif")
+                || lower.EndsWith(".webp"))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private async Task CargarImagenAsync(RespuestaItem item)
+    {
+        if (string.IsNullOrWhiteSpace(item.Contenido))
+            return;
+
+        try
+        {
+            using var response = await _httpClient.GetAsync(item.Contenido, HttpCompletionOption.ResponseHeadersRead);
+            response.EnsureSuccessStatusCode();
+
+            await using var ms = new MemoryStream();
+            await response.Content.CopyToAsync(ms);
+            ms.Seek(0, SeekOrigin.Begin);
+
+            var bitmap = new Bitmap(ms);
+            Dispatcher.UIThread.Post(() => item.Imagen = bitmap);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error cargando imagen: {ex.Message}");
+        }
     }
 
     private void Ws_OnMessageReceived(string eventName, JsonElement data)
@@ -298,6 +374,12 @@ public partial class JuegoViewModel : ObservableObject
         
         PreguntasRespondidas++;
         OnPropertyChanged(nameof(PreguntaActual));
+
+        if (PreguntasRespondidas >= TotalPreguntas)
+        {
+            await FinalizarJuego();
+            return;
+        }
 
         await CargarPregunta();
     }

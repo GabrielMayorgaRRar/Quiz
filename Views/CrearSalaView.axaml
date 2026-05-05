@@ -215,19 +215,6 @@ x:Class="Quiz.Views.CrearSalaView">
                     </ListBox.Styles>
                 </ListBox>
 
-                <StackPanel Orientation="Horizontal" Spacing="20">
-                    <TextBox
-                    Width="250"
-                    Text="{Binding CodigoSala}"
-                    IsReadOnly="True"
-                    Classes="input"/>
-
-                    <Button
-                    Content="{Binding TextoCopiar}"
-                    Command="{Binding CopiarCodigoCommand}"
-                    Classes="btnSecondary"/>
-                </StackPanel>
-
                 <Button
                 Content="CREAR"
                 Classes="btnPrimary"

@@ -17,7 +17,7 @@ public class WsClient
     {
         _ws = new ClientWebSocket();
         _cts = new CancellationTokenSource();
-        var url = $"ws://10.103.150.110:4100/ws/{key}";
+        var url = $"ws://192.168.101.108:4100/ws/{key}";
         try
         {
             await _ws.ConnectAsync(new Uri(url), _cts.Token);

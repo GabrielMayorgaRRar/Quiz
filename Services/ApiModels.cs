@@ -103,8 +103,21 @@ public class QuestionData
     [JsonPropertyName("text")]
     public string Question { get; set; } = "";
 
+    [JsonPropertyName("media_type")]
+    public string MediaType { get; set; } = "text";
+
     [JsonPropertyName("options")]
     public List<OptionData> Options { get; set; } = new();
+
+    [JsonPropertyName("answers")]
+    public List<OptionData>? Answers
+    {
+        set
+        {
+            if (value != null)
+                Options = value;
+        }
+    }
 }
 
 public class OptionData
