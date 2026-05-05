@@ -26,6 +26,12 @@ public partial class RespuestaItem : ObservableObject
     public string Contenido { get; set; } = "";
     public TipoRespuesta Tipo { get; set; }
 
+    public Action<string>? OnPlay { get; set; }
+    public Action? OnStop { get; set; }
+
+    public IRelayCommand PlayCommand => new RelayCommand(() => OnPlay?.Invoke(Contenido));
+    public IRelayCommand StopCommand => new RelayCommand(() => OnStop?.Invoke());
+
     [ObservableProperty]
     private Bitmap? imagen;
 
@@ -91,6 +97,12 @@ public partial class JuegoViewModel : ObservableObject
     private bool puedeReproducirAudio = true;
 
     [ObservableProperty]
+    private bool esPreguntaAudio = false;
+
+    [ObservableProperty]
+    private string audioUrl = "";
+
+    [ObservableProperty]
     private string mensajeResultado = "";
 
     [ObservableProperty]
@@ -131,20 +143,25 @@ public partial class JuegoViewModel : ObservableObject
         bool esPreguntaImagen = q.MediaType?.Equals("image", StringComparison.OrdinalIgnoreCase) == true;
         bool esPreguntaAudio = q.MediaType?.Equals("audio", StringComparison.OrdinalIgnoreCase) == true;
 
+        EsPreguntaAudio = esPreguntaAudio;
+        AudioUrl = esPreguntaAudio && q.Options.Count > 0 ? GetGoogleDriveUrl(q.Options[0].Content, false) : "";
+
         foreach (var op in q.Options)
         {
             var tipo = TipoRespuesta.Texto;
-            if (esPreguntaAudio || EsUrlDeAudio(op.Content))
-                tipo = TipoRespuesta.Audio;
-            else if (esPreguntaImagen || EsUrlDeImagen(op.Content))
+            if (esPreguntaImagen || EsUrlDeImagen(op.Content))
                 tipo = TipoRespuesta.Imagen;
+            else if (esPreguntaAudio || EsUrlDeAudio(op.Content))
+                tipo = TipoRespuesta.Audio;
 
             var respuesta = new RespuestaItem
             {
                 Id = op.Id,
                 Contenido = op.Content,
                 Tipo = tipo,
-                Background = "#444"
+                Background = "#444",
+                OnPlay = ReproducirAudio,
+                OnStop = StopAudio
             };
 
             Respuestas.Add(respuesta);
@@ -185,15 +202,32 @@ public partial class JuegoViewModel : ObservableObject
         catch { }
     }
 
-    private System.Diagnostics.Process? _currentAudioProcess;
+    private LibVLCSharp.Shared.LibVLC? _libVLC;
+    private LibVLCSharp.Shared.MediaPlayer? _mediaPlayer;
+
+    private void EnsureLibVlc()
+    {
+        if (_libVLC != null)
+            return;
+
+        LibVLCSharp.Shared.Core.Initialize();
+        _libVLC = new LibVLCSharp.Shared.LibVLC(
+            "--intf=dummy",
+            "--no-xlib",
+            "--vout=dummy");
+    }
 
     [RelayCommand]
     private void StopAudio()
     {
         try
         {
-            if (_currentAudioProcess != null && !_currentAudioProcess.HasExited)
-                _currentAudioProcess.Kill();
+            if (_mediaPlayer != null)
+            {
+                _mediaPlayer.Stop();
+                _mediaPlayer.Dispose();
+                _mediaPlayer = null;
+            }
         }
         catch { }
     }
@@ -202,85 +236,27 @@ public partial class JuegoViewModel : ObservableObject
     private void ReproducirAudio(string ruta)
     {
         if (string.IsNullOrWhiteSpace(ruta)) return;
-        
-        string absolutePath = GetGoogleDriveUrl(ruta, false);
 
-        if (absolutePath.StartsWith("http://", StringComparison.OrdinalIgnoreCase) || absolutePath.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
-        {
-            Task.Run(async () => {
-                try
-                {
-                    var uri = new Uri(absolutePath);
-                    string tempFile = Path.Combine(Path.GetTempPath(), "quiz_audio_" + Guid.NewGuid().ToString() + ".mp3");
-                    using var client = new HttpClient();
-                    var response = await client.GetAsync(uri);
-                    var bytes = await response.Content.ReadAsByteArrayAsync();
-                    
-                    if (bytes.Length > 2000) 
-                    {
-                        await File.WriteAllBytesAsync(tempFile, bytes);
-                        ReproducirArchivo(tempFile);
-                    }
-                    else
-                    {
-                        Console.WriteLine("El archivo parece ser HTML y no el audio.");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error descargando audio: {ex.Message}");
-                }
-            });
-        }
-        else
-        {
-            ReproducirArchivo(absolutePath);
-        }
-    }
+        string url = GetGoogleDriveUrl(ruta, false);
+        Console.WriteLine($"[ReproducirAudio] URL: {url}");
 
-    private void ReproducirArchivo(string absolutePath)
-    {
-        StopAudio();
-        Task.Run(() => 
+        try
         {
-            try
-            {
-                if (OperatingSystem.IsLinux())
-                {
-                    _currentAudioProcess = System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-                    {
-                        FileName = "ffplay",
-                        Arguments = $"-nodisp -autoexit \"{absolutePath}\"",
-                        CreateNoWindow = true,
-                        UseShellExecute = false
-                    });
-                }
-                else if (OperatingSystem.IsWindows())
-                {
-                    _currentAudioProcess = System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-                    {
-                        FileName = "powershell",
-                        Arguments = $"-c (New-Object System.Media.SoundPlayer '{absolutePath}').PlaySync()",
-                        CreateNoWindow = true,
-                        UseShellExecute = false
-                    });
-                }
-                else if (OperatingSystem.IsMacOS())
-                {
-                    _currentAudioProcess = System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-                    {
-                        FileName = "afplay",
-                        Arguments = $"\"{absolutePath}\"",
-                        CreateNoWindow = true,
-                        UseShellExecute = false
-                    });
-                }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($"Error playing audio: {ex.Message}");
-            }
-        });
+            StopAudio();
+
+            EnsureLibVlc();
+
+            var media = new LibVLCSharp.Shared.Media(_libVLC!, new Uri(url));
+            _mediaPlayer = new LibVLCSharp.Shared.MediaPlayer(_libVLC!);
+            _mediaPlayer.Volume = 100;
+            _mediaPlayer.Media = media;
+            media.Dispose();
+            _mediaPlayer.Play();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[ReproducirAudio] Error: {ex.Message}");
+        }
     }
 
     [RelayCommand]
@@ -365,18 +341,33 @@ public partial class JuegoViewModel : ObservableObject
         if (match.Success)
         {
             if (isImage)
-                return $"https://drive.google.com/uc?export=view&id={match.Groups[1].Value}";
+                return $"https://drive.google.com/uc?export=download&id={match.Groups[1].Value}";
             else
-                return $"https://drive.google.com/uc?export=download&id={match.Groups[1].Value}&confirm=t";
+                return $"http://10.103.150.200:4100/api/v1/stream/audio/{match.Groups[1].Value}";
         }
-        return input;
+        var bareId = System.Text.RegularExpressions.Regex.Match(url, @"^[a-zA-Z0-9_-]{10,}$");
+        if (bareId.Success)
+        {
+            if (isImage)
+                return $"https://drive.google.com/uc?export=download&id={url}";
+            else
+                return $"http://10.103.150.200:4100/api/v1/stream/audio/{url}";
+        }
+        return url;
     }
 
     private static bool EsUrlDeImagen(string contenido)
     {
         if (string.IsNullOrWhiteSpace(contenido)) return false;
         var lower = contenido.ToLowerInvariant();
-        return lower.Contains("imgur.com") || lower.EndsWith(".png") || lower.EndsWith(".jpg") || lower.EndsWith(".jpeg") || lower.EndsWith(".gif") || lower.EndsWith(".webp");
+        return lower.Contains("imgur.com")
+            || lower.Contains("drive.google.com")
+            || lower.Contains("uc?export=view")
+            || lower.EndsWith(".png")
+            || lower.EndsWith(".jpg")
+            || lower.EndsWith(".jpeg")
+            || lower.EndsWith(".gif")
+            || lower.EndsWith(".webp");
     }
 
     private static bool EsUrlDeAudio(string contenido)
@@ -396,6 +387,13 @@ public partial class JuegoViewModel : ObservableObject
             var url = GetGoogleDriveUrl(item.Contenido, true);
             using var response = await _httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
             response.EnsureSuccessStatusCode();
+
+            var contentType = response.Content.Headers.ContentType?.MediaType ?? string.Empty;
+            if (!contentType.StartsWith("image/", StringComparison.OrdinalIgnoreCase))
+            {
+                Console.WriteLine($"Error cargando imagen: contenido no es imagen ({contentType}) -> {url}");
+                return;
+            }
 
             await using var ms = new MemoryStream();
             await response.Content.CopyToAsync(ms);

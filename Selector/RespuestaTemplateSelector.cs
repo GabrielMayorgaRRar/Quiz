@@ -14,13 +14,16 @@ public class RespuestaTemplateSelector : IDataTemplate
     {
         if (param is RespuestaItem item)
         {
-            return item.Tipo switch 
+            var control = item.Tipo switch
             {
                 TipoRespuesta.Texto => TextoTemplate!.Build(param),
                 TipoRespuesta.Imagen => ImagenTemplate!.Build(param),
                 TipoRespuesta.Audio => AudioTemplate!.Build(param),
                 _ => TextoTemplate!.Build(param)
             };
+            if (control != null)
+                control.DataContext = item;
+            return control;
         }
 
         return new TextBlock { Text = "Error" };

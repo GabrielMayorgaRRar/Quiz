@@ -154,19 +154,26 @@ public partial class QuizSessionViewModel : ViewModelBase
         }
     }
 
-    private static string GetDirectUrl(string input)
+    private static string GetDirectUrl(string input, bool isImage = false)
     {
         if (string.IsNullOrWhiteSpace(input)) return input ?? string.Empty;
         var url = input.Trim().Trim('"', '\'').Replace("\\u0026", "&");
         var match = System.Text.RegularExpressions.Regex.Match(url, @"(?:/d/|id=)([a-zA-Z0-9_-]{10,})", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
-        return match.Success ? $"https://drive.google.com/uc?export=download&id={match.Groups[1].Value}" : input;
+        if (match.Success)
+        {
+            if (isImage)
+                return $"https://drive.google.com/uc?export=download&id={match.Groups[1].Value}";
+            else
+                return $"http://10.103.150.200:4100/api/v1/stream/audio/{match.Groups[1].Value}";
+        }
+        return input;
     }
 
     private async Task CargarImagenOpcionAsync(Opciones opcion)
     {
         try
         {
-            var url = GetDirectUrl(opcion.Contenido);
+            var url = GetDirectUrl(opcion.Contenido, true);
             using var client = new System.Net.Http.HttpClient();
             var bytes = await client.GetByteArrayAsync(url);
             using var stream = new System.IO.MemoryStream(bytes);
