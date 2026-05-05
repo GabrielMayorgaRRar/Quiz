@@ -7,7 +7,6 @@ xmlns:selectors="clr-namespace:Quiz.Selectors">
 
     <UserControl.Resources>
 
-        <!--  TEXTO  -->
         <DataTemplate x:Key="TextoTemplate">
             <Border
             Padding="10"
@@ -25,36 +24,64 @@ xmlns:selectors="clr-namespace:Quiz.Selectors">
             </Border>
         </DataTemplate>
 
-        <!--  IMAGEN  -->
         <DataTemplate x:Key="ImagenTemplate">
-            <Border
-            Margin="10"
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Stretch"
-            ClipToBounds="True"
-            CornerRadius="10">
-                <Image Source="{Binding Imagen}" Stretch="Uniform" />
-            </Border>
+            <Panel Margin="10">
+                <Border
+                HorizontalAlignment="Stretch"
+                VerticalAlignment="Stretch"
+                ClipToBounds="True"
+                CornerRadius="10">
+                    <Image Source="{Binding Imagen}" Stretch="Uniform" />
+                </Border>
+                <Border 
+                HorizontalAlignment="Right" 
+                VerticalAlignment="Top" 
+                Margin="8" 
+                Background="#AA000000" 
+                CornerRadius="6" 
+                Padding="6,2">
+                    <TextBlock Text="Imagen" Foreground="White" FontSize="11" FontWeight="Bold" />
+                </Border>
+            </Panel>
         </DataTemplate>
 
-        <!--  AUDIO  -->
         <DataTemplate x:Key="AudioTemplate">
             <StackPanel
             HorizontalAlignment="Center"
             VerticalAlignment="Center"
-            Spacing="8">
+            Spacing="12">
 
-                <Border
-                Padding="10"
-                Background="#FFFFFF22"
-                CornerRadius="50">
-                    <TextBlock FontSize="32" Text="🔊" />
-                </Border>
+                <TextBlock FontSize="40" Foreground="White" Text="🎵" HorizontalAlignment="Center" />
+
+                <StackPanel Orientation="Horizontal" Spacing="16" HorizontalAlignment="Center">
+                    <Button
+                    Width="48"
+                    Height="48"
+                    Background="#FFFFFF22"
+                    CornerRadius="24"
+                    Click="OnInnerButtonClick"
+                    Command="{Binding $parent[UserControl].DataContext.ReproducirAudioCommand}"
+                    CommandParameter="{Binding Contenido}">
+                        <TextBlock FontSize="20" Foreground="White" Text="▶" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Button>
+
+                    <Button
+                    Width="48"
+                    Height="48"
+                    Background="#FFFFFF22"
+                    CornerRadius="24"
+                    Click="OnInnerButtonClick"
+                    Command="{Binding $parent[UserControl].DataContext.StopAudioCommand}">
+                        <TextBlock FontSize="20" Foreground="White" Text="⏸" HorizontalAlignment="Center" VerticalAlignment="Center" />
+                    </Button>
+                </StackPanel>
 
                 <TextBlock
-                FontSize="14"
+                FontSize="16"
+                FontWeight="Bold"
                 Foreground="White"
-                Text="Reproducir" />
+                Text="Audio"
+                HorizontalAlignment="Center" />
             </StackPanel>
         </DataTemplate>
 
@@ -70,7 +97,6 @@ xmlns:selectors="clr-namespace:Quiz.Selectors">
 
     <Grid>
 
-        <!--  FONDO  -->
         <Image
         Opacity="0.3"
         Source="avares://Quiz/Assets/11587928_4786503.jpg"
@@ -78,10 +104,8 @@ xmlns:selectors="clr-namespace:Quiz.Selectors">
 
         <Grid Margin="20" RowDefinitions="Auto,Auto,*">
 
-            <!--  HEADER  -->
             <StackPanel Grid.Row="0" Spacing="12">
 
-                <!-- CONTENEDOR -->
                 <Border
                 Padding="15"
                 Background="#AA000000"
@@ -89,7 +113,6 @@ xmlns:selectors="clr-namespace:Quiz.Selectors">
 
                     <StackPanel Spacing="8">
 
-                        <!-- PREGUNTA -->
                         <TextBlock
                         HorizontalAlignment="Center"
                         FontSize="30"
@@ -97,7 +120,6 @@ xmlns:selectors="clr-namespace:Quiz.Selectors">
                         Foreground="#78D874"
                         Text="{Binding PreguntaActual, StringFormat='Pregunta {0} de 12'}" />
 
-                        <!-- TEXTO MEJORADO -->
                         <Border
                         Padding="6,3"
                         Background="#22FFFFFF"
@@ -115,16 +137,13 @@ xmlns:selectors="clr-namespace:Quiz.Selectors">
                     </StackPanel>
                 </Border>
 
-                <!-- BARRA PRO -->
                 <Grid>
 
-                    <!-- FONDO -->
                     <Border
                     Height="20"
                     Background="#222"
                     CornerRadius="12" />
 
-                    <!-- PROGRESS -->
                     <ProgressBar
                     Height="20"
                     Maximum="15"
@@ -133,7 +152,6 @@ xmlns:selectors="clr-namespace:Quiz.Selectors">
                     Foreground="#EE00A5BB"
                     CornerRadius="12" />
 
-                    <!-- TEXTO ENCIMA -->
                     <TextBlock
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
@@ -145,7 +163,6 @@ xmlns:selectors="clr-namespace:Quiz.Selectors">
 
             </StackPanel>
 
-            <!--  PREGUNTA  -->
             <Border
             Grid.Row="1"
             Margin="0,10"
@@ -161,7 +178,6 @@ xmlns:selectors="clr-namespace:Quiz.Selectors">
                 TextWrapping="Wrap" />
             </Border>
 
-            <!--  RESPUESTAS  -->
             <UniformGrid
             Grid.Row="2"
             Margin="0,20"
@@ -170,7 +186,6 @@ xmlns:selectors="clr-namespace:Quiz.Selectors">
             Columns="2"
             Rows="2">
 
-                <!--  🔵  -->
                 <Button
                 Margin="10"
                 HorizontalAlignment="Stretch"
@@ -207,7 +222,6 @@ xmlns:selectors="clr-namespace:Quiz.Selectors">
                     </Border>
                 </Button>
 
-                <!--  🟢  -->
                 <Button
                 Margin="10"
                 HorizontalAlignment="Stretch"
@@ -244,7 +258,6 @@ xmlns:selectors="clr-namespace:Quiz.Selectors">
                     </Border>
                 </Button>
 
-                <!--  🔴  -->
                 <Button
                 Margin="10"
                 HorizontalAlignment="Stretch"
@@ -281,7 +294,6 @@ xmlns:selectors="clr-namespace:Quiz.Selectors">
                     </Border>
                 </Button>
 
-                <!--  🟣  -->
                 <Button
                 Margin="10"
                 HorizontalAlignment="Stretch"
@@ -363,7 +375,6 @@ xmlns:selectors="clr-namespace:Quiz.Selectors">
 
                 <StackPanel Spacing="12">
 
-                    <!-- TÍTULO -->
                     <Border
                     Padding="10"
                     Background="White"
@@ -377,7 +388,6 @@ xmlns:selectors="clr-namespace:Quiz.Selectors">
                         Text="Estadísticas" />
                     </Border>
 
-                    <!-- LISTA -->
                     <ItemsControl ItemsSource="{Binding Estadisticas}">
                         <ItemsControl.ItemTemplate>
                             <DataTemplate>
@@ -418,7 +428,6 @@ xmlns:selectors="clr-namespace:Quiz.Selectors">
                         </ItemsControl.ItemTemplate>
                     </ItemsControl>
 
-                    <!-- BOTÓN -->
                     <Button
                     Margin="0,15,0,0"
                     Padding="20,10"

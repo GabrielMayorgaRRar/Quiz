@@ -154,12 +154,21 @@ public partial class QuizSessionViewModel : ViewModelBase
         }
     }
 
+    private static string GetDirectUrl(string input)
+    {
+        if (string.IsNullOrWhiteSpace(input)) return input ?? string.Empty;
+        var url = input.Trim().Trim('"', '\'').Replace("\\u0026", "&");
+        var match = System.Text.RegularExpressions.Regex.Match(url, @"(?:/d/|id=)([a-zA-Z0-9_-]{10,})", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+        return match.Success ? $"https://drive.google.com/uc?export=download&id={match.Groups[1].Value}" : input;
+    }
+
     private async Task CargarImagenOpcionAsync(Opciones opcion)
     {
         try
         {
+            var url = GetDirectUrl(opcion.Contenido);
             using var client = new System.Net.Http.HttpClient();
-            var bytes = await client.GetByteArrayAsync(opcion.Contenido);
+            var bytes = await client.GetByteArrayAsync(url);
             using var stream = new System.IO.MemoryStream(bytes);
             opcion.ImagenCargada = new Avalonia.Media.Imaging.Bitmap(stream);
         }
@@ -168,6 +177,7 @@ public partial class QuizSessionViewModel : ViewModelBase
 
     private System.Diagnostics.Process? _currentAudioProcess;
 
+    [RelayCommand]
     private void StopAudio()
     {
         try
@@ -183,13 +193,13 @@ public partial class QuizSessionViewModel : ViewModelBase
     {
         if (string.IsNullOrWhiteSpace(audioPath)) return;
         
-        string absolutePath = audioPath;
+        string absolutePath = GetDirectUrl(audioPath);
 
-        if (audioPath.StartsWith("http://", StringComparison.OrdinalIgnoreCase) || audioPath.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+        if (absolutePath.StartsWith("http://", StringComparison.OrdinalIgnoreCase) || absolutePath.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
         {
             try
             {
-                var uri = new Uri(audioPath);
+                var uri = new Uri(absolutePath);
                 string tempFile = System.IO.Path.Combine(System.IO.Path.GetTempPath(), "quiz_audio_" + Guid.NewGuid().ToString() + ".mp3");
                 using var client = new System.Net.Http.HttpClient();
                 var bytes = await client.GetByteArrayAsync(uri);

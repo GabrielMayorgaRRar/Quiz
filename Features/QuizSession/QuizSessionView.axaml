@@ -243,7 +243,18 @@
                                     Background="#F5F5F4"
                                     ClipToBounds="True"
                                     CornerRadius="16">
-                                    <Image Source="{Binding ImagenCargada}" Stretch="Uniform" />
+                                    <Panel>
+                                        <Image Source="{Binding ImagenCargada}" Stretch="Uniform" />
+                                        <Border 
+                                            HorizontalAlignment="Left" 
+                                            VerticalAlignment="Top" 
+                                            Margin="8" 
+                                            Background="#88000000" 
+                                            CornerRadius="6" 
+                                            Padding="6,2">
+                                            <TextBlock Text="Imagen" Foreground="White" FontSize="10" FontWeight="Bold" />
+                                        </Border>
+                                    </Panel>
                                 </Border>
                             </Border>
                         </DataTemplate>
@@ -272,12 +283,12 @@
                                 Cursor="Hand"
                                 Tag="{Binding}"
                                 Tapped="OnOptionTapped">
-                                <Grid ColumnDefinitions="Auto,*">
+                                <Grid ColumnDefinitions="Auto,Auto,*,Auto">
                                     <Button
                                         Grid.Column="0"
                                         Width="32"
                                         Height="32"
-                                        Margin="0,0,16,0"
+                                        Margin="0,0,8,0"
                                         Padding="0"
                                         Background="#FAF9F9"
                                         CornerRadius="16"
@@ -294,14 +305,44 @@
                                             Fill="#D4A373"
                                             Stretch="Uniform" />
                                     </Button>
-                                    <TextBlock
+                                    <Button
                                         Grid.Column="1"
+                                        Width="32"
+                                        Height="32"
+                                        Margin="0,0,16,0"
+                                        Padding="0"
+                                        Background="#FAF9F9"
+                                        CornerRadius="16"
+                                        Command="{Binding $parent[UserControl].((vm:QuizSessionViewModel)DataContext).StopAudioCommand}"
+                                        Cursor="Hand"
+                                        Tapped="OnPlayButtonTapped">
+                                        <Path
+                                            Width="12"
+                                            Height="12"
+                                            HorizontalAlignment="Center"
+                                            VerticalAlignment="Center"
+                                            Data="M6 6H10V18H6V6ZM14 6H18V18H14V6Z"
+                                            Fill="#D4A373"
+                                            Stretch="Uniform" />
+                                    </Button>
+                                    <TextBlock
+                                        Grid.Column="2"
                                         VerticalAlignment="Center"
                                         FontSize="18"
                                         FontWeight="SemiBold"
                                         Foreground="#433829"
                                         TextWrapping="Wrap"
                                         Text="{Binding Contenido, Converter={StaticResource fileNameConverter}}" />
+                                    <Border
+                                        Grid.Column="3"
+                                        Margin="8,0,0,0"
+                                        Padding="6,2"
+                                        HorizontalAlignment="Right"
+                                        VerticalAlignment="Center"
+                                        Background="#E7E5E4"
+                                        CornerRadius="6">
+                                        <TextBlock Text="Audio" Foreground="#A8A29E" FontSize="10" FontWeight="Bold" />
+                                    </Border>
                                 </Grid>
                             </Border>
                         </DataTemplate>

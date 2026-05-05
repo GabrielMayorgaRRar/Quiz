@@ -22,8 +22,7 @@ public enum TipoRespuesta
 
 public partial class RespuestaItem : ObservableObject
 {
-    public int Id { get; set; } // 🔥 ESTE ES EL QUE TE FALTA O ESTÁ MAL
-
+    public int Id { get; set; }
     public string Contenido { get; set; } = "";
     public TipoRespuesta Tipo { get; set; }
 
@@ -80,10 +79,6 @@ public partial class JuegoViewModel : ObservableObject
     [NotifyPropertyChangedFor(nameof(PreguntaActual))]
     private bool juegoTerminado = false;
 
-    // =========================
-    // PROPIEDADES
-    // =========================
-
     [ObservableProperty]
     private string pregunta = "";
 
@@ -108,10 +103,6 @@ public partial class JuegoViewModel : ObservableObject
     private bool mostrarEstadisticas = false;
 
     public ObservableCollection<JugadorStats> Estadisticas { get; } = new();
-
-    // =========================
-    // API
-    // =========================
 
     private async Task CargarPregunta()
     {
@@ -138,16 +129,19 @@ public partial class JuegoViewModel : ObservableObject
         Respuestas.Clear();
 
         bool esPreguntaImagen = q.MediaType?.Equals("image", StringComparison.OrdinalIgnoreCase) == true;
+        bool esPreguntaAudio = q.MediaType?.Equals("audio", StringComparison.OrdinalIgnoreCase) == true;
 
         foreach (var op in q.Options)
         {
-            var tipo = esPreguntaImagen || EsUrlDeImagen(op.Content)
-                ? TipoRespuesta.Imagen
-                : TipoRespuesta.Texto;
+            var tipo = TipoRespuesta.Texto;
+            if (esPreguntaAudio || EsUrlDeAudio(op.Content))
+                tipo = TipoRespuesta.Audio;
+            else if (esPreguntaImagen || EsUrlDeImagen(op.Content))
+                tipo = TipoRespuesta.Imagen;
 
             var respuesta = new RespuestaItem
             {
-                Id = op.Id, // 🔥 ESTA LÍNEA ES CLAVE
+                Id = op.Id,
                 Contenido = op.Content,
                 Tipo = tipo,
                 Background = "#444"
@@ -166,10 +160,6 @@ public partial class JuegoViewModel : ObservableObject
 
         IniciarTimer();
     }
-
-    // =========================
-    // TIMER
-    // =========================
 
     private async void IniciarTimer()
     {
@@ -195,34 +185,109 @@ public partial class JuegoViewModel : ObservableObject
         catch { }
     }
 
-    // =========================
-    // AUDIO
-    // =========================
+    private System.Diagnostics.Process? _currentAudioProcess;
 
     [RelayCommand]
-    private async Task ReproducirAudio(string ruta)
+    private void StopAudio()
     {
-        if (!PuedeReproducirAudio) return;
-
-        PuedeReproducirAudio = false;
-        await Task.Delay(3000);
-        PuedeReproducirAudio = true;
+        try
+        {
+            if (_currentAudioProcess != null && !_currentAudioProcess.HasExited)
+                _currentAudioProcess.Kill();
+        }
+        catch { }
     }
 
-    // =========================
-    // RESPUESTA
-    // =========================
+    [RelayCommand]
+    private void ReproducirAudio(string ruta)
+    {
+        if (string.IsNullOrWhiteSpace(ruta)) return;
+        
+        string absolutePath = GetGoogleDriveUrl(ruta, false);
+
+        if (absolutePath.StartsWith("http://", StringComparison.OrdinalIgnoreCase) || absolutePath.StartsWith("https://", StringComparison.OrdinalIgnoreCase))
+        {
+            Task.Run(async () => {
+                try
+                {
+                    var uri = new Uri(absolutePath);
+                    string tempFile = Path.Combine(Path.GetTempPath(), "quiz_audio_" + Guid.NewGuid().ToString() + ".mp3");
+                    using var client = new HttpClient();
+                    var response = await client.GetAsync(uri);
+                    var bytes = await response.Content.ReadAsByteArrayAsync();
+                    
+                    if (bytes.Length > 2000) 
+                    {
+                        await File.WriteAllBytesAsync(tempFile, bytes);
+                        ReproducirArchivo(tempFile);
+                    }
+                    else
+                    {
+                        Console.WriteLine("El archivo parece ser HTML y no el audio.");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error descargando audio: {ex.Message}");
+                }
+            });
+        }
+        else
+        {
+            ReproducirArchivo(absolutePath);
+        }
+    }
+
+    private void ReproducirArchivo(string absolutePath)
+    {
+        StopAudio();
+        Task.Run(() => 
+        {
+            try
+            {
+                if (OperatingSystem.IsLinux())
+                {
+                    _currentAudioProcess = System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = "ffplay",
+                        Arguments = $"-nodisp -autoexit \"{absolutePath}\"",
+                        CreateNoWindow = true,
+                        UseShellExecute = false
+                    });
+                }
+                else if (OperatingSystem.IsWindows())
+                {
+                    _currentAudioProcess = System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = "powershell",
+                        Arguments = $"-c (New-Object System.Media.SoundPlayer '{absolutePath}').PlaySync()",
+                        CreateNoWindow = true,
+                        UseShellExecute = false
+                    });
+                }
+                else if (OperatingSystem.IsMacOS())
+                {
+                    _currentAudioProcess = System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = "afplay",
+                        Arguments = $"\"{absolutePath}\"",
+                        CreateNoWindow = true,
+                        UseShellExecute = false
+                    });
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error playing audio: {ex.Message}");
+            }
+        });
+    }
 
     [RelayCommand]
     private async Task SeleccionarRespuesta(RespuestaItem item)
     {
         _cts?.Cancel();
-
-        if (item.Tipo == TipoRespuesta.Audio)
-        {
-            await ReproducirAudio(item.Contenido);
-            return;
-        }
+        StopAudio();
 
         bool correcta = item.Contenido == _respuestaCorrecta;
 
@@ -255,7 +320,7 @@ public partial class JuegoViewModel : ObservableObject
         PreguntasRespondidas++;
         OnPropertyChanged(nameof(PreguntaActual));
 
-        await Task.Delay(500); // Tarda menos, de 1500 a 500
+        await Task.Delay(500);
 
         MostrarResultado = false;
 
@@ -267,10 +332,6 @@ public partial class JuegoViewModel : ObservableObject
 
         await CargarPregunta();
     }
-
-    // =========================
-    // WEBSOCKET & SCOREBOARD
-    // =========================
 
     private async Task ObtenerScoreboardFinal()
     {
@@ -296,23 +357,33 @@ public partial class JuegoViewModel : ObservableObject
         MostrarEstadisticas = true;
     }
 
+    private static string GetGoogleDriveUrl(string input, bool isImage)
+    {
+        if (string.IsNullOrWhiteSpace(input)) return input ?? string.Empty;
+        var url = input.Trim().Trim('"', '\'').Replace("\\u0026", "&");
+        var match = System.Text.RegularExpressions.Regex.Match(url, @"(?:/d/|id=)([a-zA-Z0-9_-]{10,})", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
+        if (match.Success)
+        {
+            if (isImage)
+                return $"https://drive.google.com/uc?export=view&id={match.Groups[1].Value}";
+            else
+                return $"https://drive.google.com/uc?export=download&id={match.Groups[1].Value}&confirm=t";
+        }
+        return input;
+    }
+
     private static bool EsUrlDeImagen(string contenido)
     {
-        if (string.IsNullOrWhiteSpace(contenido))
-            return false;
+        if (string.IsNullOrWhiteSpace(contenido)) return false;
+        var lower = contenido.ToLowerInvariant();
+        return lower.Contains("imgur.com") || lower.EndsWith(".png") || lower.EndsWith(".jpg") || lower.EndsWith(".jpeg") || lower.EndsWith(".gif") || lower.EndsWith(".webp");
+    }
 
-        if (Uri.TryCreate(contenido, UriKind.Absolute, out var uri))
-        {
-            var lower = contenido.ToLowerInvariant();
-            if (lower.Contains("drive.google.com") || lower.Contains("docs.google.com") || lower.Contains("imgur.com")
-                || lower.EndsWith(".png") || lower.EndsWith(".jpg") || lower.EndsWith(".jpeg") || lower.EndsWith(".gif")
-                || lower.EndsWith(".webp"))
-            {
-                return true;
-            }
-        }
-
-        return false;
+    private static bool EsUrlDeAudio(string contenido)
+    {
+        if (string.IsNullOrWhiteSpace(contenido)) return false;
+        var lower = contenido.ToLowerInvariant();
+        return lower.EndsWith(".mp3") || lower.EndsWith(".wav") || lower.EndsWith(".ogg") || lower.Contains("drive.google.com");
     }
 
     private async Task CargarImagenAsync(RespuestaItem item)
@@ -322,7 +393,8 @@ public partial class JuegoViewModel : ObservableObject
 
         try
         {
-            using var response = await _httpClient.GetAsync(item.Contenido, HttpCompletionOption.ResponseHeadersRead);
+            var url = GetGoogleDriveUrl(item.Contenido, true);
+            using var response = await _httpClient.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
             response.EnsureSuccessStatusCode();
 
             await using var ms = new MemoryStream();
@@ -363,10 +435,6 @@ public partial class JuegoViewModel : ObservableObject
         }
     }
 
-    // =========================
-    // FLUJO CENTRAL
-    // =========================
-
     private async Task PasarASiguientePregunta()
     {
         MostrarResultado = false;
@@ -384,19 +452,11 @@ public partial class JuegoViewModel : ObservableObject
         await CargarPregunta();
     }
 
-    // =========================
-    // CLEANUP
-    // =========================
-
     public void Cleanup()
     {
         _ws.OnMessageReceived -= Ws_OnMessageReceived;
         _ = _ws.DisconnectAsync();
     }
-
-    // =========================
-    // NAV
-    // =========================
 
     [RelayCommand]
     private void Volver()
