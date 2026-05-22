@@ -9,7 +9,7 @@ namespace Quiz.Services;
 public class QuizApiService
 {
     private readonly HttpClient _http;
-    private const string BaseUrl = "http://localhost:4100/api/v1";
+    private const string BaseUrl = "http://10.103.150.200:4100/api/v1";
     public QuizApiService()
     {
         _http = new HttpClient { BaseAddress = new Uri(BaseUrl + "/") };
