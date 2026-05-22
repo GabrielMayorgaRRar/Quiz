@@ -9,8 +9,7 @@ namespace Quiz.Services;
 public class QuizApiService
 {
     private readonly HttpClient _http;
-    private const string BaseUrl = "http://10.103.150.200:4100/api/v1";
-
+    private const string BaseUrl = "http://localhost:4100/api/v1";
     public QuizApiService()
     {
         _http = new HttpClient { BaseAddress = new Uri(BaseUrl + "/") };
@@ -113,4 +112,19 @@ public class QuizApiService
             return new List<DepartureData>();
         }
     }
+
+    public async Task<List<DepartureData>> FinishGameAsync(int gameId, string key)
+{
+    try
+    {
+        var res = await _http.PostAsync($"game/{gameId}/finish?key={key}", null);
+        if (res.IsSuccessStatusCode)
+        {
+            var content = await res.Content.ReadFromJsonAsync<ApiResponse<List<DepartureData>>>();
+            return content?.Data ?? new List<DepartureData>();
+        }
+    }
+    catch { }
+    return new List<DepartureData>();
+}
 }
